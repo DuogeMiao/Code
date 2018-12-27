@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-dimission-add">
+			<input id="employeeId" name="employeeId" class="form-control" type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">工号：</label>
+				<div class="col-sm-8">
+					<select name="employeeNo" onchange="getByEmployeeNo()" id="employeeNo" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeVoListByStatus('0')}">
+						<option value=""></option>
+						<option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeNo}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">姓名：</label>
+				<div class="col-sm-8">
+					<input id="employeeName" name="employeeName" readonly="true" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">身份证：</label>
+				<div class="col-sm-8">
+                    <input id="identityCard" name="identityCard" readonly="true" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">公司：</label>
+				<div class="col-sm-8">
+					<input id="companyName" name="companyName" readonly="true" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">部门：</label>
+				<div class="col-sm-8">
+					<input id="deptName" name="deptName" readonly="true" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">岗位：</label>
+				<div class="col-sm-8">
+					<input id="postName" name="postName" readonly="true" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">职务：</label>
+				<div class="col-sm-8">
+					<input id="jobName" name="jobName" readonly="true" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">入职日期：</label>
+				<div class="col-sm-8">
+					<input id="entryDate" name="entryDate" readonly="true" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">离职日期：</label>
+				<div class="col-sm-8">
+					<input id="dimissionDate" name="dimissionDate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">回传日期：</label>
+				<div class="col-sm-8">
+					<input id="backDate" name="backDate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">离职类型：</label>
+				<div class="col-sm-8">
+					<select name="dimissionType" id="dimissionType" class="form-control m-b" th:with="type=${@dict.getType('roster_dimission_type')}">
+						<option></option>
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">离职原因：</label>
+				<div class="col-sm-8">
+					<select name="dimissionReason" id="dimissionReason" class="form-control m-b" th:with="type=${@dict.getType('roster_dimission_reason')}" multiple="">
+						<option></option>
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">状态：</label>
+				<div class="col-sm-8">
+					<input id="status" name="status" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remark" name="remark" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+	<script th:src="@{/ajax/libs/select/select2.js}"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "roster/dimission"
+		$("#form-dimission-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-dimission-add').serialize());
+	        }
+	    }
+
+        // laydate 时间控件绑定
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            var entryDate = laydate.render({
+                elem: '#entryDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var dimissionDate = laydate.render({
+                elem: '#dimissionDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var backDate = laydate.render({
+                elem: '#backDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+        });
+
+        function getByEmployeeNo() {
+            try{
+                //根据员工工号查询数据
+                $.ajax({
+                    type: "post",
+                    url: "/roster/employee/employeeNo",
+                    async: false,
+                    data: {
+                        "employeeNo": document.getElementById('employeeNo').value
+                    },
+                    dataType: "json",
+                    success: function (e) {
+                        document.getElementById('employeeName').value = e.data.employeeName;
+                        document.getElementById('employeeId').value = e.data.employeeId;
+                        document.getElementById('identityCard').value = e.data.identityCard;
+                        document.getElementById('entryDate').value = e.data.entryDate;
+                        //根据公司id获取公司信息
+                        $.ajax({
+                            type: "post",
+                            url: "/system/companys/companyId",
+                            async: false,
+                            data: {
+                                "companyId": e.data.companyId
+                            },
+                            dataType: "json",
+                            success: function (c) {
+                                document.getElementById('companyName').value = c.data.companyCode;
+                            }
+                        });
+                        //根据部门id获取部门信息
+                        $.ajax({
+                            type: "post",
+                            url: "/system/dept/deptId",
+                            async: false,
+                            data: {
+                                "deptId": e.data.deptId
+                            },
+                            dataType: "json",
+                            success: function (d) {
+                                document.getElementById('deptName').value = d.data.deptName;
+                            }
+                        });
+                        //根据岗位id获取岗位信息
+                        $.ajax({
+                            type: "post",
+                            url: "/system/post/postId",
+                            async: false,
+                            data: {
+                                "postId": e.data.postId
+                            },
+                            dataType: "json",
+                            success: function (p) {
+                                document.getElementById('postName').value = p.data.postName;
+                            }
+                        });
+                        //根据职务id获取职务信息
+                        $.ajax({
+                            type: "post",
+                            url: "/system/job/jobId",
+                            async: false,
+                            data: {
+                                "jobId": e.data.jobId
+                            },
+                            dataType: "json",
+                            success: function (j) {
+                                document.getElementById('jobName').value = j.data.jobName;
+                            }
+                        });
+                    }
+                });
+            } catch(e){
+                $.modal.closeLoading();
+            }
+        }
+
+	</script>
+</body>
+</html>

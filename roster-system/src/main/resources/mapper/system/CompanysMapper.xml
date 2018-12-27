@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsingshan.system.mapper.CompanysMapper">
+    
+    <resultMap type="Companys" id="CompanysResult">
+        <result property="companyId"    column="company_id"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="companySort"    column="company_sort"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectCompanysVo">
+        select company_id, company_code, company_name, company_sort, status, create_by, create_time, update_by, update_time, remark from companys
+    </sql>
+	
+    <select id="selectCompanysList" parameterType="Companys" resultMap="CompanysResult">
+        <include refid="selectCompanysVo"/>
+        <where>  
+            <if test="companyId != null "> and company_id = #{companyId}</if>
+             <if test="companyCode != null  and companyCode != '' "> and company_code = #{companyCode}</if>
+             <if test="companyName != null  and companyName != '' "> and company_name = #{companyName}</if>
+             <if test="companySort != null "> and company_sort = #{companySort}</if>
+             <if test="status != null  and status != '' "> and status = #{status}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectCompanysById" parameterType="Long" resultMap="CompanysResult">
+        <include refid="selectCompanysVo"/>
+        where company_id = #{companyId}
+    </select>
+
+    <select id="selectCompanyAll" resultMap="CompanysResult">
+        <include refid="selectCompanysVo"/>
+    </select>
+
+        
+    <insert id="insertCompanys" parameterType="Companys">
+        insert into companys
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="companyId != null  ">company_id,</if>
+			<if test="companyCode != null  and companyCode != ''  ">company_code,</if>
+			<if test="companyName != null  and companyName != ''  ">company_name,</if>
+			<if test="companySort != null  ">company_sort,</if>
+			<if test="status != null  and status != ''  ">status,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="companyId != null  ">#{companyId},</if>
+			<if test="companyCode != null  and companyCode != ''  ">#{companyCode},</if>
+			<if test="companyName != null  and companyName != ''  ">#{companyName},</if>
+			<if test="companySort != null  ">#{companySort},</if>
+			<if test="status != null  and status != ''  ">#{status},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+            sysdate()
+         </trim>
+    </insert>
+	 
+    <update id="updateCompanys" parameterType="Companys">
+        update companys
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyCode != null  and companyCode != ''  ">company_code = #{companyCode},</if>
+            <if test="companyName != null  and companyName != ''  ">company_name = #{companyName},</if>
+            <if test="companySort != null  ">company_sort = #{companySort},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where company_id = #{companyId}
+    </update>
+
+	<delete id="deleteCompanysById" parameterType="Long">
+        delete from companys where company_id = #{companyId}
+    </delete>
+	
+    <delete id="deleteCompanysByIds" parameterType="Long">
+        delete from companys where company_id in 
+        <foreach item="companyId" collection="array" open="(" separator="," close=")">
+            #{companyId}
+        </foreach>
+    </delete>
+    
+</mapper>

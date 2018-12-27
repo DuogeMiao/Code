@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-salary-edit" th:object="${salary}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+            <input id="employeeId" name="employeeId" th:field="*{employeeId}" class="form-control" type="hidden">
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">工号：</label>
+                <div class="col-sm-8">
+                    <input id="employeeNo" name="employeeNo" readonly="true" th:field="*{employeeNo}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">姓名：</label>
+                <div class="col-sm-8">
+                    <input id="employeeName" name="employeeName" readonly="true" th:field="*{employeeName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">身份证：</label>
+                <div class="col-sm-8">
+                    <input id="identityCard" name="identityCard" readonly="true" th:field="*{identityCard}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">公司：</label>
+                <div class="col-sm-8">
+                    <select name="companyName" id="companyName" class="form-control m-b" th:with="type=${@dict.getType('roster_company_name')}">
+                        <option></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{companyName}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">部门：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="deptName" th:field="*{deptName}"  onclick="selectDeptTree()" readonly="true" id="treeName">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">岗位：</label>
+                <div class="col-sm-8">
+                    <select id="postName" name="postName" class="form-control select2-hidden-accessible">
+                        <option></option>
+                        <option th:each="post:${posts}" th:value="${post.postName}" th:text="${post.postName}" th:disabled="${post.status == '1'}" th:field="*{postName}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">职务：</label>
+                <div class="col-sm-8">
+                    <select id="jobName" name="jobName" class="form-control select2-hidden-accessible">
+                        <option></option>
+                        <option th:each="job:${jobs}" th:value="${job.jobName}" th:text="${job.jobName}" th:disabled="${job.status == '1'}" th:field="*{jobName}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">基本薪资：</label>
+                <div class="col-sm-8">
+                    <input id="baseSalary" name="baseSalary" th:field="*{baseSalary}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">职务薪资：</label>
+                <div class="col-sm-8">
+                    <input id="jobSalary" name="jobSalary" th:field="*{jobSalary}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">绩效：</label>
+                <div class="col-sm-8">
+                    <input id="performance" name="performance" th:field="*{performance}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">回传日期：</label>
+                <div class="col-sm-8">
+                    <input id="backDate" name="backDate" th:field="*{backDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">调整次数：</label>
+                <div class="col-sm-8">
+                    <input id="counts" name="counts" th:field="*{counts}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">类型：</label>
+                <div class="col-sm-8">
+                    <select name="adjustmentType" id="adjustmentType" class="form-control m-b" th:with="type=${@dict.getType('roster_adjustment_type')}">
+                        <option></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{adjustmentType}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">补贴：</label>
+                <div class="col-sm-8">
+                    <input id="subsidy" name="subsidy" th:field="*{subsidy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">调薪日期：</label>
+                <div class="col-sm-8">
+                    <input id="adjustmentDate" name="adjustmentDate" th:field="*{adjustmentDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">生效日期：</label>
+                <div class="col-sm-8">
+                    <input id="effectiveDate" name="effectiveDate" th:field="*{effectiveDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('roster_adjustment_status')}">
+                        <input type="radio" th:id="${dict.dictCode}" name="status" th:value="${dict.dictValue}" th:field="*{status}">
+                        <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input id="remark" name="remark" th:field="*{remark}" class="form-control" type="text">
+                </div>
+            </div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script th:src="@{/ajax/libs/select/select2.js}"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "roster/salary"
+		$("#form-salary-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-salary-edit').serialize());
+	        }
+	    }
+
+        // laydate 时间控件绑定
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            var backDate = laydate.render({
+                elem: '#backDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var adjustmentDate = laydate.render({
+                elem: '#adjustmentDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var effectiveDate = laydate.render({
+                elem: '#effectiveDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+        });
+
+
+        /*选择部门树*/
+        function selectDeptTree() {
+            var treeId = $("#treeId").val();
+            var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
+            var url = ctx + "system/dept/selectDeptTree/" + deptId;
+            var options = {
+                title: '选择部门',
+                width: "380",
+                url: ctx + "system/dept/selectDeptTree/" + deptId,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+
+        function doSubmit(index, layero){
+            var tree = layero.find("iframe")[0].contentWindow.$._tree;
+            if ($.tree.notAllowParents(tree)) {
+                var body = layer.getChildFrame('body', index);
+                $("#treeId").val(body.find('#treeId').val());
+                $("#treeName").val(body.find('#treeName').val());
+                layer.close(index);
+            }
+        }
+	</script>
+</body>
+</html>

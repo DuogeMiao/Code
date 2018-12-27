@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsingshan.infomana.mapper.EmployeeMapper">
+    
+    <resultMap type="Employee" id="EmployeeResult">
+        <result property="employeeId"    column="employee_id"    />
+        <result property="employeeNo"    column="employee_no"    />
+        <result property="employeeName"    column="employee_name"    />
+        <result property="identityCard"    column="identity_card"    />
+        <result property="birthDate"    column="birth_date"    />
+        <result property="sex"    column="sex"    />
+        <result property="nation"    column="nation"    />
+        <result property="maritalStatus"    column="marital_status"    />
+        <result property="nativePlace"    column="native_place"    />
+        <result property="address"    column="address"    />
+        <result property="residenceType"    column="residence_type"    />
+        <result property="education"    column="education"    />
+        <result property="politicsStatus"    column="politics_status"    />
+        <result property="graduateInstitutions"    column="graduate_institutions"    />
+        <result property="major"    column="major"    />
+        <result property="contactNumber"    column="contact_number"    />
+        <result property="emergencyCall"    column="emergency_call"    />
+        <result property="joinWorkDate"    column="join_work_date"    />
+        <result property="jobTitle"    column="job_title"    />
+        <result property="getTime"    column="get_time"    />
+        <result property="companyId"    column="company_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="postId"    column="post_id"    />
+        <result property="jobId"    column="job_id"    />
+        <result property="workAge"    column="work_age"    />
+        <result property="bankCard"    column="bank_card"    />
+        <result property="accountBank"    column="account_bank"    />
+        <result property="entryDate"    column="entry_date"    />
+        <result property="status"    column="status"    />
+        <result property="contractStatus"    column="contract_status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectEmployee">
+        SELECT
+            employee_id,
+            employee_no,
+            employee_name,
+            identity_card,
+            birth_date,
+            sex,
+            entry_date,
+            nation,
+            marital_status,
+            native_place,
+            address,
+            residence_type,
+            education,
+            politics_status,
+            graduate_institutions,
+            major,
+            contact_number,
+            emergency_call,
+            join_work_date,
+            job_title,
+            get_time,
+            company_id,
+            dept_id,
+            post_id,
+            job_id,
+            work_age,
+            bank_card,
+            account_bank,
+            STATUS,
+            contract_status,
+            del_flag,
+            create_by,
+            create_time,
+            update_by,
+            update_time,
+            remark
+        FROM
+            employee
+    </sql>
+
+
+    <select id="selectExport" resultType="com.tsingshan.infomana.domain.Employee"  statementType="STATEMENT">
+        <include refid="selectEmployee"/>
+        where employee_id in
+            <foreach collection="ids" item="ids" open="(" separator="," close=")">
+                ${ids}
+            </foreach>
+    </select>
+
+    <select id="selectEmployeeListByStatus" parameterType="java.lang.String" resultMap="EmployeeResult">
+        <include refid="selectEmployee"/>
+        WHERE `status` = #{status}
+    </select>
+	
+    <select id="selectEmployeeList" parameterType="Employee" resultMap="EmployeeResult">
+        <include refid="selectEmployee"/>
+        <where>
+            <if test="employeeId != null ">
+                and employee_id = #{employeeId}
+            </if>
+            <if test="employeeNo != null  and employeeNo != '' ">
+                and employee_no like concat('%', #{employeeNo}, '%')
+            </if>
+            <if test="employeeName != null  and employeeName != '' ">
+                and employee_name like concat('%', #{employeeName}, '%')
+            </if>
+            <if test="identityCard != null  and identityCard != '' ">
+                and identity_card = #{identityCard}
+            </if>
+            <if test="birthDate != null "> and birth_date = #{birthDate}</if>
+            <if test="sex != null  and sex != '' "> and sex = #{sex}</if>
+            <if test="nation != null  and nation != '' "> and nation = #{nation}</if>
+            <if test="maritalStatus != null  and maritalStatus != '' "> and marital_status = #{maritalStatus}</if>
+            <if test="nativePlace != null  and nativePlace != '' "> and native_place = #{nativePlace}</if>
+            <if test="address != null  and address != '' "> and address = #{address}</if>
+            <if test="residenceType != null  and residenceType != '' "> and residence_type = #{residenceType}</if>
+            <if test="education != null  and education != '' "> and education = #{education}</if>
+            <if test="politicsStatus != null  and politicsStatus != '' "> and politics_status = #{politicsStatus}</if>
+            <if test="graduateInstitutions != null  and graduateInstitutions != '' "> and graduate_institutions = #{graduateInstitutions}</if>
+            <if test="major != null  and major != '' "> and major = #{major}</if>
+            <if test="contactNumber != null  and contactNumber != '' ">
+                and contact_number like concat('%', #{contactNumber}, '%')
+            </if>
+            <if test="emergencyCall != null  and emergencyCall != '' ">
+                and emergency_call like concat('%', #{emergencyCall}, '%')
+            </if>
+            <if test="joinWorkDate != null "> and join_work_date = #{joinWorkDate}</if>
+            <if test="jobTitle != null  and jobTitle != '' "> and job_title = #{jobTitle}</if>
+            <if test="getTime != null "> and get_time = #{getTime}</if>
+            <if test="companyId != null ">
+                and company_id = #{companyId}
+            </if>
+            <if test="deptId != null">
+                and dept_id =  #{deptId}
+            </if>
+            <if test="jobId != null">
+                and job_id = #{jobId}
+            </if>
+            <if test="postId != null">
+                and post_id = #{postId}
+            </if>
+            <if test="workAge != null  and workAge != '' ">
+                and work_age = #{workAge}
+            </if>
+            <if test="bankCard != null  and bankCard != '' "> and bank_card = #{bankCard}</if>
+            <if test="accountBank != null  and accountBank != '' "> and account_bank = #{accountBank}</if>
+            <if test="entryDate != null  and entryDate != '' "> and entry_date = #{entryDate}</if>
+            <if test="status != null  and status != '' "> and status = #{status}</if>
+            <if test="contractStatus != null"> and contract_status = #{contractStatus}</if>
+            <if test="delFlag != null  and delFlag != '' "> and del_flag = #{delFlag}</if>
+            <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+            <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+        </where>
+    </select>
+    
+    <select id="selectEmployeeById" parameterType="Long" resultMap="EmployeeResult">
+        <include refid="selectEmployee"/>
+        WHERE  employee_id = #{employeeId}
+    </select>
+    <select id="selectEmployeeByEmployeeNo" parameterType="String" resultMap="EmployeeResult">
+        <include refid="selectEmployee"/>
+        WHERE  employee_no = #{employeeNo}
+    </select>
+        
+    <insert id="insertEmployee" parameterType="Employee">
+        insert into employee
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="employeeId != null  ">employee_id,</if>
+			<if test="employeeNo != null  and employeeNo != ''  ">employee_no,</if>
+			<if test="employeeName != null  and employeeName != ''  ">employee_name,</if>
+			<if test="identityCard != null  and identityCard != ''  ">identity_card,</if>
+			<if test="birthDate != null  ">birth_date,</if>
+			<if test="sex != null  and sex != ''  ">sex,</if>
+			<if test="nation != null  and nation != ''  ">nation,</if>
+			<if test="maritalStatus != null  and maritalStatus != ''  ">marital_status,</if>
+			<if test="nativePlace != null  and nativePlace != ''  ">native_place,</if>
+			<if test="address != null  and address != ''  ">address,</if>
+			<if test="residenceType != null  and residenceType != ''  ">residence_type,</if>
+			<if test="education != null  and education != ''  ">education,</if>
+			<if test="politicsStatus != null  and politicsStatus != ''  ">politics_status,</if>
+			<if test="graduateInstitutions != null  and graduateInstitutions != ''  ">graduate_institutions,</if>
+			<if test="major != null  and major != ''  ">major,</if>
+			<if test="contactNumber != null  and contactNumber != ''  ">contact_number,</if>
+			<if test="emergencyCall != null  and emergencyCall != ''  ">emergency_call,</if>
+			<if test="joinWorkDate != null  ">join_work_date,</if>
+			<if test="jobTitle != null  and jobTitle != ''  ">job_title,</if>
+			<if test="getTime != null  ">get_time,</if>
+			<if test="companyId != null ">company_id,</if>
+			<if test="deptId != null  and deptId != ''  ">dept_id,</if>
+			<if test="jobId != null  and jobId != ''  ">job_id,</if>
+			<if test="postId != null  and postId != ''  ">post_id,</if>
+			<if test="workAge != null  and workAge != ''  ">work_age,</if>
+			<if test="bankCard != null  and bankCard != ''  ">bank_card,</if>
+			<if test="accountBank != null  and accountBank != ''  ">account_bank,</if>
+			<if test="entryDate != null ">entry_date,</if>
+			<if test="status != null  and status != ''  ">status,</if>
+			<if test="contractStatus != null ">contract_status,</if>
+			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="employeeId != null  ">#{employeeId},</if>
+			<if test="employeeNo != null  and employeeNo != ''  ">#{employeeNo},</if>
+			<if test="employeeName != null  and employeeName != ''  ">#{employeeName},</if>
+			<if test="identityCard != null  and identityCard != ''  ">#{identityCard},</if>
+			<if test="birthDate != null  ">#{birthDate},</if>
+			<if test="sex != null  and sex != ''  ">#{sex},</if>
+			<if test="nation != null  and nation != ''  ">#{nation},</if>
+			<if test="maritalStatus != null  and maritalStatus != ''  ">#{maritalStatus},</if>
+			<if test="nativePlace != null  and nativePlace != ''  ">#{nativePlace},</if>
+			<if test="address != null  and address != ''  ">#{address},</if>
+			<if test="residenceType != null  and residenceType != ''  ">#{residenceType},</if>
+			<if test="education != null  and education != ''  ">#{education},</if>
+			<if test="politicsStatus != null  and politicsStatus != ''  ">#{politicsStatus},</if>
+			<if test="graduateInstitutions != null  and graduateInstitutions != ''  ">#{graduateInstitutions},</if>
+			<if test="major != null  and major != ''  ">#{major},</if>
+			<if test="contactNumber != null  and contactNumber != ''  ">#{contactNumber},</if>
+			<if test="emergencyCall != null  and emergencyCall != ''  ">#{emergencyCall},</if>
+			<if test="joinWorkDate != null  ">#{joinWorkDate},</if>
+			<if test="jobTitle != null  and jobTitle != ''  ">#{jobTitle},</if>
+			<if test="getTime != null  ">#{getTime},</if>
+			<if test="companyId != null ">#{companyId},</if>
+			<if test="deptId != null  and deptId != ''  ">#{deptId},</if>
+			<if test="jobId != null  and jobId != ''  ">#{jobId},</if>
+			<if test="postId != null  and postId != ''  ">#{postId},</if>
+			<if test="workAge != null  and workAge != ''  ">#{workAge},</if>
+			<if test="bankCard != null  and bankCard != ''  ">#{bankCard},</if>
+			<if test="accountBank != null  and accountBank != ''  ">#{accountBank},</if>
+			<if test="entryDate != null  ">#{entryDate},</if>
+			<if test="status != null  and status != ''  ">#{status},</if>
+			<if test="contractStatus != null">#{contractStatus},</if>
+			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+            sysdate()
+         </trim>
+    </insert>
+	 
+    <update id="updateEmployee" parameterType="Employee">
+        update employee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="employeeNo != null  and employeeNo != ''  ">employee_no = #{employeeNo},</if>
+            <if test="employeeName != null  and employeeName != ''  ">employee_name = #{employeeName},</if>
+            <if test="identityCard != null  and identityCard != ''  ">identity_card = #{identityCard},</if>
+            <if test="birthDate != null  ">birth_date = #{birthDate},</if>
+            <if test="sex != null  and sex != ''  ">sex = #{sex},</if>
+            <if test="nation != null  and nation != ''  ">nation = #{nation},</if>
+            <if test="maritalStatus != null  and maritalStatus != ''  ">marital_status = #{maritalStatus},</if>
+            <if test="nativePlace != null  and nativePlace != ''  ">native_place = #{nativePlace},</if>
+            <if test="address != null  and address != ''  ">address = #{address},</if>
+            <if test="residenceType != null  and residenceType != ''  ">residence_type = #{residenceType},</if>
+            <if test="education != null  and education != ''  ">education = #{education},</if>
+            <if test="politicsStatus != null  and politicsStatus != ''  ">politics_status = #{politicsStatus},</if>
+            <if test="graduateInstitutions != null  and graduateInstitutions != ''  ">graduate_institutions = #{graduateInstitutions},</if>
+            <if test="major != null  and major != ''  ">major = #{major},</if>
+            <if test="contactNumber != null  and contactNumber != ''  ">contact_number = #{contactNumber},</if>
+            <if test="emergencyCall != null  and emergencyCall != ''  ">emergency_call = #{emergencyCall},</if>
+            <if test="joinWorkDate != null  ">join_work_date = #{joinWorkDate},</if>
+            <if test="jobTitle != null  and jobTitle != ''  ">job_title = #{jobTitle},</if>
+            <if test="getTime != null  ">get_time = #{getTime},</if>
+            <if test="companyId ">company_id = #{companyId},</if>
+            <if test="deptId != null  and deptId != ''  ">dept_id = #{deptId},</if>
+            <if test="jobId != null  and jobId != ''  ">job_id = #{jobId},</if>
+            <if test="postId != null  and postId != ''  ">post_id = #{postId},</if>
+            <if test="workAge != null  and workAge != ''  ">work_age = #{workAge},</if>
+            <if test="bankCard != null  and bankCard != ''  ">bank_card = #{bankCard},</if>
+            <if test="accountBank != null  and accountBank != ''  ">account_bank = #{accountBank},</if>
+            <if test="entryDate != null ">entry_date = #{entryDate},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="contractStatus != null ">contract_status = #{contractStatus},</if>
+            <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where employee_id = #{employeeId}
+    </update>
+
+	<delete id="deleteEmployeeById" parameterType="Long">
+        update employee set del_flag = '1' where employee_id = #{employeeId}
+    </delete>
+	
+    <delete id="deleteEmployeeByIds" parameterType="Long">
+        update employee set del_flag = '1' where employee_id in
+        <foreach item="employeeId" collection="array" open="(" separator="," close=")">
+            #{employeeId}
+        </foreach>
+
+    </delete>
+    
+</mapper>

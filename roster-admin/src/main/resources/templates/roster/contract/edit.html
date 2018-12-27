@@ -1,0 +1,239 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-contract-edit" th:object="${contractVo}">
+            <input id="contractId" name="contractId" th:field="*{contractId}"  type="hidden">
+            <input id="employeeId" name="employeeId" th:field="*{employeeId}"  type="hidden">
+
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">合同编号：</label>
+                <div class="col-sm-8">
+                    <input id="contractNo" name="contractNo" th:field="*{contractNo}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">姓名：</label>
+                <div class="col-sm-8">
+                    <input id="employeeName" name="employeeName" th:field="*{employeeName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">身份证：</label>
+                <div class="col-sm-8">
+                    <input id="identityCard" name="identityCard" th:field="*{identityCard}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">工号：</label>
+                <div class="col-sm-8">
+                    <input id="employeeNo" name="employeeNo" th:field="*{employeeNo}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">入职日期：</label>
+                <div class="col-sm-8">
+                    <input id="entryDate" name="entryDate" th:field="*{entryDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">最早入职日期：</label>
+                <div class="col-sm-8">
+                    <input id="earliestEntryDate" name="earliestEntryDate" th:field="*{earliestEntryDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">意外险：</label>
+                <div class="col-sm-8">
+                    <select name="accidentInsurance" id="accidentInsurance" class="form-control m-b" th:field="*{accidentInsurance}">
+                        <option value=""></option>
+                        <option value="已买">已买</option>
+                        <option value="未买">未买</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">社会保险：</label>
+                <div class="col-sm-8">
+                    <select name="socialInsurance" id="socialInsurance" class="form-control m-b" th:field="*{socialInsurance}">
+                        <option value=""></option>
+                        <option value="已买">已买</option>
+                        <option value="未买">未买</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">工伤保险：</label>
+                <div class="col-sm-8">
+                    <select name="injuryInsurance" id="injuryInsurance" class="form-control m-b" th:field="*{injuryInsurance}">
+                        <option value=""></option>
+                        <option value="已买">已买</option>
+                        <option value="未买">未买</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">公司：</label>
+                <div class="col-sm-8">
+                    <select name="companyId" id="companyId" class="form-control select2-hidden-accessible">
+                        <option></option>
+                        <option th:each="com : ${companys}" th:text="${com.companyCode}" th:value="${com.companyId}" th:selected="${com.companyCode} == *{companyCode} ? true : false" th:disabled="${com.status == '1'}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">部门：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="deptName" th:field="*{deptName}"  onclick="selectDeptTree()" readonly="true" id="treeName">
+                    <input name="deptId"  type="hidden" id="treeId"/>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">岗位：</label>
+                <div class="col-sm-8">
+                    <select id="postId" name="postId" class="form-control select2-hidden-accessible">
+                        <option></option>
+                        <option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}" th:selected="${post.postName} == *{postName} ? true : false" th:disabled="${post.status == '1'}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">职务：</label>
+                <div class="col-sm-8">
+                    <select id="jobId" name="jobId" class="form-control select2-hidden-accessible">
+                        <option></option>
+                        <option th:each="job:${jobs}" th:value="${job.jobId}" th:text="${job.jobName}" th:selected="${job.jobName} == *{jobName} ? true : false" th:disabled="${job.status == '1'}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">银行卡号：</label>
+                <div class="col-sm-8">
+                    <input id="bankCard" name="bankCard" th:field="*{bankCard}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">具体开户行：</label>
+                <div class="col-sm-8">
+                    <input id="accountBank" name="accountBank" th:field="*{accountBank}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">试用期(月)：</label>
+                <div class="col-sm-8">
+                    <input id="trialPeriod" name="trialPeriod" th:field="*{trialPeriod}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">合同类型：</label>
+                <div class="col-sm-8">
+                    <select name="contractType" id="contractType" class="form-control m-b" th:with="contractType=${@dict.getType('roster_contract_type')}">
+                        <option></option>
+                        <option th:each="ct : ${contractType}" th:text="${ct.dictLabel}" th:value="${ct.dictValue}" th:field="*{contractType}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">签订日期：</label>
+                <div class="col-sm-8">
+                    <input id="signDate" name="signDate" th:field="*{signDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">过期日期：</label>
+                <div class="col-sm-8">
+                    <input id="expireDate" name="expireDate" th:field="*{expireDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('roster_contract_status')}">
+                        <input type="radio" th:id="${dict.dictCode}" name="status" th:value="${dict.dictValue}" th:field="*{status}">
+                        <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input id="remark" name="remark" th:field="*{remark}" class="form-control" type="text">
+                </div>
+            </div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script th:src="@{/ajax/libs/select/select2.js}"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "roster/contract"
+		$("#form-contract-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-contract-edit').serialize());
+	        }
+	    }
+
+        // laydate 时间控件绑定
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            var entryDate = laydate.render({
+                elem: '#entryDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var earliestEntryDate = laydate.render({
+                elem: '#earliestEntryDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var signDate = laydate.render({
+                elem: '#signDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var expireDate = laydate.render({
+                elem: '#expireDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+        });
+
+        /*选择部门树*/
+        function selectDeptTree() {
+            var treeId = $("#treeId").val();
+            var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
+            var url = ctx + "system/dept/selectDeptTree/" + deptId;
+            var options = {
+                title: '选择部门',
+                width: "380",
+                url: ctx + "system/dept/selectDeptTree/" + deptId,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+
+        function doSubmit(index, layero){
+            var tree = layero.find("iframe")[0].contentWindow.$._tree;
+            if ($.tree.notAllowParents(tree)) {
+                var body = layer.getChildFrame('body', index);
+                $("#treeId").val(body.find('#treeId').val());
+                $("#treeName").val(body.find('#treeName').val());
+                layer.close(index);
+            }
+        }
+	</script>
+</body>
+</html>

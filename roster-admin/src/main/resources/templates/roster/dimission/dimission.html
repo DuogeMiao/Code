@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="dimission-form">
+					<div class="select-list">
+						<ul>
+							<li>
+								员工工号：<input type="text" name="employeeNo"/>
+							</li>
+							<li>
+								员工姓名：<input type="text" name="employeeName"/>
+							</li>
+							<li>
+								身份证：<input type="text" name="identityCard"/>
+							</li>
+							<li>
+								公司：<select name="companyName" th:with="type=${@dict.getType('roster_company_name')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="roster:dimission:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="roster:dimission:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:dimission:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+
+				<!--<a class="btn btn-info menuItem" onclick="employee()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link"></i> 员工
+				</a>
+				<a class="btn btn-info menuItem" onclick="contract()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link"></i> 合同
+				</a>
+				<a class="btn btn-info menuItem" onclick="visa()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link"></i> 护照
+				</a>
+				<a class="btn btn-info menuItem" onclick="transaction()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link"></i> 异动
+				</a>
+				<a class="btn btn-info menuItem" onclick="salary()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link"></i> 调薪
+				</a>
+				<a class="btn btn-info menuItem" onclick="promotion()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link"></i> 晋升
+				</a>-->
+
+			</div>
+
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('roster:dimission:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('roster:dimission:remove')}]];
+        var status_datas = [[${@dict.getType('roster_employee_status')}]];
+        var prefix = ctx + "roster/dimission";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                modalName: "离职",
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : 'ID',
+                    visible : false
+				},
+				{
+					field : 'employeeId', 
+					title : '员工ID',
+                    visible : false
+				},
+				{
+					field : 'employeeNo', 
+					title : '工号' 
+				},
+				{
+					field : 'employeeName', 
+					title : '员工姓名' 
+				},
+				{
+					field : 'identityCard', 
+					title : '身份证' 
+				},
+				{
+					field : 'companyName', 
+					title : '公司名称' 
+				},
+				{
+					field : 'deptName', 
+					title : '部门名称'
+				},
+				{
+					field : 'postName',
+					title : '岗位名称'
+				},
+				{
+					field : 'jobName', 
+					title : '职位名称'
+				},
+				{
+					field : 'entryDate', 
+					title : '入职日期' 
+				},
+				{
+					field : 'dimissionDate', 
+					title : '离职日期' 
+				},
+				{
+					field : 'backDate', 
+					title : '回传日期' 
+				},
+				{
+					field : 'dimissionType', 
+					title : '离职类型'
+				},
+				{
+					field : 'dimissionReason', 
+					title : '离职原因' 
+				},
+				{
+					field: 'status',
+					title: '状态',
+					align: 'center',
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(status_datas, value);
+					}
+				},
+				{
+					field : 'remark', 
+					title : '备注' 
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+
+        /*花名册管理-员工 */
+        function employee() {
+            var url = ctx + "roster/employee";
+            createMenuItem(url, "员工信息");
+        }
+        /*花名册管理-合同 */
+        function contract() {
+            var url = ctx + "roster/contract";
+            createMenuItem(url, "合同信息");
+        }
+        /*花名册管理-护照 */
+        function visa() {
+            var url = ctx + "roster/visa";
+            createMenuItem(url, "护照签证信息");
+        }
+        /*花名册管理-异动 */
+        function transaction() {
+            var url = ctx + "roster/transaction";
+            createMenuItem(url, "异动信息");
+        }
+        /*花名册管理-调薪 */
+        function salary() {
+            var url = ctx + "roster/salary";
+            createMenuItem(url, "调薪信息");
+        }
+        /*花名册管理-晋升 */
+        function promotion() {
+            var url = ctx + "roster/promotion";
+            createMenuItem(url, "晋升信息");
+        }
+
+    </script>
+</body>
+</html>

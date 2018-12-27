@@ -1,0 +1,206 @@
+package com.tsingshan.web.controller.roster;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import com.github.pagehelper.PageInfo;
+import com.tsingshan.common.annotation.Log;
+import com.tsingshan.common.base.AjaxResult;
+import com.tsingshan.common.enums.BusinessType;
+import com.tsingshan.common.utils.ExcelUtil;
+import com.tsingshan.common.utils.StringUtils;
+import com.tsingshan.framework.util.ShiroUtils;
+import com.tsingshan.infomana.domain.Employee;
+import com.tsingshan.infomana.domain.vo.EmployeeVo;
+import com.tsingshan.infomana.service.IEmployeeService;
+import com.tsingshan.system.domain.SysPost;
+import com.tsingshan.system.service.IJobService;
+import com.tsingshan.system.service.ISysPostService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.tsingshan.infomana.domain.Transaction;
+import com.tsingshan.infomana.service.ITransactionService;
+import com.tsingshan.web.core.base.BaseController;
+import com.tsingshan.framework.web.page.TableDataInfo;
+
+/**
+ * 异动 信息操作处理
+ * 
+ * @author tsingshan
+ * @date 2018-10-31
+ */
+@Controller
+@RequestMapping("/roster/transaction")
+public class TransactionController extends BaseController
+{
+    private String prefix = "roster/transaction";
+	
+	@Autowired
+	private ITransactionService transactionService;
+
+	@Autowired
+	private IEmployeeService employeeService;
+
+    @Autowired
+    private ISysPostService postService;
+
+    @Autowired
+    private IJobService jobService;
+	
+	@RequiresPermissions("roster:transaction:view")
+	@GetMapping()
+	public String transaction()
+	{
+	    return prefix + "/transaction";
+	}
+	
+	/**
+	 * 查询异动列表
+	 */
+	@RequiresPermissions("roster:transaction:list")
+	@PostMapping("/list")
+	@ResponseBody
+	public TableDataInfo list(Transaction transaction)
+	{
+		startPage();
+        List<Transaction> list = transactionService.selectTransactionList(transaction);
+		//重新set 为了接收 页面传的id参数  用于返回页面 判断是否为空
+		TableDataInfo tableDataInfo = new TableDataInfo();
+		tableDataInfo.setCode(0);
+		tableDataInfo.setTotal(new PageInfo(list).getTotal());
+		tableDataInfo.setRows(list);
+		tableDataInfo.setId(transaction.getEmployeeId());
+		return tableDataInfo;
+	}
+	
+	/**
+	 * 新增异动
+	 */
+	@GetMapping("/add")
+	public String add(ModelMap modelMap)
+	{
+        modelMap.put("posts", postService.selectPostAll());
+        modelMap.put("jobs", jobService.selectJobAll());
+	    return prefix + "/add";
+	}
+	
+	/**
+	 * 新增保存异动
+	 */
+	@RequiresPermissions("roster:transaction:add")
+	@Log(title = "异动", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public AjaxResult addSave(Transaction transaction,Long deptId,Long postId)
+	{
+		if (deptId == null || postId == null) {
+			return AjaxResult.error("异动出部门或者岗位不能为空");
+		}
+		transaction.setCreateBy(ShiroUtils.getLoginName());
+		SysPost sysPost = postService.selectPostById(postId);
+		transaction.setTransInPost(sysPost.getPostName());
+		transaction.setSpanCompany("否");
+		AjaxResult ajaxResult = transactionService.insertTransaction(transaction,deptId,postId);
+        return ajaxResult;
+	}
+
+	/**
+	 * 修改异动
+	 */
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") Long id, ModelMap mmap)
+	{
+		Transaction transaction = transactionService.selectTransactionById(id);
+		mmap.put("transaction", transaction);
+	    return prefix + "/edit";
+	}
+	
+	/**
+	 * 修改保存异动
+	 */
+	@RequiresPermissions("roster:transaction:edit")
+	@Log(title = "异动", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public AjaxResult editSave(Transaction transaction)
+	{
+
+			transaction.setUpdateBy(ShiroUtils.getLoginName());
+        AjaxResult ajaxResult = transactionService.updateTransaction(transaction);
+        return ajaxResult;
+	}
+
+	@Log(title = "异动", businessType = BusinessType.EXPORT)
+	@RequiresPermissions("roster:transaction:export")
+	@PostMapping("/export")
+	@ResponseBody
+	public AjaxResult export(String  ids)
+	{
+		List<Transaction> list = transactionService.selectExport(ids);
+		ExcelUtil<Transaction> util = new ExcelUtil<Transaction>(Transaction.class);
+        AjaxResult ajaxResult = util.exportExcel(list, "transaction");
+        return ajaxResult;
+	}
+	
+	/**
+	 * 删除异动
+	 */
+	@RequiresPermissions("roster:transaction:remove")
+	@Log(title = "异动", businessType = BusinessType.DELETE)
+	@PostMapping( "/remove")
+	@ResponseBody
+	public AjaxResult remove(String ids)
+	{
+        AjaxResult ajaxResult = transactionService.deleteTransactionByIds(ids);
+        return ajaxResult;
+    }
+
+	/**
+	 * 向页面put值
+	 * @param employeeId
+	 * @param mmap
+	 * @return
+	 */
+	@GetMapping("/{employeeId}")
+	public String transaByEmpId(@PathVariable("employeeId") Long employeeId, ModelMap mmap)
+	{
+		mmap.put("employeeId", employeeId);
+		return prefix + "/transaction";
+	}
+
+	/**
+	 * 根据员工id回显员工信息到页面自动填充
+	 * @param employeeId
+	 * @param map
+	 * @return
+	 */
+	@GetMapping("/add/{employeeId}")
+	public String addByEmployeeId(@PathVariable("employeeId") Long employeeId, ModelMap map)
+	{
+		EmployeeVo employeeVo = employeeService.selectEmployeeVoById(employeeId);
+        map.put("employeeVo", employeeVo);
+//		map.put("employeeId", employee.getEmployeeId());
+//		map.put("employeeName", employee.getEmployeeName());
+//		map.put("employeeNo", employee.getEmployeeNo());
+//		map.put("identityCard", employee.getIdentityCard());
+		return prefix + "/add2";
+	}
+
+	@Override
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
+	
+}

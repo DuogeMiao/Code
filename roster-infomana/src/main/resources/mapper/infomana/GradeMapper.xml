@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsingshan.infomana.mapper.GradeMapper">
+    
+    <resultMap type="Grade" id="GradeResult">
+        <result property="id"    column="id"    />
+        <result property="level"    column="level_name"    />
+        <result property="grade"    column="grade"    />
+        <result property="baseSalary"    column="base_salary"    />
+        <result property="jobSalary"    column="job_salary"    />
+        <result property="everyGradeChange"    column="every_grade_change"    />
+        <result property="jobName"    column="job_name"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectGradeVo">
+        select id, level_name, grade, base_salary, job_salary, every_grade_change, job_name, status, del_flag, create_by, create_time, update_by, update_time, remark from level_grade
+    </sql>
+
+    <select id="selectExport" resultType="com.tsingshan.infomana.domain.Grade"  statementType="STATEMENT">
+        <include refid="selectGradeVo" />
+        where id in
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            ${ids}
+        </foreach>
+    </select>
+	
+    <select id="selectGradeList" parameterType="Grade" resultMap="GradeResult">
+        <include refid="selectGradeVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="level != null ">
+                 and level_name = #{level}
+             </if>
+             <if test="grade != null ">
+                 and grade = #{grade}
+             </if>
+             <if test="baseSalary != null ">
+                 and base_salary like concat('%', #{baseSalary}, '%')
+             </if>
+             <if test="jobSalary != null ">
+                 and job_salary like concat('%', #{jobSalary}, '%')
+             </if>
+             <if test="everyGradeChange != null ">
+                 and every_grade_change like concat('%', #{everyGradeChange}, '%')
+             </if>
+             <if test="jobName != null  and jobName != '' ">
+                 and job_name like concat('%', #{jobName}, '%')
+             </if>
+             <if test="status != null  and status != '' "> and status = #{status}</if>
+             <if test="delFlag != null  and delFlag != '' "> and del_flag = #{delFlag}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectGradeById" parameterType="Integer" resultMap="GradeResult">
+        <include refid="selectGradeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGrade" parameterType="Grade">
+        insert into level_grade
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="level != null  ">level_name,</if>
+			<if test="grade != null  ">grade,</if>
+			<if test="baseSalary != null  ">base_salary,</if>
+			<if test="jobSalary != null  ">job_salary,</if>
+			<if test="everyGradeChange != null  ">every_grade_change,</if>
+			<if test="jobName != null  and jobName != ''  ">job_name,</if>
+			<if test="status != null  and status != ''  ">status,</if>
+			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="level != null  ">#{level},</if>
+			<if test="grade != null  ">#{grade},</if>
+			<if test="baseSalary != null  ">#{baseSalary},</if>
+			<if test="jobSalary != null  ">#{jobSalary},</if>
+			<if test="everyGradeChange != null  ">#{everyGradeChange},</if>
+			<if test="jobName != null  and jobName != ''  ">#{jobName},</if>
+			<if test="status != null  and status != ''  ">#{status},</if>
+			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+            sysdate()
+        </trim>
+    </insert>
+	 
+    <update id="updateGrade" parameterType="Grade">
+        update level_grade
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="level != null  ">level_name = #{level},</if>
+            <if test="grade != null  ">grade = #{grade},</if>
+            <if test="baseSalary != null  ">base_salary = #{baseSalary},</if>
+            <if test="jobSalary != null  ">job_salary = #{jobSalary},</if>
+            <if test="everyGradeChange != null  ">every_grade_change = #{everyGradeChange},</if>
+            <if test="jobName != null  and jobName != ''  ">job_name = #{jobName},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteGradeById" parameterType="Integer">
+        delete from level_grade where id = #{id}
+    </delete>
+	
+    <delete id="deleteGradeByIds" parameterType="Integer">
+        delete from level_grade where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,259 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-visa-add">
+			<input id="employeeId" name="employeeId" th:value="${employeeId}"  class="form-control" type="hidden">
+			<div class="form-group">
+				<label class="col-sm-3 control-label">护照号：</label>
+				<div class="col-sm-8">
+					<input id="passportNo" name="passportNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">工号：</label>
+				<div class="col-sm-8">
+					<select name="employeeNo" onchange="getByEmployeeNo()" id="employeeNo" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeVoListByStatus('')}">
+						<option value=""></option>
+						<option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeNo}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">姓名：</label>
+				<div class="col-sm-8">
+					<input id="employeeName" name="employeeName"  class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">身份证：</label>
+				<div class="col-sm-8">
+					<input id="identityCard" name="identityCard"  class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">护照签发日期：</label>
+				<div class="col-sm-8">
+					<input id="passportIssueDate" name="passportIssueDate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">护照截止日期：</label>
+				<div class="col-sm-8">
+					<input id="passportDeadline" name="passportDeadline" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">签证编号：</label>
+				<div class="col-sm-8">
+					<input id="visaNo" name="visaNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">签证类型：</label>
+				<div class="col-sm-8">
+					<input id="visaType" name="visaType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">签证有效期（天）：</label>
+				<div class="col-sm-8">
+					<input id="visaValidity" name="visaValidity" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">入境时间：</label>
+				<div class="col-sm-8">
+					<input id="entryTime" name="entryTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">处境时间：</label>
+				<div class="col-sm-8">
+					<input id="exitTime" name="exitTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">入矿时间：</label>
+				<div class="col-sm-8">
+					<input id="inMineTime" name="inMineTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">出矿时间：</label>
+				<div class="col-sm-8">
+					<input id="outMineTime" name="outMineTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">状态：</label>
+				<div class="col-sm-8">
+					<input id="status" name="status" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remark" name="remark" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+	<script th:src="@{/ajax/libs/select/select2.js}"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "roster/visa";
+        $("#form-visa-add").validate({
+            rules:{
+                passportNo:{
+                    required:true,
+                    isPassport: true
+                }
+            },
+            messages:{
+                passportNo:{
+                    required: "请填写护照号",
+                    isPassport: "护照格式不正确"
+                }
+            }
+
+        });
+        jQuery.validator.addMethod("isPassport", function(value, element) {
+            var passportNo1 = /^1[45][0-9]{7}$|(^[P|p|S|s]\d{7}$)|(^[S|s|G|g|E|e]\d{8}$)|(^[Gg|Tt|Ss|Ll|Qq|Dd|Aa|Ff]\d{8}$)|(^[H|h|M|m]\d{8,10}$)/;
+            var passportNo2 = /^[a-zA-Z0-9]{5,17}$/;
+            return this.optional(element) || ( passportNo2.test(value) || passportNo1.test(value));
+        }, "护照格式不正确");
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-visa-add').serialize());
+            }
+        }
+
+
+        // laydate 时间控件绑定
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            var passportIssueDate = laydate.render({
+                elem: '#passportIssueDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var passportDeadline = laydate.render({
+                elem: '#passportDeadline',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var entryTime = laydate.render({
+                elem: '#entryTime',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var exitTime = laydate.render({
+                elem: '#exitTime',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var inMineTime = laydate.render({
+                elem: '#inMineTime',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var outMineTime = laydate.render({
+                elem: '#outMineTime',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+        });
+
+        function getByEmployeeNo() {
+            try{
+                //根据员工工号查询数据
+                $.ajax({
+                    type: "post",
+                    url: "/roster/employee/employeeNo",
+                    async: false,
+                    data: {
+                        "employeeNo": document.getElementById('employeeNo').value
+                    },
+                    dataType: "json",
+                    success: function (e) {
+                        document.getElementById('employeeName').value = e.data.employeeName;
+                        document.getElementById('employeeId').value = e.data.employeeId;
+                        document.getElementById('identityCard').value = e.data.identityCard;
+                        /*//根据公司id获取公司信息
+                        $.ajax({
+                            type: "post",
+                            url: "/system/companys/companyId",
+                            async: false,
+                            data: {
+                                "companyId": e.data.companyId
+                            },
+                            dataType: "json",
+                            success: function (c) {
+                                document.getElementById('companyName').value = c.data.companyCode;
+                            }
+                        });
+                        //根据部门id获取部门信息
+                        $.ajax({
+                            type: "post",
+                            url: "/system/dept/deptId",
+                            async: false,
+                            data: {
+                                "deptId": e.data.deptId
+                            },
+                            dataType: "json",
+                            success: function (d) {
+                                document.getElementById('treeName').value = d.data.deptName;
+                                document.getElementById('treeId').value = e.data.deptId;
+                            }
+                        });
+                        selectValue("postId",e.data.postId);
+                        selectValue("jobId",e.data.jobId);
+                        //根据岗位id获取岗位信息
+                        $.ajax({
+                            type: "post",
+                            url: "/system/post/postId",
+                            async: false,
+                            data: {
+                                "postId": e.data.postId
+                            },
+                            dataType: "json",
+                            success: function (p) {
+                                document.getElementById('postName').value = p.data.postName;
+                            }
+                        });
+                        //根据职务id获取职务信息
+                        $.ajax({
+                            type: "post",
+                            url: "/system/job/jobId",
+                            async: false,
+                            data: {
+                                "jobId": e.data.jobId
+                            },
+                            dataType: "json",
+                            success: function (j) {
+                                document.getElementById('jobName').value = j.data.jobName;
+                            }
+                        });*/
+                    }
+                });
+            } catch(e){
+                $.modal.closeLoading();
+            }
+        }
+        /*function selectValue(id,value) {
+            var selectId = $("#"+id+"").select2();
+            selectId.val(value).trigger("change");
+            selectId.change();
+        }*/
+	</script>
+</body>
+</html>

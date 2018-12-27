@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-dimission-edit" th:object="${dimission}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+            <input id="employeeId" name="employeeId" th:field="*{employeeId}" class="form-control" type="hidden">
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">工号：</label>
+                <div class="col-sm-8">
+                    <input id="employeeNo" name="employeeNo" th:field="*{employeeNo}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">员工：</label>
+                <div class="col-sm-8">
+                    <input id="employeeName" name="employeeName" th:field="*{employeeName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">身份证：</label>
+                <div class="col-sm-8">
+                    <input id="identityCard" name="identityCard" th:field="*{identityCard}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">公司：</label>
+                <div class="col-sm-8">
+                    <input id="companyName" name="companyName" th:field="*{companyName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">部门：</label>
+                <div class="col-sm-8">
+                    <input id="deptName" name="deptName" th:field="*{deptName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">岗位：</label>
+                <div class="col-sm-8">
+                    <input id="postName" name="postName" th:field="*{postName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">职务：</label>
+                <div class="col-sm-8">
+                    <input id="jobName" name="jobName" th:field="*{jobName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">入职日期：</label>
+                <div class="col-sm-8">
+                    <input id="entryDate" name="entryDate" th:field="*{entryDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">离职日期：</label>
+                <div class="col-sm-8">
+                    <input id="dimissionDate" name="dimissionDate" th:field="*{dimissionDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">回传日期：</label>
+                <div class="col-sm-8">
+                    <input id="backDate" name="backDate" th:field="*{backDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">离职类型：</label>
+                <div class="col-sm-8">
+                    <select name="dimissionType" id="dimissionType" class="form-control m-b" th:with="type=${@dict.getType('roster_dimission_type')}">
+                        <option></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{dimissionType}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">离职原因：</label>
+                <div class="col-sm-8">
+                    <select name="dimissionReason" id="dimissionReason" class="form-control select2-hidden-accessible" th:with="type=${@dict.getType('roster_dimission_reason')}" multiple="">
+                        <option></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{dimissionReason}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <input id="status" name="status" th:field="*{status}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input id="remark" name="remark" th:field="*{remark}" class="form-control" type="text">
+                </div>
+            </div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script th:src="@{/ajax/libs/select/select2.js}"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "roster/dimission"
+		$("#form-dimission-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-dimission-edit').serialize());
+	        }
+	    }
+
+        // laydate 时间控件绑定
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            var entryDate = laydate.render({
+                elem: '#entryDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var dimissionDate = laydate.render({
+                elem: '#dimissionDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var backDate = laydate.render({
+                elem: '#backDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+        });
+	</script>
+</body>
+</html>

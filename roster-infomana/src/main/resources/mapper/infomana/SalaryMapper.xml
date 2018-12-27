@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsingshan.infomana.mapper.SalaryMapper">
+    
+    <resultMap type="Salary" id="SalaryResult">
+        <result property="id"    column="id"    />
+        <result property="employeeId"    column="employee_id"    />
+        <result property="employeeNo"    column="employee_no"    />
+        <result property="employeeName"    column="employee_name"    />
+        <result property="identityCard"    column="identity_card"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="jobName"    column="job_name"    />
+        <result property="postName"    column="post_name"    />
+        <result property="baseSalary"    column="base_salary"    />
+        <result property="jobSalary"    column="job_salary"    />
+        <result property="performance"    column="performance"    />
+        <result property="backDate"    column="back_date"    />
+        <result property="counts"    column="counts"    />
+        <result property="adjustmentType"    column="adjustment_type"    />
+        <result property="subsidy"    column="subsidy"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectSalaryVo">
+        select id, employee_id, employee_no, employee_name, identity_card, company_name, dept_name, job_name, post_name, base_salary, job_salary, performance, back_date, counts, adjustment_type, subsidy, adjustment_date, effective_date, status, del_flag, create_by, create_time, update_by, update_time, remark from adjustment_salary
+    </sql>
+
+    <select id="selectExport" resultType="com.tsingshan.infomana.domain.Salary"  statementType="STATEMENT">
+        SELECT
+            employee_no,
+            employee_name,
+            identity_card,
+            company_name,
+            dept_name,
+            job_name,
+            post_name,
+            base_salary,
+            job_salary,
+            performance,
+            back_date,
+            counts,
+            adjustment_type,
+            subsidy,
+            adjustment_date,
+            effective_date,
+            STATUS,
+            remark
+        FROM
+            adjustment_salary
+        where id in
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            ${ids}
+        </foreach>
+    </select>
+
+    <select id="selectSalaryList" parameterType="Salary" resultMap="SalaryResult">
+        <include refid="selectSalaryVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="employeeId != null "> and employee_id = #{employeeId}</if>
+             <if test="employeeNo != null  and employeeNo != '' ">
+                 and employee_no = #{employeeNo}
+             </if>
+             <if test="employeeName != null  and employeeName != '' ">
+                 and employee_name like concat('%', #{employeeName}, '%')
+             </if>
+             <if test="identityCard != null  and identityCard != '' ">
+                 and identity_card like concat('%', #{identityCard}, '%')
+             </if>
+             <if test="companyName != null  and companyName != '' ">
+                 and company_name like concat('%', #{companyName}, '%')
+             </if>
+             <if test="deptName != null  and deptName != '' ">
+                 and dept_name like concat('%', #{deptName}, '%')
+             </if>
+             <if test="jobName != null  and jobName != '' ">
+                 and job_name like concat('%', #{jobName}, '%')
+             </if>
+             <if test="postName != null  and postName != '' ">
+                 and post_name like concat('%', #{postName}, '%')
+             </if>
+             <if test="baseSalary != null ">
+                 and base_salary like concat('%', #{baseSalary}, '%')
+             </if>
+             <if test="jobSalary != null ">
+                 and job_salary like concat('%', #{jobSalary}, '%')
+             </if>
+             <if test="performance != null ">
+                 and performance like concat('%', #{performance}, '%')
+             </if>
+             <if test="backDate != null "> and back_date = #{backDate}</if>
+             <if test="counts != null "> and counts = #{counts}</if>
+             <if test="adjustmentType != null  and adjustmentType != '' ">
+                 and adjustment_type like concat('%', #{adjustmentType}, '%')
+             </if>
+             <if test="subsidy != null ">
+                 and subsidy like concat('%', #{subsidy}, '%')
+             </if>
+             <if test="status != null  and status != '' "> and status = #{status}</if>
+             <if test="delFlag != null  and delFlag != '' "> and del_flag = #{delFlag}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectSalaryById" parameterType="Long" resultMap="SalaryResult">
+        <include refid="selectSalaryVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectSalaryByEmployeeNoStatus"  resultMap="SalaryResult">
+        <include refid="selectSalaryVo"/>
+        where employee_no = #{employeeNo} and `status` = #{status}
+    </select>
+        
+    <insert id="insertSalary" parameterType="Salary">
+        insert into adjustment_salary
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="employeeId != null  ">employee_id,</if>
+			<if test="employeeNo != null  and employeeNo != ''  ">employee_no,</if>
+			<if test="employeeName != null  and employeeName != ''  ">employee_name,</if>
+			<if test="identityCard != null  and identityCard != ''  ">identity_card,</if>
+			<if test="companyName != null  and companyName != ''  ">company_name,</if>
+			<if test="deptName != null  and deptName != ''  ">dept_name,</if>
+			<if test="jobName != null  and jobName != ''  ">job_name,</if>
+			<if test="postName != null  and postName != ''  ">post_name,</if>
+			<if test="baseSalary != null  ">base_salary,</if>
+			<if test="jobSalary != null  ">job_salary,</if>
+			<if test="performance != null  ">performance,</if>
+			<if test="backDate != null  ">back_date,</if>
+			<if test="counts != null  ">counts,</if>
+			<if test="adjustmentType != null  and adjustmentType != ''  ">adjustment_type,</if>
+			<if test="subsidy != null  ">subsidy,</if>
+			<if test="adjustmentDate != null  ">adjustment_date,</if>
+			<if test="effectiveDate != null  ">effective_date,</if>
+			<if test="status != null  and status != ''  ">status,</if>
+			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="employeeId != null  ">#{employeeId},</if>
+			<if test="employeeNo != null  and employeeNo != ''  ">#{employeeNo},</if>
+			<if test="employeeName != null  and employeeName != ''  ">#{employeeName},</if>
+			<if test="identityCard != null  and identityCard != ''  ">#{identityCard},</if>
+			<if test="companyName != null  and companyName != ''  ">#{companyName},</if>
+			<if test="deptName != null  and deptName != ''  ">#{deptName},</if>
+			<if test="jobName != null  and jobName != ''  ">#{jobName},</if>
+			<if test="postName != null  and postName != ''  ">#{postName},</if>
+			<if test="baseSalary != null  ">#{baseSalary},</if>
+			<if test="jobSalary != null  ">#{jobSalary},</if>
+			<if test="performance != null  ">#{performance},</if>
+			<if test="backDate != null  ">#{backDate},</if>
+			<if test="counts != null  ">#{counts},</if>
+			<if test="adjustmentType != null  and adjustmentType != ''  ">#{adjustmentType},</if>
+			<if test="adjustmentDate != null  ">#{adjustmentDate},</if>
+			<if test="effectiveDate != null  ">#{effectiveDate},</if>
+			<if test="subsidy != null  ">#{subsidy},</if>
+			<if test="status != null  and status != ''  ">#{status},</if>
+			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+            sysdate()
+         </trim>
+    </insert>
+	 
+    <update id="updateSalary" parameterType="Salary">
+        update adjustment_salary
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="employeeId != null  ">employee_id = #{employeeId},</if>
+            <if test="employeeNo != null  and employeeNo != ''  ">employee_no = #{employeeNo},</if>
+            <if test="employeeName != null  and employeeName != ''  ">employee_name = #{employeeName},</if>
+            <if test="identityCard != null  and identityCard != ''  ">identity_card = #{identityCard},</if>
+            <if test="companyName != null  and companyName != ''  ">company_name = #{companyName},</if>
+            <if test="deptName != null  and deptName != ''  ">dept_name = #{deptName},</if>
+            <if test="jobName != null  and jobName != ''  ">job_name = #{jobName},</if>
+            <if test="postName != null  and postName != ''  ">post_name = #{postName},</if>
+            <if test="baseSalary != null  ">base_salary = #{baseSalary},</if>
+            <if test="jobSalary != null  ">job_salary = #{jobSalary},</if>
+            <if test="performance != null  ">performance = #{performance},</if>
+            <if test="backDate != null  ">back_date = #{backDate},</if>
+            <if test="counts != null  ">counts = #{counts},</if>
+            <if test="adjustmentType != null  and adjustmentType != ''  ">adjustment_type = #{adjustmentType},</if>
+            <if test="subsidy != null  ">subsidy = #{subsidy},</if>
+            <if test="adjustmentDate != null  ">adjustment_date = #{adjustmentDate},</if>
+            <if test="effectiveDate != null  ">effective_date = #{effectiveDate},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteSalaryById" parameterType="Long">
+        delete from adjustment_salary where id = #{id}
+    </delete>
+	
+    <delete id="deleteSalaryByIds" parameterType="Long">
+        delete from adjustment_salary where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

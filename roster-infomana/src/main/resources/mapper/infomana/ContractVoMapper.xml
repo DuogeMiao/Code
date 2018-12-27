@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsingshan.infomana.mapper.ContractVoMapper">
+
+	<sql id="selectContractVo">
+        SELECT
+            c.contract_id,
+            c.contract_no,
+            e.employee_id,
+            e.employee_name,
+            e.identity_card,
+            e.employee_no,
+            c.entry_date,
+            c.earliest_entry_date,
+            c.accident_insurance,
+            c.social_insurance,
+            c.injury_insurance,
+            co.company_code,
+            d.dept_name,
+            p.post_name,
+            j.job_name,
+            c.bank_card,
+            c.account_bank,
+            c.trial_period,
+            c.contract_type,
+            c.sign_date,
+            c.year_limit,
+            c.expire_date,
+            c.`status`,
+            c.remark
+        FROM
+            contract c
+        LEFT JOIN employee e ON c.employee_id = e.employee_id
+        LEFT JOIN companys co ON c.company_id = co.company_id
+        LEFT JOIN sys_dept d ON c.dept_id = d.dept_id
+        LEFT JOIN sys_post p ON c.post_id = p.post_id
+        LEFT JOIN job j ON c.job_id = j.job_id
+        WHERE
+            c.del_flag = '0'
+    </sql>
+
+	
+    <select id="selectContractVoList" parameterType="ContractVo" resultType="com.tsingshan.infomana.domain.vo.ContractVo">
+        <include refid="selectContractVo"/>
+
+            <if test="contractId != null ">
+                and c.contract_id = #{contractId}
+            </if>
+             <if test="employeeId != null ">
+                 and e.employee_id = #{employeeId}
+             </if>
+             <if test="contractNo != null  and contractNo != '' ">
+                 and c.contract_no like concat('%', #{contractNo}, '%')
+             </if>
+             <if test="entryDate != null ">
+                 and c.entry_date = #{entryDate}
+             </if>
+             <if test="earliestEntryDate != null ">
+                 and c.earliest_entry_date = #{earliestEntryDate}
+             </if>
+             <if test="accidentInsurance != null  and accidentInsurance != '' ">
+                 and c.accident_insurance like concat('%', #{accidentInsurance}, '%')
+             </if>
+             <if test="socialInsurance != null  and socialInsurance != '' ">
+                 and c.social_insurance like concat('%', #{socialInsurance}, '%')
+             </if>
+             <if test="injuryInsurance != null  and injuryInsurance != '' ">
+                 and c.injury_insurance like concat('%', #{injuryInsurance}, '%')
+             </if>
+             <if test="companyCode != null  and companyCode != '' ">
+                 and co.company_code = #{companyCode}
+             </if>
+             <if test="deptName != null  and deptName != '' ">
+                 and d.dept_name = #{deptName}
+             </if>
+            <if test="postName != null  and postName != '' ">
+                and p.post_name = #{postName}
+            </if>
+             <if test="jobName != null  and jobName != '' ">
+                 and j.job_name = #{jobName}
+             </if>
+             <if test="bankCard != null  and bankCard != '' ">
+                 and c.bank_card like concat('%', #{bankCard}, '%')
+             </if>
+             <if test="accountBank != null  and accountBank != '' ">
+                 and c.account_bank like concat('%', #{accountBank}, '%')
+             </if>
+             <if test="trialPeriod != null  and trialPeriod != '' ">
+                 and c.trial_period like concat('%', #{trialPeriod}, '%')
+             </if>
+             <if test="status != null  and status != '' ">
+                 and c.status = #{status}
+             </if>
+             <if test="delFlag != null  and delFlag != '' ">
+                 and c.del_flag = #{delFlag}
+             </if>
+             <if test="createBy != null  and createBy != '' ">
+                 and c.create_by = #{createBy}</if>
+             <if test="createTime != null ">
+                 and c.create_time = #{createTime}
+             </if>
+             <if test="updateBy != null  and updateBy != '' ">
+                 and c.update_by = #{updateBy}
+             </if>
+             <if test="updateTime != null ">
+                 and c.update_time = #{updateTime}
+             </if>
+             <if test="remark != null  and remark != '' "> and c.remark = #{remark}</if>
+    </select>
+
+    <select id="selectContractVoById" parameterType="Long" resultType="com.tsingshan.infomana.domain.vo.ContractVo">
+      <include refid="selectContractVo" />
+      AND c.contract_id = #{contractId}
+    </select>
+</mapper>

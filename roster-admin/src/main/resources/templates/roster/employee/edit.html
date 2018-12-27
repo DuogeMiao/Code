@@ -1,0 +1,280 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-employee-edit" th:object="${employeeVo}">
+            <input id="employeeId" name="employeeId" th:field="*{employeeId}"  type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">工号：</label>
+                <div class="col-sm-8">
+                    <input id="employeeNo" name="employeeNo" th:field="*{employeeNo}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">员工姓名：</label>
+                <div class="col-sm-8">
+                    <input id="employeeName" name="employeeName" th:field="*{employeeName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">身份证：</label>
+                <div class="col-sm-8">
+                    <input id="identityCard" name="identityCard" th:field="*{identityCard}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">出生日期：</label>
+                <div class="col-sm-8">
+                    <input id="birthDate" name="birthDate" th:field="*{birthDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">性别：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('sys_user_sex')}">
+                        <input type="radio" th:id="${dict.dictCode}" name="sex" th:value="${dict.dictValue}" th:field="*{sex}">
+                        <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">民族：</label>
+                <div class="col-sm-8">
+                    <select name="nation" id="nation" class="form-control m-b" th:with="nations=${@dict.getType('roster_nation_type')}">
+                        <option th:each="nation : ${nations}" th:text="${nation.dictLabel}" th:value="${nation.dictValue}" th:field="*{nation}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">婚姻状况：</label>
+                <div class="col-sm-8">
+                    <select name="maritalStatus" id="maritalStatus" class="form-control m-b" th:with="maritals=${@dict.getType('roster_marital_status')}">
+                        <option th:each="marital : ${maritals}" th:text="${marital.dictLabel}" th:value="${marital.dictValue}" th:field="*{maritalStatus}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">籍贯：</label>
+                <div class="col-sm-8">
+                    <input id="nativePlace" name="nativePlace" th:field="*{nativePlace}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">住址：</label>
+                <div class="col-sm-8">
+                    <input id="address" name="address" th:field="*{address}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">户口类型：</label>
+                <div class="col-sm-8">
+                    <select name="residenceType" id="residenceType" class="form-control m-b" th:with="residences=${@dict.getType('roster_residence_type')}">
+                        <option th:each="res : ${residences}" th:text="${res.dictLabel}" th:value="${res.dictValue}" th:field="*{residenceType}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">学历：</label>
+                <div class="col-sm-8">
+                    <select name="education" id="education" class="form-control m-b" th:with="educations=${@dict.getType('roster_education')}">
+                        <option th:each="edu : ${educations}" th:text="${edu.dictLabel}" th:value="${edu.dictValue}" th:field="*{education}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">政治面貌：</label>
+                <div class="col-sm-8">
+                    <select name="politicsStatus" id="politicsStatus" class="form-control m-b" th:with="politics=${@dict.getType('roster_politics_status')}">
+                        <option></option>
+                        <option th:each="ps : ${politics}" th:text="${ps.dictLabel}" th:value="${ps.dictValue}" th:field="*{politicsStatus}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">毕业院校：</label>
+                <div class="col-sm-8">
+                    <input id="graduateInstitutions" name="graduateInstitutions" th:field="*{graduateInstitutions}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">专业：</label>
+                <div class="col-sm-8">
+                    <input id="major" name="major" th:field="*{major}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">联系电话：</label>
+                <div class="col-sm-8">
+                    <input id="contactNumber" name="contactNumber" th:field="*{contactNumber}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">紧急电话：</label>
+                <div class="col-sm-8">
+                    <input id="emergencyCall" name="emergencyCall" th:field="*{emergencyCall}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">参加工作时间：</label>
+                <div class="col-sm-8">
+                    <input id="joinWorkDate" name="joinWorkDate" th:field="*{joinWorkDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">职称或从业资格：</label>
+                <div class="col-sm-8">
+                    <input id="jobTitle" name="jobTitle" th:field="*{jobTitle}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">获得时间：</label>
+                <div class="col-sm-8">
+                    <input id="getTime" name="getTime" th:field="*{getTime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">公司：</label>
+                <div class="col-sm-8">
+                    <select id="companyId" name="companyId" class="form-control select2-hidden-accessible" >
+                        <option></option>
+                        <option th:each="comp:${companys}" th:value="${comp.companyId}" th:text="${comp.companyCode}" th:selected="${comp.companyCode} == *{companyCode} ? true : false" th:disabled="${comp.status == '1'}"  ></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">部门：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" th:field="*{deptName}" name="deptName" onclick="selectDeptTree()" readonly="true" id="treeName">
+                    <input name="deptId"  type="hidden" id="treeId"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">岗位：</label>
+                <div class="col-sm-8">
+                    <select id="postId" name="postId" class="form-control select2-hidden-accessible">
+                        <option></option>
+                        <option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}" th:disabled="${post.status == '1'}" th:selected="${post.postName} == *{postName} ? true : false"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">职务：</label>
+                <div class="col-sm-8">
+                    <select id="jobId" name="jobId" class="form-control select2-hidden-accessible">
+                        <option></option>
+                        <option th:each="job:${jobs}" th:value="${job.jobId}" th:text="${job.jobName}" th:disabled="${job.status == '1'}" th:selected="${job.jobName} == *{jobName} ? true : false"></option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">入职时间：</label>
+                <div class="col-sm-8">
+                    <input id="entryDate" name="entryDate" th:field="*{entryDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">银行卡号：</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" th:field="*{bankCard}" id="bankCard"  name="bankCard"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">具体开户行：</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" th:field="*{accountBank}" id="accountBank" name="accountBank"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">在职状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('roster_employee_status')}">
+                        <input type="radio" th:id="${dict.dictCode}" name="status" th:value="${dict.dictValue}" th:field="*{status}">
+                        <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input id="remark" name="remark" th:field="*{remark}" class="form-control" type="text">
+                </div>
+            </div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script th:src="@{/ajax/libs/select/select2.js}"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "roster/employee"
+		$("#form-employee-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-employee-edit').serialize());
+	        }
+	    }
+
+        // laydate 时间控件绑定
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            var joinWorkDate = laydate.render({
+                elem: '#joinWorkDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var birthDate = laydate.render({
+                elem: '#birthDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var getTime = laydate.render({
+                elem: '#getTime',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+            var entryDate = laydate.render({
+                elem: '#entryDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+
+        });
+
+        /*编辑-选择部门树*/
+        function selectDeptTree() {
+            var treeId = $("#treeId").val();
+            var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
+            var url = ctx + "system/dept/selectDeptTree/" + deptId;
+            var options = {
+                title: '选择部门',
+                width: "380",
+                url: ctx + "system/dept/selectDeptTree/" + deptId,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+
+        function doSubmit(index, layero){
+            var tree = layero.find("iframe")[0].contentWindow.$._tree;
+            if ($.tree.notAllowParents(tree)) {
+                var body = layer.getChildFrame('body', index);
+                $("#treeId").val(body.find('#treeId').val());
+                $("#treeName").val(body.find('#treeName').val());
+                layer.close(index);
+            }
+        }
+	</script>
+</body>
+</html>

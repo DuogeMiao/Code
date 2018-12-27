@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<input type="hidden" id="employeeId" name="employeeId" th:value="${employeeId}"/>
+				<form id="contract-form">
+					<div class="select-list">
+						<ul>
+							<li>
+								合同编号：<input type="text" name="contractNo"/>
+							</li>
+							<li>
+								公司：<select name="companyCode" th:with="companys=${@companysServiceImpl.selectCompanyAll()}">
+										<option value="">所有</option>
+										<option th:each="com : ${companys}" th:text="${com.companyCode}" th:value="${com.companyCode}"></option>
+									</select>
+							</li>
+							<li>
+								部门：<input type="text" name="deptName" onclick="selectDeptTree()" id="treeName"/>
+							</li>
+                            <li>
+                                岗位：<select name="postName" th:with="posts=${@sysPostServiceImpl.selectPostAll()}">
+                                        <option value="">所有</option>
+                                        <option th:each="post : ${posts}" th:text="${post.postName}" th:value="${post.postName}"></option>
+                                    </select>
+                            </li>
+                            <li>
+                                职位：<select name="jobName" th:with="jobs=${@jobServiceImpl.selectJobAll()}">
+                                        <option value="">所有</option>
+                                        <option th:each="job : ${jobs}" th:text="${job.jobName}" th:value="${job.jobName}"></option>
+                                    </select>
+                            </li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="roster:contract:add">
+					<i class="fa fa-plus"></i> 新签
+				</a>
+				<a class="btn btn-primary btn-sigle disabled" onclick="reSignContract()" shiro:hasPermission="roster:contract:edit">
+					<i class="fa fa-edit"></i> 重签
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="roster:contract:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:contract:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:contract:export">
+					<i class="fa fa-download"></i> 导出
+				</a>
+
+				<!--<a class="btn btn-info menuItem" onclick="employee()"  shiro:hasPermission="roster:contract:view">
+					<i class="fa fa-link"></i> 员工
+				</a>
+				<a class="btn btn-info menuItem" onclick="visa()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link"></i> 护照
+				</a>
+				<a class="btn btn-info menuItem" onclick="transaction()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link menuItem"></i> 异动
+				</a>
+				<a class="btn btn-info menuItem" onclick="salary()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link menuItem"></i> 调薪
+				</a>
+				<a class="btn btn-info menuItem" onclick="promotion()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link menuItem"></i> 晋升
+				</a>
+				<a class="btn btn-info menuItem" onclick="dimission()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link"></i> 离职
+				</a>-->
+			</div>
+
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('roster:contract:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('roster:contract:remove')}]];
+        var roster_contract_status = [[${@dict.getType('roster_contract_status')}]];
+        var roster_contract_type = [[${@dict.getType('roster_contract_type')}]];
+        var prefix = ctx + "roster/contract";
+
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				reSignContractUrl: prefix + "/reSign/{id}",
+                queryParams : queryParams,
+                responseHandler: responseHandler,
+                modalName: "合同",
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'contractId', 
+					title : '合同ID',
+                    visible : false
+				},
+				{
+					field : 'contractNo', 
+					title : '合同编号' 
+				},
+				{
+					field : 'employeeName',
+					title : '员工姓名'
+				},
+				{
+					field : 'identityCard', 
+					title : '身份证' 
+				},
+				{
+					field : 'employeeNo',
+					title : '工号'
+				},
+				{
+					field : 'entryDate', 
+					title : '入职日期' 
+				},
+				{
+					field : 'earliestEntryDate', 
+					title : '最早入职日期' 
+				},
+				{
+					field : 'accidentInsurance', 
+					title : '意外险' 
+				},
+				{
+					field : 'socialInsurance', 
+					title : '社会保险' 
+				},
+				{
+					field : 'injuryInsurance', 
+					title : '工伤保险' 
+				},
+				{
+					field : 'companyCode',
+					title : '公司名称' 
+				},
+				{
+					field : 'deptName', 
+					title : '部门名称' 
+				},
+				{
+					field : 'postName',
+					title : '岗位名称'
+				},
+				{
+					field : 'jobName', 
+					title : '职位名称'
+				},
+				{
+					field : 'bankCard', 
+					title : '银行卡号' 
+				},
+				{
+					field : 'accountBank', 
+					title : '具体开户行' 
+				},
+				{
+					field : 'trialPeriod', 
+					title : '试用期(月)'
+				},
+				{
+					field : 'contractType',
+					title : '合同类型',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(roster_contract_type, value);
+                    }
+
+				},
+				{
+					field : 'signDate',
+					title : '签订日期'
+				},
+				{
+					field : 'yearLimit',
+					title : '合同年限'
+				},
+				{
+					field : 'expireDate',
+					title : '过期日期'
+				},
+				{
+					field : 'note',
+					title : '提醒'
+				},
+				{
+					field: 'status',
+					title: '状态',
+					align: 'center',
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(roster_contract_status, value);
+					}
+				},
+				{
+					field : 'remark', 
+					title : '备注' 
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.contractId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.contractId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+
+        function reSignContract() {
+            var url = "/404.html";
+            var id = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if ($.common.isNotEmpty(id)) {
+                if (id.length != 1) {
+                    $.modal.alertWarning("请选择一条记录");
+                    return;
+                }
+                url = $.table._option.reSignContractUrl.replace("{id}", id);
+            }
+            $.modal.open("重签" + $.table._option.modalName, url);
+		}
+
+        /*花名册管理-员工 */
+        function employee() {
+            var url = ctx + "roster/employee";
+            createMenuItem(url, "员工信息");
+        }
+        /*花名册管理-护照 */
+        function visa() {
+            var url = ctx + "roster/visa";
+            createMenuItem(url, "护照签证信息");
+        }
+        /*花名册管理-异动 */
+        function transaction() {
+            var url = ctx + "roster/transaction";
+            createMenuItem(url, "异动信息");
+        }
+        /*花名册管理-调薪 */
+        function salary() {
+            var url = ctx + "roster/salary";
+            createMenuItem(url, "调薪信息");
+        }
+        /*花名册管理-晋升 */
+        function promotion() {
+            var url = ctx + "roster/promotion";
+            createMenuItem(url, "晋升信息");
+        }
+
+        /*花名册管理-离职 */
+        function dimission() {
+            var url = ctx + "roster/dimission";
+            createMenuItem(url, "离职信息");
+        }
+
+        function queryParams(params) {
+                return {
+                    employeeId:    	$("#employeeId").val(),//向后台传入id参数
+                    pageSize:       params.limit,
+                    pageNum:        params.offset / params.limit + 1,
+                    searchValue:    params.search,
+                    orderByColumn:  params.sort,
+                    isAsc:          params.order
+                };
+        }
+
+        // 请求获取数据后处理回调函数
+		function responseHandler(res) {
+            if (res.code == 0) {
+                //判断返回的是否有数据
+                if(res.total == 0 && res.id != null) {
+                    var  url = "/roster/contract/add/" + res.id;
+                    $.modal.open("没有该员工的" + $.table._option.modalName + "！是否添加？" , url);
+                }
+                return { rows: res.rows, total: res.total };
+            } else {
+                $.modal.alertWarning(res.msg);
+                return { rows: [], total: 0 };
+            }
+        }
+
+
+        /*选择部门树*/
+        function selectDeptTree() {
+            var treeId = $("#treeId").val();
+            var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
+            var url = ctx + "system/dept/selectDeptTree/" + deptId;
+            var options = {
+                title: '选择部门',
+                width: "380",
+                url: ctx + "system/dept/selectDeptTree/" + deptId,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+
+        function doSubmit(index, layero){
+            var tree = layero.find("iframe")[0].contentWindow.$._tree;
+            if ($.tree.notAllowParents(tree)) {
+                var body = layer.getChildFrame('body', index);
+                $("#treeId").val(body.find('#treeId').val());
+                $("#treeName").val(body.find('#treeName').val());
+                layer.close(index);
+            }
+        }
+    </script>
+</body>
+</html>

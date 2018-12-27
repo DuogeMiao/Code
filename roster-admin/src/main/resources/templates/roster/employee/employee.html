@@ -1,0 +1,385 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header">
+</head>
+<body class="gray-bg">
+	<include file="../templates/index1.html"></include>
+    <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="employee-form">
+					<!--<input name="deptId"  type="hidden" id="treeId"/>-->
+					<div class="select-list">
+						<ul>
+							<li>
+								工号：<input type="text" name="employeeNo"/>
+							</li>
+							<li>
+								姓名：<input type="text" name="employeeName"/>
+							</li>
+							<li>
+								身份证：<input type="text" name="identityCard"/>
+							</li>
+							<li>
+								公司：<select name="companyCode" th:with="companys=${@companysServiceImpl.selectCompanyAll()}">
+								<option value="">所有</option>
+								<option th:each="company : ${companys}" th:text="${company.companyCode}" th:value="${company.companyCode}"></option>
+							</select>
+							</li>
+							<li>
+								部门：<input  type="text" name="deptName" onclick="selectDeptTree()"  id="treeName">
+							</li>
+							<li>
+								岗位：<select  name="postName" th:with="postList=${@sysPostServiceImpl.selectPostAll()}">
+									<option value="">所有</option>
+									<option th:each="post : ${postList}" th:text="${post.postName}" th:value="${post.postName}"></option>
+								</select>
+							</li>
+							<li>
+								职务：<select  name="jobName" th:with="jobList=${@jobServiceImpl.selectJobAll()}">
+									<option value="">所有</option>
+									<option th:each="job : ${jobList}" th:text="${job.jobName}" th:value="${job.jobName}"></option>
+								</select>
+							</li>
+							<li>
+								是否签订合同：<select  name="contractStatus">
+                                            <option value="">所有</option>
+											<option value="0">已签订合同</option>
+											<option value="1">未签订合同</option>
+										</select>
+							</li>
+							<li>
+								在职状态：<select name="status" id="status"  th:with="employeeStatus=${@dict.getType('roster_employee_status')}">
+											<option value="">所有</option>
+											<option th:each="status : ${employeeStatus}" th:text="${status.dictLabel}" th:value="${status.dictValue}"></option>
+										</select>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="roster:employee:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="roster:employee:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:employee:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:employee:export">
+					<i class="fa fa-download"></i> 导出
+				</a>
+
+				<!--<a class="btn btn-info menuItem" onclick="contract()"  shiro:hasPermission="roster:contract:view">
+					<i class="fa fa-link"></i> 合同
+				</a>
+				<a class="btn btn-info menuItem" onclick="visa()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link"></i> 护照
+				</a>
+				<a class="btn btn-info menuItem" onclick="transaction()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link menuItem"></i> 异动
+				</a>
+				<a class="btn btn-info menuItem" onclick="salary()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link menuItem"></i> 调薪
+				</a>
+				<a class="btn btn-info menuItem" onclick="promotion()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link menuItem"></i> 晋升
+				</a>
+				<a class="btn btn-info menuItem" onclick="dimission()" shiro:hasPermission="roster:employee:">
+					<i class="fa fa-link"></i> 离职
+				</a>-->
+			</div>
+
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+	<script th:src="@{/ajax/libs/select/select2.js}"></script>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('roster:employee:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('roster:employee:remove')}]];
+        var sex_datas = [[${@dict.getType('sys_user_sex')}]];
+        var marital_datas = [[${@dict.getType('roster_marital_status')}]];
+        var residence_datas = [[${@dict.getType('roster_residence_type')}]];
+        var roster_employee_status = [[${@dict.getType('roster_employee_status')}]];
+        var nation_datas = [[${@dict.getType('roster_nation_type')}]];
+        var roster_education = [[${@dict.getType('roster_education')}]];
+        var roster_politics_status = [[${@dict.getType('roster_politics_status')}]];
+
+        var prefix = ctx + "roster/employee";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                contractUrl: "/roster/contract",
+                modalName: "员工",
+                sortName: "createTime",
+                sortOrder: "desc",
+                search: false,
+				striped: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'employeeId', 
+					title : '员工ID',
+                    visible : false
+				},
+				{
+					field : 'employeeNo', 
+					title : '工号',
+                    sortable: true
+				},
+				{
+					field : 'employeeName', 
+					title : '员工姓名' 
+				},
+				{
+					field : 'identityCard', 
+					title : '身份证' 
+				},
+				{
+					field : 'birthDate', 
+					title : '出生日期' 
+				},
+				{
+					field: 'sex',
+					title: '性别',
+					align: 'center',
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(sex_datas, value);
+					}
+				},
+				{
+					field : 'nation', 
+					title : '民族',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(nation_datas, value);
+                    }
+				},
+				{
+					field: 'maritalStatus',
+					title: '婚姻状况',
+					align: 'center',
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(marital_datas, value);
+					}
+				},
+				{
+					field : 'nativePlace', 
+					title : '籍贯' 
+				},
+				{
+					field : 'address', 
+					title : '住址' 
+				},
+				{
+					field: 'residenceType',
+					title: '户口类型',
+					align: 'center',
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(residence_datas, value);
+					}
+				},
+				{
+					field : 'education',
+					title : '学历',
+					align: 'center',
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(roster_education, value);
+					}
+				},
+				{
+					field : 'politicsStatus', 
+					title : '政治面貌',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(roster_politics_status, value);
+                    }
+				},
+				{
+					field : 'graduateInstitutions', 
+					title : '毕业院校' 
+				},
+				{
+					field : 'major', 
+					title : '所学专业'
+				},
+				{
+					field : 'contactNumber', 
+					title : '联系电话' 
+				},
+				{
+					field : 'emergencyCall', 
+					title : '紧急电话' 
+				},
+				{
+					field : 'joinWorkDate', 
+					title : '参加工作时间' 
+				},
+				{
+					field : 'jobTitle', 
+					title : '职称或从业资格' 
+				},
+				{
+					field : 'getTime', 
+					title : '获得时间' 
+				},
+				{
+					field: 'companyCode',
+					title: '公司'
+				},
+				{
+					field : 'deptName',
+					title : '部门'
+				},
+				{
+					field : 'postName',
+					title : '岗位'
+				},
+				{
+					field : 'jobName',
+					title : '职务'
+				},
+				{
+					field : 'entryDate',
+					title : '入职时间'
+				},
+				{
+					field : 'bankCard',
+					title : '银行卡号'
+				},
+				{
+					field : 'accountBank',
+					title : '具体开户行'
+				},
+				{
+					field : 'contractStatus',
+					title : '签订合同',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        var sta = row.contractStatus == '0' ? '已签订' : '未签订';
+                        actions.push("<span class='badge badge-primary'>" + sta + "</span>");
+                        return actions;
+                    }
+				},
+				{
+					field: 'status',
+					title: '状态',
+					align: 'center',
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(roster_employee_status, value);
+					}
+				},
+				{
+					field : 'remark', 
+					title : '备注' 
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.employeeId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.employeeId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+
+        /* 获取选择的员工id值*/
+        function getEmployeeId() {
+            var id = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if (id.length != 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            return id;
+		}
+
+        /*花名册管理-合同 */
+        function contract() {
+            if (getEmployeeId() != null) {
+                var url = ctx + 'roster/contract/' + getEmployeeId();
+                createMenuItem(url, "合同信息");
+            }
+        }
+        /*花名册管理-护照 */
+        function visa() {
+            if (getEmployeeId() != null ) {
+                var url = ctx + 'roster/visa/' + getEmployeeId();
+                createMenuItem(url, "护照签证信息");
+            }
+        }
+        /*花名册管理-异动 */
+        function transaction() {
+            if (getEmployeeId() != null) {
+                var url = ctx + "roster/transaction/" + getEmployeeId() ;
+                createMenuItem(url, "异动信息");
+            }
+        }
+        /*花名册管理-调薪 */
+        function salary() {
+            if (getEmployeeId() != null) {
+                var url = ctx + "roster/salary/" + getEmployeeId();
+                createMenuItem(url, "调薪信息");
+            }
+        }
+        /*花名册管理-晋升 */
+        function promotion() {
+            if (getEmployeeId() != null) {
+                var url = ctx + "roster/promotion/" + getEmployeeId();
+                createMenuItem(url, "晋升信息");
+            }
+        }
+        /*花名册管理-离职 */
+        function dimission() {
+            var url = ctx + "roster/dimission";
+            createMenuItem(url, "离职信息");
+        }
+
+
+        /*选择部门树*/
+        function selectDeptTree() {
+            var treeId = $("#treeId").val();
+            var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
+            var url = ctx + "system/dept/selectDeptTree/" + deptId;
+            var options = {
+                title: '选择部门',
+                width: "380",
+                url: ctx + "system/dept/selectDeptTree/" + deptId,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+
+        function doSubmit(index, layero){
+            var tree = layero.find("iframe")[0].contentWindow.$._tree;
+            if ($.tree.notAllowParents(tree)) {
+                var body = layer.getChildFrame('body', index);
+                $("#treeId").val(body.find('#treeId').val());
+                $("#treeName").val(body.find('#treeName').val());
+                layer.close(index);
+            }
+        }
+
+    </script>
+</body>
+</html>
