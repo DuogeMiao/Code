@@ -73,13 +73,7 @@ public class SalaryController extends BaseController
 	{
 		startPage();
         List<Salary> list = salaryService.selectSalaryList(salary);
-		//重新set 为了接收 页面传的id参数  用于返回页面 判断是否为空
-		TableDataInfo tableDataInfo = new TableDataInfo();
-		tableDataInfo.setCode(0);
-		tableDataInfo.setTotal(new PageInfo(list).getTotal());
-		tableDataInfo.setRows(list);
-		tableDataInfo.setId(salary.getEmployeeId());
-		return tableDataInfo;
+		return getDataTable(list);
 	}
 	
 	/**

@@ -32,8 +32,7 @@ public class TransactionServiceImpl implements ITransactionService
 	@Autowired
 	private TransactionMapper transactionMapper;
 
-	@Autowired
-   private EmployeeMapper employeeMapper;
+
 
 
 
@@ -68,31 +67,16 @@ public class TransactionServiceImpl implements ITransactionService
      * @return 结果
      */
 	@Override
-	public AjaxResult insertTransaction(Transaction transaction,long deptId,long postId)
+	public AjaxResult insertTransaction(Transaction transaction)
 	{
 		try {
-            //判断当前异动入部门是否为空
-            if (null != transaction.getTransInDept() || !"".equals(transaction.getTransInDept())) {
-                //判断异动入部门是否与异动出部门相等
-                if (transaction.getTransOutDept().equals(transaction.getTransInDept())) {
-                    return AjaxResult.error("异动入部门与异动出部门相等");
-                }
-                transactionMapper.insertTransaction(transaction);
-                updateEmployee(transaction.getEmployeeId(), deptId, postId);
-                return AjaxResult.success();
-            }
-            return AjaxResult.error("数据异常");
+            transactionMapper.insertTransaction(transaction);
+            return AjaxResult.success();
         } catch (Exception e) {
 		    logger.error("插入异动信息异常{}", e.getMessage());
 		    return AjaxResult.error("添加异常");
         }
 	}
-	private void updateEmployee (long employeeId, long deptId, long postId) {
-        Employee employee = employeeMapper.selectEmployeeById(employeeId);
-        employee.setDeptId(deptId);
-        employee.setPostId(postId);
-        employeeMapper.updateEmployee(employee);
-    }
 	
 	/**
      * 修改异动
@@ -104,8 +88,8 @@ public class TransactionServiceImpl implements ITransactionService
 	public AjaxResult updateTransaction(Transaction transaction)
 	{
 	    try {
-            int i = transactionMapper.updateTransaction(transaction);
-            return AjaxResult.toAjax(i);
+            transactionMapper.updateTransaction(transaction);
+            return AjaxResult.success();
         } catch (Exception e) {
 	        logger.error("更新异动信息异常{}", e.getMessage());
 	        return AjaxResult.error("更新异常");
@@ -122,8 +106,8 @@ public class TransactionServiceImpl implements ITransactionService
 	public AjaxResult deleteTransactionByIds(String ids)
 	{
 	    try {
-            int i = transactionMapper.deleteTransactionByIds(Convert.toStrArray(ids));
-            return AjaxResult.toAjax(i);
+            transactionMapper.deleteTransactionByIds(Convert.toStrArray(ids));
+            return AjaxResult.success();
         } catch (Exception e) {
 	        logger.error("删除异动信息异常{}", e.getMessage());
 	        return AjaxResult.error("删除异常");

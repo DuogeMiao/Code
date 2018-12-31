@@ -77,7 +77,7 @@ public class Dimission extends BaseEntity
 	private String dimissionReason;
 
 	/** 状态（0正常 1停用） */
-	private String status;
+	private String state;
 	/** 删除标志（0代表存在 2代表删除） */
 	private String delFlag;
 
@@ -97,7 +97,7 @@ public class Dimission extends BaseEntity
             .append("backDate", getBackDate())
             .append("dimissionType", getDimissionType())
             .append("dimissionReason", getDimissionReason())
-            .append("status", getStatus())
+            .append("state", getState())
             .append("delFlag", getDelFlag())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

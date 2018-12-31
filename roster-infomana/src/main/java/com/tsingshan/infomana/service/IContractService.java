@@ -21,8 +21,6 @@ public interface IContractService
      * @return 合同信息
      */
 	Contract selectContractById(long contractId);
-
-	ContractVo selectContractVoById(long contractId);
 	
 	/**
      * 查询合同列表
@@ -31,14 +29,6 @@ public interface IContractService
      * @return 合同集合
      */
 	List<Contract> selectContractList(Contract contract);
-
-	/**
-	 * 查询合同列表
-	 *
-	 * @param contractVo 合同信息
-	 * @return 合同集合
-	 */
-	List<ContractVo> selectContractVoList(ContractVo contractVo);
 	
 	/**
      * 新增合同
@@ -72,7 +62,7 @@ public interface IContractService
 	AjaxResult deleteContractByIds(String ids);
 
 	/**
-	 * 根据id查询显示任意列表
+	 * 根据id查询显示任意列表 导出
 	 * @param ids
 	 * @return
 	 */

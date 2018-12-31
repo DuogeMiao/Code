@@ -722,7 +722,7 @@
     		            $.modal.msgError("不能选择根节点（" + nodes[i].name + "）");
     		            return false;
     		        }
-    		        /*if (nodes[i].isParent) {
+    		       /* if (nodes[i].isParent) {
     		            $.modal.msgError("不能选择父节点（" + nodes[i].name + "）");
     		            return false;
     		        }*/

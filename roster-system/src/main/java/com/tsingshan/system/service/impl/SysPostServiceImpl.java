@@ -85,6 +85,11 @@ public class SysPostServiceImpl implements ISysPostService
         return postMapper.selectPostById(postId);
     }
 
+    @Override
+    public SysPost selectPostByPostName(String postName) {
+        return postMapper.selectPostByPostName(postName);
+    }
+
     /**
      * 批量删除岗位信息
      * 
@@ -182,4 +187,6 @@ public class SysPostServiceImpl implements ISysPostService
     public List<SysPost> selectExport(String ids) {
         return postMapper.selectExport(Convert.toStrArray(ids));
     }
+
+
 }

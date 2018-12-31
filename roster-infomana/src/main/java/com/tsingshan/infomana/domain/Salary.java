@@ -91,7 +91,7 @@ public class Salary extends BaseEntity
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date effectiveDate;
 	/** 状态（0正常 1停用） */
-	private String status;
+	private String state;
 	/** 删除标志（0代表存在 2代表删除） */
 	private String delFlag;
 
@@ -115,7 +115,7 @@ public class Salary extends BaseEntity
             .append("subsidy", getSubsidy())
             .append("adjustmentDate", getAdjustmentDate())
             .append("effectiveDate", getEffectiveDate())
-            .append("status", getStatus())
+            .append("state", getState())
             .append("delFlag", getDelFlag())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

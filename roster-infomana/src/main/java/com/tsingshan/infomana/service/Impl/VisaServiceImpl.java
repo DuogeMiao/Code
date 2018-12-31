@@ -63,17 +63,21 @@ public class VisaServiceImpl implements IVisaService
 	{
 		try {
 			Visa vs = new Visa();
-			vs.setVisaNo(visa.getPassportNo());
+			vs.setPassportNo(visa.getPassportNo());
 			List<Visa> visas = visaMapper.selectVisaList(vs);
 			if (visas.size() > 0) {
 				return AjaxResult.error("已经有该护照信息");
 			}
 			//更新旧护照信息状态
-            Visa visaByEmployeeNoStatus= visaMapper.selectVisaByEmployeeNoStatus(visa.getEmployeeNo(), "0");
+            Visa visaByEmployeeNoStatus= visaMapper.selectVisaByEmployeeNoState(visa.getEmployeeNo(), "0");
 			if (visaByEmployeeNoStatus != null) {
-                visaByEmployeeNoStatus.setStatus("1");
+                visaByEmployeeNoStatus.setState("1");
+                visa.setVisaNo(visaByEmployeeNoStatus.getVisaNo() + 1);
                 updateVisa(visaByEmployeeNoStatus);
+            } else {
+                visa.setVisaNo(1);
             }
+            visa.setState("0");
             visaMapper.insertVisa(visa);
 			return AjaxResult.success();
 		} catch (Exception e) {
@@ -122,5 +126,10 @@ public class VisaServiceImpl implements IVisaService
 	public List<Visa> selectExport(String ids) {
 		return visaMapper.selectExport(Convert.toLongArray(ids));
 	}
+
+    @Override
+    public Visa selectVisaByEmployeeNoState(String employeeNo, String state) {
+        return visaMapper.selectVisaByEmployeeNoState(employeeNo, state);
+    }
 
 }

@@ -34,7 +34,7 @@ public interface IPromotionService
      * @param promotion 晋升信息
      * @return 结果
      */
-	AjaxResult insertPromotion(Promotion promotion,long postId, long jobId);
+	AjaxResult insertPromotion(Promotion promotion);
 	
 	/**
      * 修改晋升

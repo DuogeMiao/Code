@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsingshan.infomana.mapper.LevelGradeMapper">
+    
+    <resultMap type="LevelGrade" id="LevelGradeResult">
+        <result property="id"    column="id"    />
+        <result property="levelGradeName"    column="level_grade_name"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="baseSalary"    column="base_salary"    />
+        <result property="jobSalary"    column="job_salary"    />
+        <result property="everyGradeChange"    column="every_grade_change"    />
+        <result property="jobName"    column="job_name"    />
+        <result property="levelGradeType"    column="level_grade_type"    />
+        <result property="state"    column="state"    />
+        <result property="icon"    column="icon"    />
+        <result property="isParent"    column="is_parent"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectLevelGradeVo">
+        select id, level_grade_name, parent_id, sort_order, base_salary, job_salary, every_grade_change, job_name, level_grade_type, state, icon, is_parent, create_by, create_time, update_by, update_time, remark from salary_level_grade
+    </sql>
+	
+    <select id="selectLevelGradeList" parameterType="LevelGrade" resultMap="LevelGradeResult">
+        <include refid="selectLevelGradeVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="levelGradeName != null  and levelGradeName != '' "> and level_grade_name = #{levelGradeName}</if>
+             <if test="parentId != null "> and parent_id = #{parentId}</if>
+             <if test="sortOrder != null "> and sort_order = #{sortOrder}</if>
+             <if test="baseSalary != null "> and base_salary = #{baseSalary}</if>
+             <if test="jobSalary != null "> and job_salary = #{jobSalary}</if>
+             <if test="everyGradeChange != null "> and every_grade_change = #{everyGradeChange}</if>
+             <if test="jobName != null  and jobName != '' "> and job_name = #{jobName}</if>
+             <if test="levelGradeType != null  and levelGradeType != '' "> and level_grade_type = #{levelGradeType}</if>
+             <if test="state != null "> and state = #{state}</if>
+             <if test="icon != null  and icon != '' "> and icon = #{icon}</if>
+             <if test="isParent != null "> and is_parent = #{isParent}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectLevelGradeAll"  resultMap="LevelGradeResult">
+        <include refid="selectLevelGradeVo"/>
+    </select>
+
+    <select id="selectCountLevelGradeByParentId" resultType="Integer">
+        select count(1) from salary_level_grade where parent_id=#{parentId}
+    </select>
+
+
+    <select id="selectLevelGradeById" parameterType="Integer" resultMap="LevelGradeResult">
+        SELECT
+            t.id,
+            t.level_grade_name,
+            t.parent_id,
+            t.sort_order,
+            t.base_salary,
+            t.job_salary,
+            t.every_grade_change,
+            t.job_name,
+            t.level_grade_type,
+            t.state,
+            t.icon,
+            t.is_parent,
+            t.remark,
+            (
+                SELECT
+                    level_grade_name
+                FROM
+                    salary_level_grade
+                WHERE
+                    id = t.parent_id
+            ) parent_name
+        FROM
+            salary_level_grade t
+        WHERE
+            t.id = #{id}
+    </select>
+        
+    <insert id="insertLevelGrade" parameterType="LevelGrade">
+        insert into salary_level_grade
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="levelGradeName != null  and levelGradeName != ''  ">level_grade_name,</if>
+			<if test="parentId != null  ">parent_id,</if>
+			<if test="sortOrder != null  ">sort_order,</if>
+			<if test="baseSalary != null  ">base_salary,</if>
+			<if test="jobSalary != null  ">job_salary,</if>
+			<if test="everyGradeChange != null  ">every_grade_change,</if>
+			<if test="jobName != null  and jobName != ''  ">job_name,</if>
+			<if test="levelGradeType != null  and levelGradeType != ''  ">level_grade_type,</if>
+			<if test="state != null  ">state,</if>
+			<if test="icon != null  and icon != ''  ">icon,</if>
+			<if test="isParent != null  ">is_parent,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="levelGradeName != null  and levelGradeName != ''  ">#{levelGradeName},</if>
+			<if test="parentId != null  ">#{parentId},</if>
+			<if test="sortOrder != null  ">#{sortOrder},</if>
+			<if test="baseSalary != null  ">#{baseSalary},</if>
+			<if test="jobSalary != null  ">#{jobSalary},</if>
+			<if test="everyGradeChange != null  ">#{everyGradeChange},</if>
+			<if test="jobName != null  and jobName != ''  ">#{jobName},</if>
+			<if test="levelGradeType != null  and levelGradeType != ''  ">#{levelGradeType},</if>
+			<if test="state != null  ">#{state},</if>
+			<if test="icon != null  and icon != ''  ">#{icon},</if>
+			<if test="isParent != null  ">#{isParent},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+            sysdate()
+         </trim>
+    </insert>
+	 
+    <update id="updateLevelGrade" parameterType="LevelGrade">
+        update salary_level_grade
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="levelGradeName != null  and levelGradeName != ''  ">level_grade_name = #{levelGradeName},</if>
+            <if test="parentId != null  ">parent_id = #{parentId},</if>
+            <if test="sortOrder != null  ">sort_order = #{sortOrder},</if>
+            <if test="baseSalary != null  ">base_salary = #{baseSalary},</if>
+            <if test="jobSalary != null  ">job_salary = #{jobSalary},</if>
+            <if test="everyGradeChange != null  ">every_grade_change = #{everyGradeChange},</if>
+            <if test="jobName != null  and jobName != ''  ">job_name = #{jobName},</if>
+            <if test="levelGradeType != null  and levelGradeType != ''  ">level_grade_type = #{levelGradeType},</if>
+            <if test="state != null  ">state = #{state},</if>
+            <if test="icon != null  and icon != ''  ">icon = #{icon},</if>
+            <if test="isParent != null  ">is_parent = #{isParent},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteLevelGradeById" parameterType="Integer">
+        delete from salary_level_grade where id = #{id}
+    </delete>
+	
+    <delete id="deleteLevelGradeByIds" parameterType="Integer">
+        delete from salary_level_grade where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -38,8 +38,13 @@ public class CompanysServiceImpl implements ICompanysService
 	{
 	    return companysMapper.selectCompanysById(companyId);
 	}
-	
-	/**
+
+    @Override
+    public Companys selectCompanysByCompanyCode(String companyCode) {
+        return companysMapper.selectCompanysByCompanyCode(companyCode);
+    }
+
+    /**
      * 查询公司列表
      * 
      * @param companys 公司信息

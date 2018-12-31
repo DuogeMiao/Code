@@ -21,6 +21,8 @@ import com.tsingshan.system.service.IJobService;
 import com.tsingshan.system.service.ISysDeptService;
 import com.tsingshan.system.service.ISysPostService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -46,6 +48,8 @@ import com.tsingshan.framework.web.page.TableDataInfo;
 @RequestMapping("/roster/promotion")
 public class PromotionController extends BaseController
 {
+    private static Logger logger = LoggerFactory.getLogger(PromotionController.class);
+
     private String prefix = "roster/promotion";
 	
 	@Autowired
@@ -78,13 +82,7 @@ public class PromotionController extends BaseController
 	{
 		startPage();
         List<Promotion> list = promotionService.selectPromotionList(promotion);
-		//重新set 为了接收 页面传的id参数  用于返回页面 判断是否为空
-		TableDataInfo tableDataInfo = new TableDataInfo();
-		tableDataInfo.setCode(0);
-		tableDataInfo.setTotal(new PageInfo(list).getTotal());
-		tableDataInfo.setRows(list);
-		tableDataInfo.setId(promotion.getEmployeeId());
-		return tableDataInfo;
+		return getDataTable(list);
 	}
 	
 	/**
@@ -107,20 +105,34 @@ public class PromotionController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(Promotion promotion, Long postId, Long jobId)
 	{
-        if (postId == null || jobId == null) {
-            return AjaxResult.error("岗位和职务不能为空");
+        try {
+            if (postId == null || jobId == null) {
+                return AjaxResult.error("岗位和职务不能为空");
+            }
+            SysPost sysPost = postService.selectPostById(postId);
+            Job job = jobService.selectJobById(jobId);
+            if (promotion.getJobName().equals(job.getJobName())) {
+                return AjaxResult.error("职务必须改变");
+            }
+            promotion.setPostName(sysPost.getPostName());
+            promotion.setJobName(job.getJobName());
+            promotion.setCreateBy(ShiroUtils.getLoginName());
+            promotionService.insertPromotion(promotion);
+            //更新员工岗位或者职务
+            updateEmployee(promotion.getEmployeeId(), postId, jobId);
+            return AjaxResult.success();
+        } catch (Exception e) {
+            logger.error("新增晋升信息异常{}", e.getMessage());
+            return AjaxResult.error();
         }
-        SysPost sysPost = postService.selectPostById(postId);
-        Job job = jobService.selectJobById(jobId);
-        if (promotion.getJobName().equals(job.getJobName())) {
-            return AjaxResult.error("职务必须改变");
-        }
-        promotion.setPostName(sysPost.getPostName());
-        promotion.setJobName(job.getJobName());
-        promotion.setCreateBy(ShiroUtils.getLoginName());
-        AjaxResult ajaxResult = promotionService.insertPromotion(promotion,postId,jobId);
-		return ajaxResult;
 	}
+
+    private void updateEmployee(long employeeId, long postId, long jobId) {
+        Employee employee = employeeService.selectEmployeeById(employeeId);
+        employee.setPostId(postId);
+        employee.setJobId(jobId);
+        employeeService.updateEmployee(employee);
+    }
 
 	/**
 	 * 修改晋升

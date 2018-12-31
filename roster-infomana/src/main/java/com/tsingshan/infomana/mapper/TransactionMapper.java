@@ -19,7 +19,7 @@ public interface TransactionMapper
      * @param id 异动ID
      * @return 异动信息
      */
-	public Transaction selectTransactionById(Long id);
+	Transaction selectTransactionById(Long id);
 	
 	/**
      * 查询异动列表
@@ -27,7 +27,7 @@ public interface TransactionMapper
      * @param transaction 异动信息
      * @return 异动集合
      */
-	public List<Transaction> selectTransactionList(Transaction transaction);
+	List<Transaction> selectTransactionList(Transaction transaction);
 	
 	/**
      * 新增异动
@@ -35,7 +35,7 @@ public interface TransactionMapper
      * @param transaction 异动信息
      * @return 结果
      */
-	public int insertTransaction(Transaction transaction);
+	int insertTransaction(Transaction transaction);
 	
 	/**
      * 修改异动
@@ -43,7 +43,7 @@ public interface TransactionMapper
      * @param transaction 异动信息
      * @return 结果
      */
-	public int updateTransaction(Transaction transaction);
+	int updateTransaction(Transaction transaction);
 	
 	/**
      * 删除异动
@@ -51,7 +51,7 @@ public interface TransactionMapper
      * @param id 异动ID
      * @return 结果
      */
-	public int deleteTransactionById(Long id);
+	int deleteTransactionById(Long id);
 	
 	/**
      * 批量删除异动
@@ -59,7 +59,7 @@ public interface TransactionMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-	public int deleteTransactionByIds(String[] ids);
+	int deleteTransactionByIds(String[] ids);
 
 	/**
 	 * 根据id查询显示任意列表

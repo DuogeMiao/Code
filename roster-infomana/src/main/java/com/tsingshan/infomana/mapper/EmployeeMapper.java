@@ -34,9 +34,9 @@ public interface EmployeeMapper
      * @param employee 员工信息
      * @return 员工集合
      */
-	public List<Employee> selectEmployeeList(Employee employee);
+	List<Employee> selectEmployeeList(Employee employee);
 
-	public List<Employee> selectEmployeeListByStatus(@Param("status") String status);
+	List<Employee> selectEmployeeListByStatus(@Param("state") String state);
 	
 	/**
      * 新增员工

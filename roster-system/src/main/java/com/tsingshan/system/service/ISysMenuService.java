@@ -89,7 +89,7 @@ public interface ISysMenuService
      * @param parentId 菜单父ID
      * @return 结果
      */
-    public int selectCountMenuByParentId(Long parentId);
+    int selectCountMenuByParentId(Long parentId);
 
     /**
      * 查询菜单使用数量

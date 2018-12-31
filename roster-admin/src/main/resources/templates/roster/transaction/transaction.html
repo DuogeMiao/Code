@@ -44,6 +44,9 @@
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:transaction:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
+                <a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:transaction:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
 
 				<!--<a class="btn btn-info menuItem" onclick="employee()" shiro:hasPermission="roster:employee:">
 					<i class="fa fa-link"></i> 员工
@@ -75,6 +78,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('roster:transaction:edit')}]];
         var removeFlag = [[${@permission.hasPermi('roster:transaction:remove')}]];
+        var roster_span_company = [[${@dict.getType('roster_span_company')}]];
         var prefix = ctx + "roster/transaction";
 
         $(function() {
@@ -83,8 +87,7 @@
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
-                queryParams: queryParams,
-                responseHandler: responseHandler,
+                exportUrl: prefix + "/export",
                 modalName: "异动",
                 columns: [{
 		            checkbox: true
@@ -96,7 +99,8 @@
 				},
 				{
 					field : 'employeeId', 
-					title : '员工ID' 
+					title : '员工ID',
+                    visible : false
 				},
 				{
 					field : 'employeeNo', 
@@ -136,7 +140,10 @@
 				},
 				{
 					field : 'spanCompany',
-					title : '是否跨公司'
+					title : '是否跨公司',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(roster_span_company, value);
+                    }
 				},
 				{
 					field : 'effectiveDate', 
@@ -146,14 +153,14 @@
 					field : 'backDate', 
 					title : '回传日期' 
 				},
-				{
+				/*{
 					field : 'counts', 
 					title : '异动次数' 
-				},
-				{
-					field : 'status', 
+				},*/
+				/*{
+					field : 'state',
 					title : '状态'
-				},
+				},*/
 				{
 					field : 'remark', 
 					title : '备注' 
@@ -204,7 +211,7 @@
             createMenuItem(url, "离职信息");
         }
 
-        function queryParams(params) {
+        /*function queryParams(params) {
             return {
                 employeeId:    	$("#employeeId").val(),//向后台传入id参数
                 pageSize:       params.limit,
@@ -213,9 +220,9 @@
                 orderByColumn:  params.sort,
                 isAsc:          params.order
             };
-        }
+        }*/
 
-        // 请求获取数据后处理回调函数
+      /*  // 请求获取数据后处理回调函数
         function responseHandler(res) {
             if (res.code == 0) {
                 //判断返回的是否有数据
@@ -228,7 +235,7 @@
                 $.modal.alertWarning(res.msg);
                 return { rows: [], total: 0 };
             }
-        }
+        }*/
 
     </script>
 </body>

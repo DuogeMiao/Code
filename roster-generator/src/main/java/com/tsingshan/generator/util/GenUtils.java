@@ -222,8 +222,10 @@ public class GenUtils
 
     public static void main(String[] args)
     {
-        System.out.println(StringUtils.convertToCamelCase("user_name"));
-        System.out.println(replaceKeyword("岗位信息表"));
+        String tableName = "employee_rating_form";
+        tableName = tableName.substring(tableName.indexOf("_") + 1);
+        System.out.println(StringUtils.convertToCamelCase(tableName));
+        System.out.println(replaceKeyword("员工违纪考核表"));
         System.out.println(getModuleName("com.tsingshan.system"));
     }
 }

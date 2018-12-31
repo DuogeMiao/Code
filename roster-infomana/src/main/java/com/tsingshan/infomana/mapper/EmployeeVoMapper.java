@@ -1,6 +1,5 @@
 package com.tsingshan.infomana.mapper;
 
-import com.tsingshan.infomana.domain.Employee;
 import com.tsingshan.infomana.domain.vo.EmployeeVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,7 +31,7 @@ public interface EmployeeVoMapper
      */
 	List<EmployeeVo> selectEmployeeVoList(EmployeeVo employee);
 
-	List<EmployeeVo> selectEmployeeVoListByStatus(@Param("status") String status);
+	List<EmployeeVo> selectEmployeeVoListByState(@Param("state") String state, @Param("contractStatus") String contractStatus);
 
 
 	/**

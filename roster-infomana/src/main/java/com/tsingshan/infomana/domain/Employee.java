@@ -134,7 +134,7 @@ public class Employee extends BaseEntity
 
 	/** 状态（0正常 1离职） */
 	@Excel(name="状态")
-	private String status;
+	private String state;
 
 	/** 0已签订，1未签订 */
 	@Excel(name="签订合同")
@@ -173,7 +173,7 @@ public class Employee extends BaseEntity
             .append("bankCard", getBankCard())
             .append("accountBank", getAccountBank())
             .append("entryDate", getEntryDate())
-            .append("status", getStatus())
+            .append("state", getState())
             .append("delFlag", getDelFlag())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

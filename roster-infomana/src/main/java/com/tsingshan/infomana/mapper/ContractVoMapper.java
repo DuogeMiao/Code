@@ -18,7 +18,7 @@ public interface ContractVoMapper
      * @param contractVo 合同信息
      * @return 合同集合
      */
-	public List<ContractVo> selectContractVoList(ContractVo contractVo);
+	List<ContractVo> selectContractVoList(ContractVo contractVo);
 
 
     ContractVo selectContractVoById(Long contractId);

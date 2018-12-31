@@ -67,13 +67,13 @@ public class EmployeeServiceImpl implements IEmployeeService
 	}
 
 	@Override
-	public List<Employee> selectEmployeeListByStatus(String status) {
-		return employeeMapper.selectEmployeeListByStatus(status);
+	public List<Employee> selectEmployeeListByState(String state) {
+		return employeeMapper.selectEmployeeListByStatus(state);
 	}
 
 	@Override
-	public List<EmployeeVo> selectEmployeeVoListByStatus(String status) {
-		return employeeVoMapper.selectEmployeeVoListByStatus(status);
+	public List<EmployeeVo> selectEmployeeVoListByState(String state,String contractStatus) {
+		return employeeVoMapper.selectEmployeeVoListByState(state,contractStatus);
 	}
 
 
@@ -87,6 +87,10 @@ public class EmployeeServiceImpl implements IEmployeeService
 	public AjaxResult insertEmployee(Employee employee)
 	{
 		try {
+		    //设置在职状态 0 在职 1 离职
+		    employee.setState("0");
+		    //设置签订合同状态 0 已签订 1 未签订
+		    employee.setContractStatus("1");
 			employeeMapper.insertEmployee(employee);
 			return AjaxResult.success();
 		} catch (Exception e) {

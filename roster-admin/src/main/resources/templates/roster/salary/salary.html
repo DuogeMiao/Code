@@ -50,6 +50,9 @@
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:salary:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
+                <a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:salary:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
 
 				<!--<a class="btn btn-info menuItem" onclick="employee()" shiro:hasPermission="roster:employee:">
 					<i class="fa fa-link"></i> 员工
@@ -91,6 +94,7 @@
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
                 queryParams : queryParams,
                 responseHandler: responseHandler,
                 modalName: "调薪",
@@ -172,7 +176,7 @@
 					title : '生效日期'
 				},
 				{
-					field : 'status', 
+					field : 'state',
 					title : '状态',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(roster_adjustment_status, value);

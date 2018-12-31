@@ -4,7 +4,7 @@
 <head th:include="include :: header"></head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-contract-reSign" th:object="${contractVo}">
+        <form class="form-horizontal m" id="form-contract-reSign" th:object="${contract}">
             <input id="contractId" name="contractId" th:field="*{contractId}"  type="hidden">
             <input id="employeeId" name="employeeId" th:field="*{employeeId}"  type="hidden">
             <div class="form-group">	
@@ -16,31 +16,31 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">姓名：</label>
                 <div class="col-sm-8">
-                    <input id="employeeName" name="employeeName" th:field="*{employeeName}" class="form-control" type="text">
+                    <input id="employeeName" name="employeeName" readonly="true" th:field="*{employeeName}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">身份证：</label>
                 <div class="col-sm-8">
-                    <input id="identityCard" name="identityCard" th:field="*{identityCard}" class="form-control" type="text">
+                    <input id="identityCard" name="identityCard" readonly="true" th:field="*{identityCard}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">工号：</label>
                 <div class="col-sm-8">
-                    <input id="employeeNo" name="employeeNo" th:field="*{employeeNo}" class="form-control" type="text">
+                    <input id="employeeNo" name="employeeNo" readonly="true" th:field="*{employeeNo}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">入职日期：</label>
                 <div class="col-sm-8">
-                    <input id="entryDate" name="entryDate" th:field="*{entryDate}" class="form-control" type="text">
+                    <input id="entryDate" name="entryDate" readonly="true" th:field="*{entryDate}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">最早入职日期：</label>
                 <div class="col-sm-8">
-                    <input id="earliestEntryDate" name="earliestEntryDate" th:field="*{earliestEntryDate}" class="form-control" type="text">
+                    <input id="earliestEntryDate" name="earliestEntryDate" readonly="true" th:field="*{earliestEntryDate}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
@@ -73,67 +73,41 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group">	
-                <label class="col-sm-3 control-label">原公司：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">公司：</label>
                 <div class="col-sm-8">
                     <input class="form-control" type="text" name="companyCode" th:field="*{companyCode}" readonly="true" id="companyCode">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">当前公司：</label>
+
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">部门：</label>
                 <div class="col-sm-8">
-                    <select name="companyId" id="companyId" class="form-control select2-hidden-accessible">
-                        <option></option>
-                        <option th:each="com : ${companys}" th:text="${com.companyCode}" th:value="${com.companyId}"  th:disabled="${com.status == '1'}"></option>
-                    </select>
+                    <input class="form-control" type="text" id="deptName" name="deptName" th:field="*{deptName}"   readonly="true" >
                 </div>
             </div>
             <div class="form-group">	
-                <label class="col-sm-3 control-label">原部门：</label>
+                <label class="col-sm-3 control-label">岗位：</label>
                 <div class="col-sm-8">
-                    <input class="form-control" type="text"  th:field="*{deptName}"   readonly="true" >
+                    <input class="form-control" type="text" id="postName" name="postName" th:field="*{postName}"   readonly="true">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">当前部门：</label>
+                <label class="col-sm-3 control-label">岗位：</label>
                 <div class="col-sm-8">
-                    <input class="form-control" type="text" name="deptName"  onclick="selectDeptTree()" readonly="true" id="treeName">
-                    <input name="deptId"  type="hidden" id="treeId"/>
-                </div>
-            </div>
-            <div class="form-group">	
-                <label class="col-sm-3 control-label">原岗位：</label>
-                <div class="col-sm-8">
-                    <input class="form-control" type="text" name="postName" th:field="*{postName}"   readonly="true" id="postName">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">当前岗位：</label>
-                <div class="col-sm-8">
-                    <select id="postId" name="postId" class="form-control select2-hidden-accessible">
-                        <option></option>
-                        <option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}"  th:disabled="${post.status == '1'}"></option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">	
-                <label class="col-sm-3 control-label">职务：</label>
-                <div class="col-sm-8">
-                    <select id="jobId" name="jobId" class="form-control select2-hidden-accessible">
-                        <option th:each="job:${jobs}" th:value="${job.jobId}" th:text="${job.jobName}" th:selected="${job.jobName} == *{jobName} ? true : false " th:disabled="${job.status == '1'}"></option>
-                    </select>
+                    <input class="form-control" type="text" id="jobName" name="jobName" th:field="*{jobName}"   readonly="true">
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">银行卡号：</label>
                 <div class="col-sm-8">
-                    <input id="bankCard" name="bankCard" th:field="*{bankCard}" class="form-control" type="text">
+                    <input id="bankCard" name="bankCard" readonly="true" th:field="*{bankCard}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">具体开户行：</label>
                 <div class="col-sm-8">
-                    <input id="accountBank" name="accountBank" th:field="*{accountBank}" class="form-control" type="text">
+                    <input id="accountBank" name="accountBank" readonly="true" th:field="*{accountBank}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -158,18 +132,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">过期日期：</label>
+                <label class="col-sm-3 control-label">合同年限：</label>
                 <div class="col-sm-8">
-                    <input id="expireDate" name="expireDate" th:field="*{expireDate}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">	
-                <label class="col-sm-3 control-label">状态：</label>
-                <div class="col-sm-8">
-                    <div class="radio-box" th:each="dict : ${@dict.getType('roster_contract_status')}">
-                        <input type="radio" th:id="${dict.dictCode}" name="status" th:value="${dict.dictValue}" th:field="*{status}">
-                        <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
-                    </div>
+                    <input id="yearLimit" name="yearLimit" th:field="*{yearLimit}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
@@ -201,12 +166,6 @@
         // laydate 时间控件绑定
         layui.use('laydate', function() {
             var laydate = layui.laydate;
-            var entryDate = laydate.render({
-                elem: '#entryDate',
-                type: 'date',
-                theme: 'molv',
-                trigger: 'click',
-            });
             var earliestEntryDate = laydate.render({
                 elem: '#earliestEntryDate',
                 type: 'date',
@@ -227,29 +186,6 @@
             });
         });
 
-        /*选择部门树*/
-        function selectDeptTree() {
-            var treeId = $("#treeId").val();
-            var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
-            var url = ctx + "system/dept/selectDeptTree/" + deptId;
-            var options = {
-                title: '选择部门',
-                width: "380",
-                url: ctx + "system/dept/selectDeptTree/" + deptId,
-                callBack: doSubmit
-            };
-            $.modal.openOptions(options);
-        }
-
-        function doSubmit(index, layero){
-            var tree = layero.find("iframe")[0].contentWindow.$._tree;
-            if ($.tree.notAllowParents(tree)) {
-                var body = layer.getChildFrame('body', index);
-                $("#treeId").val(body.find('#treeId').val());
-                $("#treeName").val(body.find('#treeName').val());
-                layer.close(index);
-            }
-        }
 	</script>
 </body>
 </html>

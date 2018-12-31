@@ -59,5 +59,7 @@ public interface IVisaService
 	 * @return
 	 */
 	List<Visa> selectExport(String ids);
-	
+
+
+    Visa selectVisaByEmployeeNoState(String employeeNo, String state);
 }

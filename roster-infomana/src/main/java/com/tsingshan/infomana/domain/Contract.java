@@ -71,17 +71,21 @@ public class Contract extends BaseEntity
 	@Excel(name="工伤保险")
 	private String injuryInsurance;
 
-    /** 公司ID */
-    private Long companyId;
+    /** 公司 */
+    @Excel(name = "公司")
+    private String companyCode;
 
-    /** 部门ID */
-    private Long deptId;
+    /** 部门 */
+    @Excel(name = "部门")
+    private String deptName;
 
-    /** 岗位ID */
-    private Long postId;
+    /** 岗位 */
+    @Excel(name = "岗位")
+    private String postName;
 
-    /** 职务ID */
-    private Long jobId;
+    /** 职务 */
+    @Excel(name = "职务")
+    private String jobName;
 
 	/** 银行卡号 */
 	@Excel(name="银行卡号")
@@ -97,6 +101,7 @@ public class Contract extends BaseEntity
 
 
 	/** 合同类型 */
+	@Excel(name = "合同类型")
 	private String contractType;
 
 	/** 签订日期 */
@@ -111,22 +116,45 @@ public class Contract extends BaseEntity
 	private String note;
 
 	/** 合同年限 */
+	@Excel(name = "合同年限")
 	private Integer yearLimit;
 
 	/** 状态（0未到期 1到期） */
-	private String status;
+	private String state;
 	/** 删除标志（0代表存在 2代表删除） */
 	private String delFlag;
 
-    public String getNote() {
-        long nowTime = new Date().getTime();
-        if (getExpireDate() != null) {
-            long expireTime = getExpireDate().getTime();
-            long day = (expireTime - nowTime)/(24*60*60*1000);
-            if (day <= 15 && day >= 0 ) {
-                note = "合同到期，还有"+ day + "天";
-            }
-        }
-        return note;
+    public String toString() {
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+                .append("contractId", getEmployeeId())
+                .append("employeeId", getEmployeeNo())
+                .append("employeeName", getEmployeeName())
+                .append("identityCard", getIdentityCard())
+                .append("entryDate", getEntryDate())
+                .append("contractNo", getContractNo())
+                .append("earliestEntryDate", getEarliestEntryDate())
+                .append("accidentInsurance", getAccidentInsurance())
+                .append("socialInsurance", getSocialInsurance())
+                .append("injuryInsurance", getInjuryInsurance())
+                .append("companyCode", getCompanyCode())
+                .append("deptName", getDeptName())
+                .append("postName", getPostName())
+                .append("jobName", getJobName())
+                .append("bankCard", getBankCard())
+                .append("accountBank", getAccountBank())
+                .append("trialPeriod", getTrialPeriod())
+                .append("contractType", getContractType())
+                .append("signDate", getSignDate())
+                .append("expireDate", getExpireDate())
+                .append("note", getNote())
+                .append("yearLimit", getYearLimit())
+                .append("state", getState())
+                .append("delFlag", getDelFlag())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .append("remark", getRemark())
+                .toString();
     }
 }

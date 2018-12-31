@@ -7,6 +7,8 @@ import com.tsingshan.common.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -106,21 +108,49 @@ public class ContractVo extends BaseEntity
 	private String note;
 
 	/** 状态（0未到期 1到期） */
-	private String status;
+	private String state;
 	/** 删除标志（0代表存在 2代表删除） */
 	private String delFlag;
 
 
     public String getNote() {
-        long nowTime = new Date().getTime();
-        if (getExpireDate() != null) {
-            long expireTime = getExpireDate().getTime();
-            long day = (expireTime - nowTime)/(24*60*60*1000);
-            if (day <= 15 && day >= 0 ) {
-                note = "合同还有"+ day + "天到期";
+        try {
+            SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(new Date());
+            Date date = sdf.parse(format);
+            long nowTime = date.getTime();
+            if (getExpireDate() != null) {
+                long expireTime = getExpireDate().getTime();
+                long day = (expireTime - nowTime)/(24*60*60*1000) ;
+                if (day <= 15 && day >= 0 ) {
+                    note = "合同还有"+ day + "天到期";
+                }
+                else {
+                    note = "已过期";
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return note;
+
     }
+//    public static void main (String[] args) {
+//        try {
+//            SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd");
+//            String format = sdf.format(new Date());
+//            Date parse = sdf.parse(format);
+//            System.out.println("------ " +parse.getTime());
+//            long nowTime = new Date().getTime();
+//            System.out.println("====== " + nowTime);
+//            long nowTime = new Date().getTime();
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//
+//        }
+//
+//
+//    }
 
 }

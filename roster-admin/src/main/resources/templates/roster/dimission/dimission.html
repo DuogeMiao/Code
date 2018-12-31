@@ -43,6 +43,9 @@
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:dimission:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
+                <a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:dimission:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
 
 				<!--<a class="btn btn-info menuItem" onclick="employee()" shiro:hasPermission="roster:employee:">
 					<i class="fa fa-link"></i> 员工
@@ -83,6 +86,7 @@
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
                 modalName: "离职",
                 columns: [{
 		            checkbox: true
@@ -146,7 +150,7 @@
 					title : '离职原因' 
 				},
 				{
-					field: 'status',
+					field: 'state',
 					title: '状态',
 					align: 'center',
 					formatter: function(value, row, index) {

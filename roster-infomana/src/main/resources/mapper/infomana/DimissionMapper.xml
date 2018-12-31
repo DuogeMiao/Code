@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="backDate"    column="back_date"    />
         <result property="dimissionType"    column="dimission_type"    />
         <result property="dimissionReason"    column="dimission_reason"    />
-        <result property="status"    column="status"    />
+        <result property="state"    column="state"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -29,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectDimissionVo">
-        select id, employee_id, employee_no, employee_name, identity_card, company_name, dept_name, job_name, post_name, entry_date, dimission_date, back_date, dimission_type, dimission_reason, status, del_flag, create_by, create_time, update_by, update_time, remark from dimission
+        select id, employee_id, employee_no, employee_name, identity_card, company_name, dept_name, job_name, post_name, entry_date, dimission_date, back_date, dimission_type, dimission_reason, state, del_flag, create_by, create_time, update_by, update_time, remark from dimission
     </sql>
 
     <select id="selectExport" resultType="com.tsingshan.infomana.domain.Dimission"  statementType="STATEMENT">
@@ -46,7 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             back_date,
             dimission_type,
             dimission_reason,
-            STATUS,
+            state,
             remark
         from dimission
         where id in
@@ -100,8 +100,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="dimissionReason != null  and dimissionReason != '' ">
                  and dimission_reason = #{dimissionReason}
              </if>
-             <if test="status != null  and status != '' ">
-                 and status = #{status}
+             <if test="state != null  and state != '' ">
+                 and state = #{state}
              </if>
              <if test="delFlag != null  and delFlag != '' "> and del_flag = #{delFlag}</if>
              <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
@@ -134,7 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="backDate != null  ">back_date,</if>
 			<if test="dimissionType != null  and dimissionType != ''  ">dimission_type,</if>
 			<if test="dimissionReason != null  and dimissionReason != ''  ">dimission_reason,</if>
-			<if test="status != null  and status != ''  ">status,</if>
+			<if test="state != null  and state != ''  ">state,</if>
 			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
 			<if test="createBy != null  and createBy != ''  ">create_by,</if>
 			<if test="remark != null  and remark != ''  ">remark,</if>
@@ -155,7 +155,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="backDate != null  ">#{backDate},</if>
 			<if test="dimissionType != null  and dimissionType != ''  ">#{dimissionType},</if>
 			<if test="dimissionReason != null  and dimissionReason != ''  ">#{dimissionReason},</if>
-			<if test="status != null  and status != ''  ">#{status},</if>
+			<if test="state != null  and state != ''  ">#{state},</if>
 			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
 			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
 			<if test="remark != null  and remark != ''  ">#{remark},</if>
@@ -179,7 +179,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="backDate != null  ">back_date = #{backDate},</if>
             <if test="dimissionType != null  and dimissionType != ''  ">dimission_type = #{dimissionType},</if>
             <if test="dimissionReason != null  and dimissionReason != ''  ">dimission_reason = #{dimissionReason},</if>
-            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="state != null  and state != ''  ">state = #{state},</if>
             <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
             <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
             <if test="remark != null  and remark != ''  ">remark = #{remark},</if>

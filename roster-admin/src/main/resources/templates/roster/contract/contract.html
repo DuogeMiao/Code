@@ -100,9 +100,8 @@
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
 				reSignContractUrl: prefix + "/reSign/{id}",
-                queryParams : queryParams,
-                responseHandler: responseHandler,
                 modalName: "合同",
                 columns: [{
 		            checkbox: true
@@ -202,7 +201,7 @@
 					title : '提醒'
 				},
 				{
-					field: 'status',
+					field: 'state',
 					title: '状态',
 					align: 'center',
 					formatter: function(value, row, index) {
@@ -272,18 +271,17 @@
             createMenuItem(url, "离职信息");
         }
 
-        function queryParams(params) {
+        /*function queryParams(params) {
                 return {
-                    employeeId:    	$("#employeeId").val(),//向后台传入id参数
                     pageSize:       params.limit,
                     pageNum:        params.offset / params.limit + 1,
                     searchValue:    params.search,
                     orderByColumn:  params.sort,
                     isAsc:          params.order
                 };
-        }
+        }*/
 
-        // 请求获取数据后处理回调函数
+       /* // 请求获取数据后处理回调函数
 		function responseHandler(res) {
             if (res.code == 0) {
                 //判断返回的是否有数据
@@ -296,7 +294,7 @@
                 $.modal.alertWarning(res.msg);
                 return { rows: [], total: 0 };
             }
-        }
+        }*/
 
 
         /*选择部门树*/

@@ -28,7 +28,15 @@ public interface ContractMapper
      * @return 合同集合
      */
 	List<Contract> selectContractList(Contract contract);
-	
+
+
+    /**
+     * 根据合同号查询
+     * @param contractNo
+     * @return
+     */
+	List<Contract> selectContractListByContractNo(String contractNo);
+
 	/**
      * 新增合同
      * 

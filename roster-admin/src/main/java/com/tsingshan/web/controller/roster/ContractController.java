@@ -76,28 +76,19 @@ public class ContractController extends BaseController
 	@RequiresPermissions("roster:contract:list")
 	@PostMapping("/list")
 	@ResponseBody
-	public TableDataInfo list(ContractVo contractVo)
+	public TableDataInfo list(Contract contract)
 	{
 		startPage();
-		//重新set 为了接收 页面传的id参数  用于返回页面 判断是否为空
-		TableDataInfo tableDataInfo = new TableDataInfo();
-		List<ContractVo> list = contractService.selectContractVoList(contractVo);
-		tableDataInfo.setCode(0);
-		tableDataInfo.setTotal(new PageInfo(list).getTotal());
-		tableDataInfo.setRows(list);
-		tableDataInfo.setId(contractVo.getEmployeeId());
-		return tableDataInfo;
+		List<Contract> list = contractService.selectContractList(contract);
+		return getDataTable(list);
 	}
 	
 	/**
 	 * 新增合同
 	 */
 	@GetMapping("/add")
-	public String add(ModelMap modelMap)
+	public String add()
 	{
-        modelMap.put("companys", companysService.selectCompanyAll());
-        modelMap.put("posts", postService.selectPostAll());
-        modelMap.put("jobs", jobService.selectJobAll());
 	    return prefix + "/add";
 	}
 
@@ -128,8 +119,6 @@ public class ContractController extends BaseController
 	public AjaxResult addSave(Contract contract)
 	{
 		contract.setCreateBy(ShiroUtils.getLoginName());
-		Date date = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate());
-		contract.setExpireDate(date);
 		AjaxResult result = contractService.insertContract(contract);
 		return result;
 	}
@@ -140,11 +129,8 @@ public class ContractController extends BaseController
 	@GetMapping("/edit/{contractId}")
 	public String edit(@PathVariable("contractId") Long contractId, ModelMap modelMap)
 	{
-		ContractVo contractVo = contractService.selectContractVoById(contractId);
-        modelMap.put("contractVo", contractVo);
-        modelMap.put("companys", companysService.selectCompanyAll());
-        modelMap.put("posts", postService.selectPostAll());
-        modelMap.put("jobs", jobService.selectJobAll());
+		Contract contract = contractService.selectContractById(contractId);
+        modelMap.put("contract", contract);
 	    return prefix + "/edit";
 	}
 	/**
@@ -164,16 +150,13 @@ public class ContractController extends BaseController
 	/**
 	 * 重签合同
 	 * @param contractId
-	 * @param mmap
+	 * @param modelMap
 	 * @return
 	 */
 	@GetMapping("/reSign/{contractId}")
 	public String reSignContract(@PathVariable("contractId") Long contractId, ModelMap modelMap) {
-		ContractVo contractVo = contractService.selectContractVoById(contractId);
-        modelMap.put("contractVo", contractVo);
-        modelMap.put("posts", postService.selectPostAll());
-        modelMap.put("jobs", jobService.selectJobAll());
-        modelMap.put("companys", companysService.selectCompanyAll());
+		Contract contract = contractService.selectContractById(contractId);
+        modelMap.put("contract", contract);
 		return prefix + "/reSignContract";
 	}
 
@@ -181,6 +164,9 @@ public class ContractController extends BaseController
 	@PostMapping("/reSign")
 	@ResponseBody
 	public AjaxResult reSignContractSave(Contract contract) {
+	    if (StringUtils.isEmpty(contract.getContractNo())) {
+	        return AjaxResult.error("合同号不能为空");
+        }
 		contract.setCreateBy(ShiroUtils.getLoginName());
         AjaxResult ajaxResult = contractService.reSignContract(contract);
         return ajaxResult;
@@ -214,11 +200,11 @@ public class ContractController extends BaseController
     /**
      * 向页面put值
      * @param employeeId
-     * @param mmap
+     * @param modelMap
      * @return
      */
 	@GetMapping("/{employeeId}")
-	public String contractByEmpId(@PathVariable("employeeId") Integer employeeId, ModelMap modelMap)
+	public String contractByEmpId(@PathVariable("employeeId") Long employeeId, ModelMap modelMap)
 	{
         modelMap.put("employeeId", employeeId);
 		return prefix + "/contract";

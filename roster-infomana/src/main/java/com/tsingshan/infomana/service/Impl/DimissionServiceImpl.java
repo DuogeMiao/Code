@@ -70,13 +70,7 @@ public class DimissionServiceImpl implements IDimissionService
 	public AjaxResult insertDimission(Dimission dimission)
 	{
 		try {
-		    if (dimission.getEmployeeNo() == null || dimission.getEmployeeNo().equals("")) {
-                return AjaxResult.error("工号不能为空");
-            }
 			dimissionMapper.insertDimission(dimission);
-		    //更新员工信息表
-            updateEmployee(dimission.getEmployeeId());
-            updateContract(dimission.getEmployeeId());
             return AjaxResult.success();
 		} catch (Exception e) {
 			logger.error("添加离职信息异常{}", e.getMessage());
@@ -84,23 +78,9 @@ public class DimissionServiceImpl implements IDimissionService
 		}
 	}
 
-	private void updateEmployee(Long employeeId) {
-        Employee employee = employeeMapper.selectEmployeeById(employeeId);
-        employee.setStatus("1");
-        employeeMapper.updateEmployee(employee);
-    }
 
-    private void updateContract(Long employeeId) {
-	    Contract contract = new Contract();
-	    contract.setEmployeeId(employeeId);
-        List<Contract> contractList = contractMapper.selectContractList(contract);
-        for (Contract con : contractList) {
-            if (con.getStatus().equals("0")) {
-                con.setStatus("1");
-                contractMapper.updateContract(con);
-            }
-        }
-    }
+
+
 	
 	/**
      * 修改离职

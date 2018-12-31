@@ -18,7 +18,7 @@ public class TableDataInfo implements Serializable
     /** 消息状态码 */
     private int code;
 
-    private Long id;
+    //private Long id;
     /**
      * 表格数据对象
      */
@@ -66,13 +66,5 @@ public class TableDataInfo implements Serializable
     public void setCode(int code)
     {
         this.code = code;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

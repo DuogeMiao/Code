@@ -9,7 +9,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">工号：</label>
                 <div class="col-sm-8">
-                    <select name="employeeNo" onchange="getByEmployeeNo()" id="employeeNo" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeVoListByStatus('0')}">
+                    <select name="employeeNo" onchange="getByEmployeeNo()" id="employeeNo" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeVoListByState('0','0')}">
                         <option value=""></option>
                         <option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeNo}"></option>
                     </select>
@@ -40,7 +40,8 @@
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">部门：</label>
 				<div class="col-sm-8">
-					<input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" readonly="true" id="treeName">
+					<!--<input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" readonly="true" id="treeName">-->
+					<input class="form-control" type="text" id="deptName" name="deptName"  readonly="true" >
 				</div>
 			</div>
 			<div class="form-group">
@@ -61,16 +62,23 @@
 					</select>
 				</div>
 			</div>
+           <!-- <div class="form-group">
+                <label class="col-sm-3 control-label">选择薪资：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text"  onclick="selectLevelGradeTree()" readonly="true" >
+                    &lt;!&ndash;<input class="form-control" type="text"   readonly="true" id="treeName">&ndash;&gt;
+                </div>
+            </div>-->
 			<div class="form-group">
 				<label class="col-sm-3 control-label">基本薪资：</label>
 				<div class="col-sm-8">
-					<input id="baseSalary" name="baseSalary" class="form-control" type="text">
+					<input id="treeBaseSalary" onclick="selectLevelGradeTree()" name="baseSalary"  class="form-control" type="text">
 				</div>
 			</div>
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">职务薪资：</label>
 				<div class="col-sm-8">
-					<input id="jobSalary" name="jobSalary" class="form-control" type="text">
+					<input id="treeJobSalary" name="jobSalary" class="form-control" type="text">
 				</div>
 			</div>
 			<div class="form-group">	
@@ -116,15 +124,6 @@
 				<label class="col-sm-3 control-label">生效日期：</label>
 				<div class="col-sm-8">
 					<input id="effectiveDate" name="effectiveDate" class="form-control" type="text">
-				</div>
-			</div>
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">状态：</label>
-				<div class="col-sm-8">
-					<div class="radio-box" th:each="dict : ${@dict.getType('roster_adjustment_status')}">
-						<input type="radio" th:id="${dict.dictCode}" name="status" th:value="${dict.dictValue}" th:checked="${dict.isDefault == 'Y' ? true : false}">
-						<label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
-					</div>
 				</div>
 			</div>
 			<div class="form-group">	
@@ -214,12 +213,10 @@
                             },
                             dataType: "json",
                             success: function (d) {
-                                document.getElementById('treeName').value = d.data.deptName;
-                                //document.getElementById('treeId').value = e.data.deptId;
+                                document.getElementById('deptName').value = d.data.deptName;
                             }
                         });
-                        // selectValue("postId",e.data.postId);
-                        // selectValue("jobId",e.data.jobId);
+
                         //根据岗位id获取岗位信息
                         $.ajax({
                             type: "post",
@@ -230,7 +227,6 @@
                             },
                             dataType: "json",
                             success: function (p) {
-                                //document.getElementById('postName').value = p.data.postName;
                                 selectValue("postName",p.data.postName);
                             }
                         });
@@ -244,7 +240,6 @@
                             },
                             dataType: "json",
                             success: function (j) {
-                                //document.getElementById('jobName').value = j.data.jobName;
                                 selectValue("jobName",j.data.jobName);
                             }
                         });
@@ -260,29 +255,33 @@
             selectId.change();
         }
 
-        /*选择部门树*/
-        function selectDeptTree() {
+
+
+
+        /*级档管理-薪资-选择级档树*/
+        function selectLevelGradeTree() {
             var treeId = $("#treeId").val();
-            var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
-            var url = ctx + "system/dept/selectDeptTree/" + deptId;
+            var id = treeId > 0 ? treeId : 1;
+            var url = "/roster/levelGrade/selectLevelGradeTree/" + id;
             var options = {
-                title: '选择部门',
+                title: '级档选择',
                 width: "380",
-                url: ctx + "system/dept/selectDeptTree/" + deptId,
-                callBack: doSubmit
+                url: url,
+                callBack: doSelect
             };
             $.modal.openOptions(options);
         }
 
-        function doSubmit(index, layero){
-            var tree = layero.find("iframe")[0].contentWindow.$._tree;
-            if ($.tree.notAllowParents(tree)) {
-                var body = layer.getChildFrame('body', index);
-                $("#treeId").val(body.find('#treeId').val());
-                $("#treeName").val(body.find('#treeName').val());
-                layer.close(index);
-            }
+        function doSelect(index, layero){
+            var body = layer.getChildFrame('body', index);
+            $("#treeId").val(body.find('#treeId').val());
+            $("#treeName").val(body.find('#treeName').val());
+            $("#treeBaseSalary").val(body.find('#treeBaseSalary').val());
+            $("#treeJobSalary").val(body.find('#treeJobSalary').val());
+            layer.close(index);
         }
+
+
 	</script>
 </body>
 </html>

@@ -61,10 +61,18 @@ public class SalaryServiceImpl implements ISalaryService
 	{
 
 		try {
-			Salary salaryStatus = salaryMapper.selectSalaryByEmployeeNoStatus(salary.getEmployeeNo(), "0");
-			salaryStatus.setStatus("1");
-			salaryMapper.updateSalary(salaryStatus);
-			salary.setStatus("0");
+            Integer counts = null;
+		    //查找该工号当前的薪资信息
+			Salary salaryStatus = salaryMapper.selectSalaryByEmployeeNoState(salary.getEmployeeNo(), "0");
+			if (salaryStatus != null) {
+                salaryStatus.setState("1");
+                counts = salaryStatus.getCounts();
+                salary.setCounts(counts+1);
+                salaryMapper.updateSalary(salaryStatus);
+            } else {
+                salary.setCounts(1);
+            }
+			salary.setState("0");
 			salaryMapper.insertSalary(salary);
 			return AjaxResult.success();
 		} catch (Exception e) {

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsingshan.infomana.mapper.RatingFormMapper">
+    
+    <resultMap type="RatingForm" id="RatingFormResult">
+        <result property="id"    column="id"    />
+        <result property="employeeId"    column="employee_id"    />
+        <result property="institutionName"    column="institution_name"    />
+        <result property="employeeNo"    column="employee_no"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="byCheckPeople"    column="by_check_people"    />
+        <result property="identityCard"    column="identity_card"    />
+        <result property="checkTime"    column="check_time"    />
+        <result property="incidentName"    column="incident_name"    />
+        <result property="byCheckMoney"    column="by_check_money"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectRatingFormVo">
+        select id, employee_id, institution_name, employee_no, company_code, dept_name, by_check_people, identity_card, check_time, incident_name, by_check_money, del_flag, create_by, create_time, update_by, update_time, remark from employee_rating_form
+    </sql>
+	
+    <select id="selectRatingFormList" parameterType="RatingForm" resultMap="RatingFormResult">
+        <include refid="selectRatingFormVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="institutionName != null  and institutionName != '' "> and institution_name = #{institutionName}</if>
+             <if test="employeeNo != null  and employeeNo != '' "> and employee_no = #{employeeNo}</if>
+             <if test="companyCode != null  and companyCode != '' "> and company_code = #{companyCode}</if>
+             <if test="deptName != null  and deptName != '' "> and dept_name = #{deptName}</if>
+             <if test="byCheckPeople != null  and byCheckPeople != '' "> and by_check_people = #{byCheckPeople}</if>
+             <if test="identityCard != null  and identityCard != '' "> and identity_card = #{identityCard}</if>
+             <if test="checkTime != null "> and check_time = #{checkTime}</if>
+             <if test="incidentName != null  and incidentName != '' "> and incident_name = #{incidentName}</if>
+             <if test="byCheckMoney != null "> and by_check_money = #{byCheckMoney}</if>
+             <if test="delFlag != null  and delFlag != '' "> and del_flag = #{delFlag}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectRatingFormById" parameterType="Long" resultMap="RatingFormResult">
+        <include refid="selectRatingFormVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectRatingForm" parameterType="Long" resultMap="RatingFormResult">
+        SELECT
+            institution_name,
+            employee_no,
+            company_code,
+            dept_name,
+            by_check_people,
+            identity_card,
+            check_time,
+            incident_name,
+            by_check_money,
+            remark
+        FROM
+          employee_rating_form
+        where id in
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            ${ids}
+        </foreach>
+    </select>
+        
+    <insert id="insertRatingForm" parameterType="RatingForm">
+        insert into employee_rating_form
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="employeeId != null  ">employee_id,</if>
+			<if test="institutionName != null  and institutionName != ''  ">institution_name,</if>
+			<if test="employeeNo != null  and employeeNo != ''  ">employee_no,</if>
+			<if test="companyCode != null  and companyCode != ''  ">company_code,</if>
+			<if test="deptName != null  and deptName != ''  ">dept_name,</if>
+			<if test="byCheckPeople != null  and byCheckPeople != ''  ">by_check_people,</if>
+			<if test="identityCard != null  and identityCard != ''  ">identity_card,</if>
+			<if test="checkTime != null  ">check_time,</if>
+			<if test="incidentName != null  and incidentName != ''  ">incident_name,</if>
+			<if test="byCheckMoney != null  ">by_check_money,</if>
+			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="employeeId != null  ">#{employeeId},</if>
+			<if test="institutionName != null  and institutionName != ''  ">#{institutionName},</if>
+			<if test="employeeNo != null  and employeeNo != ''  ">#{employeeNo},</if>
+			<if test="companyCode != null  and companyCode != ''  ">#{companyCode},</if>
+			<if test="deptName != null  and deptName != ''  ">#{deptName},</if>
+			<if test="byCheckPeople != null  and byCheckPeople != ''  ">#{byCheckPeople},</if>
+			<if test="identityCard != null  and identityCard != ''  ">#{identityCard},</if>
+			<if test="checkTime != null  ">#{checkTime},</if>
+			<if test="incidentName != null  and incidentName != ''  ">#{incidentName},</if>
+			<if test="byCheckMoney != null  ">#{byCheckMoney},</if>
+			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+            sysdate()
+         </trim>
+    </insert>
+	 
+    <update id="updateRatingForm" parameterType="RatingForm">
+        update employee_rating_form
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="employeeId != null" >employee_id = #{employeeId}</if>
+            <if test="institutionName != null  and institutionName != ''  ">institution_name = #{institutionName},</if>
+            <if test="employeeNo != null  and employeeNo != ''  ">employee_no = #{employeeNo},</if>
+            <if test="companyCode != null  and companyCode != ''  ">company_code = #{companyCode},</if>
+            <if test="deptName != null  and deptName != ''  ">dept_name = #{deptName},</if>
+            <if test="byCheckPeople != null  and byCheckPeople != ''  ">by_check_people = #{byCheckPeople},</if>
+            <if test="identityCard != null  and identityCard != ''  ">identity_card = #{identityCard},</if>
+            <if test="checkTime != null  ">check_time = #{checkTime},</if>
+            <if test="incidentName != null  and incidentName != ''  ">incident_name = #{incidentName},</if>
+            <if test="byCheckMoney != null  ">by_check_money = #{byCheckMoney},</if>
+            <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteRatingFormById" parameterType="Long">
+        delete from employee_rating_form where id = #{id}
+    </delete>
+	
+    <delete id="deleteRatingFormByIds" parameterType="Long">
+        delete from employee_rating_form where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -14,7 +14,9 @@ import com.tsingshan.framework.util.ShiroUtils;
 import com.tsingshan.infomana.domain.Employee;
 import com.tsingshan.infomana.domain.vo.EmployeeVo;
 import com.tsingshan.infomana.service.IEmployeeService;
+import com.tsingshan.system.domain.Companys;
 import com.tsingshan.system.domain.SysPost;
+import com.tsingshan.system.service.ICompanysService;
 import com.tsingshan.system.service.IJobService;
 import com.tsingshan.system.service.ISysPostService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -56,6 +58,9 @@ public class TransactionController extends BaseController
 
     @Autowired
     private IJobService jobService;
+
+    @Autowired
+    private ICompanysService companysService;
 	
 	@RequiresPermissions("roster:transaction:view")
 	@GetMapping()
@@ -74,13 +79,7 @@ public class TransactionController extends BaseController
 	{
 		startPage();
         List<Transaction> list = transactionService.selectTransactionList(transaction);
-		//重新set 为了接收 页面传的id参数  用于返回页面 判断是否为空
-		TableDataInfo tableDataInfo = new TableDataInfo();
-		tableDataInfo.setCode(0);
-		tableDataInfo.setTotal(new PageInfo(list).getTotal());
-		tableDataInfo.setRows(list);
-		tableDataInfo.setId(transaction.getEmployeeId());
-		return tableDataInfo;
+		return getDataTable(list);
 	}
 	
 	/**
@@ -89,6 +88,7 @@ public class TransactionController extends BaseController
 	@GetMapping("/add")
 	public String add(ModelMap modelMap)
 	{
+	    modelMap.put("companys", companysService.selectCompanyAll());
         modelMap.put("posts", postService.selectPostAll());
         modelMap.put("jobs", jobService.selectJobAll());
 	    return prefix + "/add";
@@ -101,18 +101,38 @@ public class TransactionController extends BaseController
 	@Log(title = "异动", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public AjaxResult addSave(Transaction transaction,Long deptId,Long postId)
+	public AjaxResult addSave(Transaction transaction,Long deptId)
 	{
-		if (deptId == null || postId == null) {
-			return AjaxResult.error("异动出部门或者岗位不能为空");
-		}
-		transaction.setCreateBy(ShiroUtils.getLoginName());
-		SysPost sysPost = postService.selectPostById(postId);
-		transaction.setTransInPost(sysPost.getPostName());
-		transaction.setSpanCompany("否");
-		AjaxResult ajaxResult = transactionService.insertTransaction(transaction,deptId,postId);
-        return ajaxResult;
+	    if (StringUtils.isEmpty(transaction.getEmployeeNo())) {
+	        return AjaxResult.error("工号不能为空");
+        } else if (StringUtils.isEmpty(transaction.getTransInCompany())) {
+	        return AjaxResult.error("异动入公司不能为空");
+        } else if (StringUtils.isEmpty(transaction.getTransInDept())) {
+	        return AjaxResult.error("异动入部门不能为空");
+        } else if (StringUtils.isEmpty(transaction.getTransInPost())) {
+	        return AjaxResult.error("异动入岗位不能为空");
+        }
+        Companys companys = companysService.selectCompanysByCompanyCode(transaction.getTransInCompany());
+        SysPost sysPost = postService.selectPostByPostName(transaction.getTransInPost());
+        //判断异动入公司 是否与 异动出公司相等  不相等就是跨公司异动
+        if (!transaction.getTransInCompany().equals(transaction.getTransOutCompany())) {
+            //设置 是否跨公司异动   0 是 1 否
+            transaction.setSpanCompany("0");
+        } else {
+            transaction.setSpanCompany("1");
+        }
+        transaction.setCreateBy(ShiroUtils.getLoginName());
+        transactionService.insertTransaction(transaction);
+        updateEmployee(transaction.getEmployeeId(),companys.getCompanyId(),deptId,sysPost.getPostId());
+        return AjaxResult.success();
 	}
+    private void updateEmployee (long employeeId, long companyId, long deptId, long postId) {
+        Employee employee = employeeService.selectEmployeeById(employeeId);
+        employee.setCompanyId(companyId);
+        employee.setDeptId(deptId);
+        employee.setPostId(postId);
+        employeeService.updateEmployee(employee);
+    }
 
 	/**
 	 * 修改异动
@@ -134,8 +154,7 @@ public class TransactionController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(Transaction transaction)
 	{
-
-			transaction.setUpdateBy(ShiroUtils.getLoginName());
+		transaction.setUpdateBy(ShiroUtils.getLoginName());
         AjaxResult ajaxResult = transactionService.updateTransaction(transaction);
         return ajaxResult;
 	}

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.support.Convert;
+import com.tsingshan.common.utils.DateUtils;
 import com.tsingshan.infomana.domain.Employee;
 import com.tsingshan.infomana.domain.Transaction;
 import com.tsingshan.infomana.domain.vo.ContractVo;
@@ -32,12 +33,6 @@ public class ContractServiceImpl implements IContractService
 	private ContractMapper contractMapper;
 
 	@Autowired
-	private ContractVoMapper contractVoMapper;
-
-	@Autowired
-	private TransactionMapper transactionMapper;
-
-	@Autowired
     private EmployeeVoMapper employeeVoMapper;
 
 	@Autowired
@@ -55,10 +50,10 @@ public class ContractServiceImpl implements IContractService
 	    return contractMapper.selectContractById(contractId);
 	}
 
-	@Override
+	/*@Override
 	public ContractVo selectContractVoById(long contractId) {
             return contractVoMapper.selectContractVoById(contractId);
-	}
+	}*/
 
 	/**
      * 查询合同列表
@@ -72,11 +67,6 @@ public class ContractServiceImpl implements IContractService
 	    return contractMapper.selectContractList(contract);
 	}
 
-	@Override
-	public List<ContractVo> selectContractVoList(ContractVo contractVo) {
-		return contractVoMapper.selectContractVoList(contractVo);
-	}
-
 	/**
      * 新增合同
      * 
@@ -87,6 +77,11 @@ public class ContractServiceImpl implements IContractService
 	public AjaxResult insertContract(Contract contract)
 	{
 		try {
+		    //设置合同状态 0 未过期  1 过期
+		    contract.setState("0");
+		    // 根据合同年限来设置合同过期时间
+            Date date = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate());
+            contract.setExpireDate(date);
             contractMapper.insertContract(contract);
 			Employee employee = employeeMapper.selectEmployeeById(contract.getEmployeeId());
 			//更新员工的合同状态  0 已签订  1 未签订
@@ -104,66 +99,25 @@ public class ContractServiceImpl implements IContractService
 	public AjaxResult reSignContract(Contract contract) {
         try {
             //通过合同id获取旧合同
-            ContractVo lastContractVo = contractVoMapper.selectContractVoById(contract.getContractId());
             Contract lastContract = contractMapper.selectContractById(contract.getContractId());
-            //判断当前公司是否与原公司相等，不相等则签订新合同，并增加异动信息，以及更新员工信息
-            if (null != contract.getCompanyId()) {
-                if (lastContract.getContractNo().equals(contract.getContractNo())) {
-                    return AjaxResult.error("请重新填写合同号！");
-                } else if (lastContract.getCompanyId() == contract.getCompanyId()) {
-                    return AjaxResult.error("重签合同时：原公司跟现在公司必须不同");
-                } else {
-                	//把旧合同设置过期
-                    lastContract.setStatus("1");
-                    updateContract(lastContract);
-                    //插入新合同
-                    contract.setContractId(null);
-                    contractMapper.insertContract(contract);
-                    //更新员工表
-                    updateEmployee(contract);
-                    Thread.sleep(1000);
-                    //跨公司 增加异动信息
-                    insertTrans(lastContractVo,contract.getSignDate());
-                    return AjaxResult.success();
-                }
+            List<Contract> contractList = contractMapper.selectContractListByContractNo(contract.getContractNo());
+            if (contractList.size() > 0) {
+                return AjaxResult.error("已有该合同号");
             }
-            return AjaxResult.error("数据异常");
+            //把旧合同设置过期
+            lastContract.setState("1");
+            updateContract(lastContract);
+            //插入新合同
+            contract.setContractId(null);
+            // 根据合同年限来设置合同过期时间
+            Date date = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate());
+            contract.setExpireDate(date);
+            contractMapper.insertContract(contract);
+            return AjaxResult.success();
         } catch (Exception e) {
             log.error("重签合同异常{}", e.getMessage());
             return AjaxResult.error("重签合同异常");
         }
-	}
-
-	private void updateEmployee(Contract contract) {
-        Employee employee = employeeMapper.selectEmployeeById(contract.getEmployeeId());
-        employee.setEmployeeNo(contract.getEmployeeNo());
-        employee.setIdentityCard(contract.getIdentityCard());
-        employee.setEmployeeName(contract.getEmployeeName());
-        employee.setCompanyId(contract.getCompanyId());
-        employee.setDeptId(contract.getDeptId());
-        employee.setPostId(contract.getPostId());
-        employee.setJobId(contract.getJobId());
-        employee.setBankCard(contract.getBankCard());
-        employee.setAccountBank(contract.getAccountBank());
-        employeeMapper.updateEmployee(employee);
-    }
-
-	private void insertTrans(ContractVo contractVo, Date date) {
-        EmployeeVo employeeVo = employeeVoMapper.selectEmployeeVoById(contractVo.getEmployeeId());
-		Transaction transaction = new Transaction();
-		transaction.setEmployeeId(contractVo.getEmployeeId());
-		transaction.setEmployeeNo(contractVo.getEmployeeNo());
-		transaction.setEmployeeName(contractVo.getEmployeeName());
-		transaction.setIdentityCard(contractVo.getIdentityCard());
-		transaction.setTransOutCompany(contractVo.getCompanyCode());
-		transaction.setTransOutDept(contractVo.getDeptName());
-		transaction.setTransOutPost(contractVo.getPostName());
-		transaction.setSpanCompany("是");
-		transaction.setTransInCompany(employeeVo.getCompanyCode());
-		transaction.setTransInDept(employeeVo.getDeptName());
-		transaction.setTransInPost(employeeVo.getPostName());
-		transaction.setEffectiveDate(date);
-		transactionMapper.insertTransaction(transaction);
 	}
 
 	/**
@@ -176,6 +130,9 @@ public class ContractServiceImpl implements IContractService
 	public AjaxResult updateContract(Contract contract)
 	{
 	    try {
+            // 根据合同年限来设置合同过期时间
+            Date date = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate());
+            contract.setExpireDate(date);
             contractMapper.updateContract(contract);
             return AjaxResult.success();
         } catch (Exception e) {

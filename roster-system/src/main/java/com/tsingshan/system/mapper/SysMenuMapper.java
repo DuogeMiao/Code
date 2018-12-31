@@ -79,7 +79,7 @@ public interface SysMenuMapper
      * @param parentId 菜单父ID
      * @return 结果
      */
-    public int selectCountMenuByParentId(Long parentId);
+    int selectCountMenuByParentId(Long parentId);
 
     /**
      * 新增菜单信息

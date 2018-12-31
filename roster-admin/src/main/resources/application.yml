@@ -16,7 +16,7 @@ roster:
 # 开发环境配置
 server:
   # 服务端口
-  port: 80
+  port: 8899
   servlet:
     # 项目contextPath
     context-path: /

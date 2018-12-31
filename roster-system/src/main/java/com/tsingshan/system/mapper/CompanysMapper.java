@@ -60,4 +60,11 @@ public interface CompanysMapper
 	int deleteCompanysByIds(Long[] companyIds);
 
 	List<Companys> selectCompanyAll();
+
+    /**
+     * 根据 公司查询
+     * @param companyCode
+     * @return
+     */
+    Companys selectCompanysByCompanyCode(String companyCode);
 }

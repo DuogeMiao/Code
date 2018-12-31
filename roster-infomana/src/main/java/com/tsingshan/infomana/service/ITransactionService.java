@@ -34,7 +34,7 @@ public interface ITransactionService
      * @param transaction 异动信息
      * @return 结果
      */
-	AjaxResult insertTransaction(Transaction transaction,long deptId,long postId);
+	AjaxResult insertTransaction(Transaction transaction);
 	
 	/**
      * 修改异动

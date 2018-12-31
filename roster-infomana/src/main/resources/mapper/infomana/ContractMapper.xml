@@ -16,10 +16,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="accidentInsurance"    column="accident_insurance"    />
         <result property="socialInsurance"    column="social_insurance"    />
         <result property="injuryInsurance"    column="injury_insurance"    />
-        <result property="companyId"    column="company_id"    />
-        <result property="deptId"    column="dept_id"    />
-        <result property="postId"    column="post_id"    />
-        <result property="jobId"    column="job_id"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="postName"    column="post_name"    />
+        <result property="jobName"    column="job_name"    />
         <result property="bankCard"    column="bank_card"    />
         <result property="accountBank"    column="account_bank"    />
         <result property="trialPeriod"    column="trial_period"    />
@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="signDate"    column="sign_date"    />
         <result property="yearLimit"    column="year_limit"    />
         <result property="expireDate"    column="expire_date"    />
-        <result property="status"    column="status"    />
+        <result property="state"    column="state"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -41,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             contract_id,
             employee_id,
             contract_no,
+            employee_no,
             employee_name,
             identity_card,
             entry_date,
@@ -48,10 +49,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             accident_insurance,
             social_insurance,
             injury_insurance,
-            company_id,
-            dept_id,
-            post_id,
-            job_id,
+            company_code,
+            dept_name,
+            post_name,
+            job_name,
             bank_card,
             account_bank,
             trial_period,
@@ -59,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             sign_date,
             year_limit,
             expire_date,
-            STATUS,
+            state,
             del_flag,
             create_by,
             create_time,
@@ -71,7 +72,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectExport" resultType="com.tsingshan.infomana.domain.Contract"  statementType="STATEMENT">
-        <include refid="selectContract" />
+        SELECT
+            contract_no,
+            employee_name,
+            identity_card,
+            entry_date,
+            earliest_entry_date,
+            accident_insurance,
+            social_insurance,
+            injury_insurance,
+            company_code,
+            dept_name,
+            post_name,
+            job_name,
+            bank_card,
+            account_bank,
+            trial_period,
+            contract_type,
+            sign_date,
+            year_limit,
+            expire_date,
+            state,
+            remark
+        FROM
+            contract
         where contract_id in
         <foreach collection="ids" item="ids" open="(" separator="," close=")">
             ${ids}
@@ -113,17 +137,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="injuryInsurance != null  and injuryInsurance != '' ">
                  and injury_insurance like concat('%', #{injuryInsurance}, '%')
              </if>
-             <if test="companyId != null  ">
-                 and company_id = #{companyId}
+             <if test="companyCode != null and companyCode != '' ">
+                 and company_code = #{companyCode}
              </if>
-             <if test="deptId != null ">
-                 and dept_id = #{deptId}
+             <if test="deptName != null and deptName != '' ">
+                 and dept_name = #{deptName}
              </if>
-            <if test="postId != null ">
-                and post_id = #{postId}
+            <if test="postName != null and postName != '' ">
+                and post_name = #{postName}
             </if>
-            <if test="jobId != null ">
-                 and job_id = #{jobId}
+            <if test="jobName != null and jobName != '' ">
+                 and job_name = #{jobName}
              </if>
              <if test="bankCard != null  and bankCard != '' ">
                  and bank_card like concat('%', #{bankCard}, '%')
@@ -134,8 +158,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="trialPeriod != null  and trialPeriod != '' ">
                  and trial_period like concat('%', #{trialPeriod}, '%')
              </if>
-             <if test="status != null  and status != '' ">
-                 and status = #{status}
+             <if test="state != null  and state != '' ">
+                 and state = #{state}
              </if>
              <if test="delFlag != null  and delFlag != '' ">
                  and del_flag = #{delFlag}
@@ -154,11 +178,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
         </where>
     </select>
+    <select id="selectContractListByContractNo" parameterType="String" resultMap="ContractResult">
+        <include refid="selectContract"/>
+        WHERE contract_no = #{contractNo}
+    </select>
     
     <select id="selectContractById" parameterType="Long" resultMap="ContractResult">
         <include refid="selectContract"/>
         WHERE contract_id = #{contractId}
     </select>
+
+
         
     <insert id="insertContract" parameterType="Contract">
         insert into contract
@@ -174,10 +204,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="accidentInsurance != null  and accidentInsurance != ''  ">accident_insurance,</if>
 			<if test="socialInsurance != null  and socialInsurance != ''  ">social_insurance,</if>
 			<if test="injuryInsurance != null  and injuryInsurance != ''  ">injury_insurance,</if>
-			<if test="companyId != null ">company_id,</if>
-			<if test="deptId != null ">dept_id,</if>
-            <if test="postId != null ">post_id,</if>
-            <if test="jobId != null ">job_id,</if>
+			<if test="companyCode != null  and companyCode != ''  ">company_code,</if>
+			<if test="deptName != null  and deptName != ''  ">dept_name,</if>
+			<if test="postName != null  and postName != ''  ">post_name,</if>
+			<if test="jobName != null  and jobName != ''  ">job_name,</if>
 			<if test="bankCard != null  and bankCard != ''  ">bank_card,</if>
 			<if test="accountBank != null  and accountBank != ''  ">account_bank,</if>
 			<if test="trialPeriod != null  and trialPeriod != ''  ">trial_period,</if>
@@ -185,7 +215,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="signDate != null  ">sign_date,</if>
 			<if test="yearLimit != null  ">year_limit,</if>
 			<if test="expireDate != null  ">expire_date,</if>
-			<if test="status != null  and status != ''  ">status,</if>
+			<if test="state != null  and state != ''  ">state,</if>
 			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
 			<if test="createBy != null  and createBy != ''  ">create_by,</if>
 			<if test="remark != null  and remark != ''  ">remark,</if>
@@ -203,10 +233,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="accidentInsurance != null  and accidentInsurance != ''  ">#{accidentInsurance},</if>
 			<if test="socialInsurance != null  and socialInsurance != ''  ">#{socialInsurance},</if>
 			<if test="injuryInsurance != null  and injuryInsurance != ''  ">#{injuryInsurance},</if>
-			<if test="companyId != null ">#{companyId},</if>
-			<if test="deptId != null ">#{deptId},</if>
-            <if test="postId != null  ">#{postId},</if>
-            <if test="jobId != null ">#{jobId},</if>
+            <if test="companyCode != null  and companyCode != ''  ">#{companyCode},</if>
+            <if test="deptName != null  and deptName != ''  ">#{deptName},</if>
+            <if test="postName != null  and postName != ''  ">#{postName},</if>
+            <if test="jobName != null  and jobName != ''  ">#{jobName},</if>
 			<if test="bankCard != null  and bankCard != ''  ">#{bankCard},</if>
 			<if test="accountBank != null  and accountBank != ''  ">#{accountBank},</if>
 			<if test="trialPeriod != null  and trialPeriod != ''  ">#{trialPeriod},</if>
@@ -214,7 +244,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="signDate != null  ">#{signDate},</if>
             <if test="yearLimit != null  ">#{yearLimit},</if>
             <if test="expireDate != null  ">#{expireDate},</if>
-			<if test="status != null  and status != ''  ">#{status},</if>
+			<if test="state != null  and state != ''  ">#{state},</if>
 			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
 			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
 			<if test="remark != null  and remark != ''  ">#{remark},</if>
@@ -235,10 +265,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="accidentInsurance != null  and accidentInsurance != ''  ">accident_insurance = #{accidentInsurance},</if>
             <if test="socialInsurance != null  and socialInsurance != ''  ">social_insurance = #{socialInsurance},</if>
             <if test="injuryInsurance != null  and injuryInsurance != ''  ">injury_insurance = #{injuryInsurance},</if>
-            <if test="companyId != null ">company_id = #{companyId},</if>
-            <if test="deptId != null  ">dept_id = #{deptId},</if>
-            <if test="postId != null  ">post_id = #{postId},</if>
-            <if test="jobId != null  ">job_id = #{jobId},</if>
+            <if test="companyCode != null  and companyCode != ''  ">company_code = #{companyCode},</if>
+            <if test="deptName != null  and deptName != ''  ">dept_name = #{deptName},</if>
+            <if test="postName != null  and postName != ''  ">post_name = #{postName},</if>
+            <if test="jobName != null  and jobName != ''  ">job_name = #{jobName},</if>
             <if test="bankCard != null  and bankCard != ''  ">bank_card = #{bankCard},</if>
             <if test="accountBank != null  and accountBank != ''  ">account_bank = #{accountBank},</if>
             <if test="trialPeriod != null  and trialPeriod != ''  ">trial_period = #{trialPeriod},</if>
@@ -246,7 +276,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="signDate != null ">sign_date = #{signDate},</if>
             <if test="yearLimit != null ">year_limit = #{yearLimit},</if>
             <if test="expireDate != null ">expire_date = #{expireDate},</if>
-            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="state != null  and state != ''  ">state = #{state},</if>
             <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
             <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
             <if test="remark != null  and remark != ''  ">remark = #{remark},</if>

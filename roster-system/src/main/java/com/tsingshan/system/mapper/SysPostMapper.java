@@ -32,7 +32,7 @@ public interface SysPostMapper
      * @param userId 用户ID
      * @return 岗位列表
      */
-    public List<SysPost> selectPostsByUserId(Long userId);
+    List<SysPost> selectPostsByUserId(Long userId);
 
     /**
      * 通过岗位ID查询岗位信息
@@ -40,7 +40,9 @@ public interface SysPostMapper
      * @param postId 岗位ID
      * @return 角色对象信息
      */
-    public SysPost selectPostById(Long postId);
+    SysPost selectPostById(Long postId);
+
+    SysPost selectPostByPostName(String postName);
 
     /**
      * 批量删除岗位信息
@@ -48,7 +50,7 @@ public interface SysPostMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deletePostByIds(Long[] ids);
+    int deletePostByIds(Long[] ids);
 
     /**
      * 修改岗位信息
@@ -56,7 +58,7 @@ public interface SysPostMapper
      * @param post 岗位信息
      * @return 结果
      */
-    public int updatePost(SysPost post);
+    int updatePost(SysPost post);
 
     /**
      * 新增岗位信息
@@ -64,7 +66,7 @@ public interface SysPostMapper
      * @param post 岗位信息
      * @return 结果
      */
-    public int insertPost(SysPost post);
+    int insertPost(SysPost post);
 
     /**
      * 校验岗位名称
@@ -72,7 +74,7 @@ public interface SysPostMapper
      * @param postName 岗位名称
      * @return 结果
      */
-    public SysPost checkPostNameUnique(String postName);
+    SysPost checkPostNameUnique(String postName);
 
     /**
      * 校验岗位编码
@@ -80,7 +82,7 @@ public interface SysPostMapper
      * @param postCode 岗位编码
      * @return 结果
      */
-    public SysPost checkPostCodeUnique(String postCode);
+    SysPost checkPostCodeUnique(String postCode);
 
     /**
      * 根据id查询显示任意列表
@@ -88,4 +90,6 @@ public interface SysPostMapper
      * @return
      */
     List<SysPost> selectExport(@Param("ids") String[] ids);
+
+
 }

@@ -64,12 +64,19 @@ public class PromotionServiceImpl implements IPromotionService
      * @return 结果
      */
 	@Override
-	public AjaxResult insertPromotion(Promotion promotion,  long postId, long jobId)
+	public AjaxResult insertPromotion(Promotion promotion)
 	{
 		try {
-			promotionMapper.insertPromotion(promotion);
-			//更新员工岗位或者职务
-			updateEmployee(promotion.getEmployeeId(), postId, jobId);
+		    Promotion pro = new Promotion();
+		    pro.setEmployeeNo(promotion.getEmployeeNo());
+            List<Promotion> list = promotionMapper.selectPromotionList(pro);
+            if (list.size() > 0) {
+                promotion.setCounts(list.size() + 1);
+            } else {
+                promotion.setCounts(1);
+            }
+            promotionMapper.insertPromotion(promotion);
+
 			return AjaxResult.success();
 		} catch (Exception e) {
 			logger.error("新增晋升信息异常{}", e.getMessage());
@@ -77,13 +84,6 @@ public class PromotionServiceImpl implements IPromotionService
 		}
 	}
 
-	private void updateEmployee(long employeeId, long postId, long jobId) {
-        Employee employee = employeeMapper.selectEmployeeById(employeeId);
-        employee.setPostId(postId);
-        employee.setJobId(jobId);
-        employeeMapper.updateEmployee(employee);
-    }
-	
 	/**
      * 修改晋升
      * 
@@ -94,7 +94,6 @@ public class PromotionServiceImpl implements IPromotionService
 	public AjaxResult updatePromotion(Promotion promotion)
 	{
 		try {
-
 			promotionMapper.updatePromotion(promotion);
 			return AjaxResult.success();
 		} catch (Exception e) {

@@ -3,19 +3,22 @@ package com.tsingshan.web.controller.roster;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 import com.tsingshan.common.annotation.Log;
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.enums.BusinessType;
 import com.tsingshan.common.utils.ExcelUtil;
 import com.tsingshan.common.utils.StringUtils;
 import com.tsingshan.framework.util.ShiroUtils;
+import com.tsingshan.infomana.domain.Contract;
 import com.tsingshan.infomana.domain.Employee;
 import com.tsingshan.infomana.domain.vo.EmployeeVo;
+import com.tsingshan.infomana.service.IContractService;
 import com.tsingshan.infomana.service.IEmployeeService;
 import com.tsingshan.system.service.IJobService;
 import com.tsingshan.system.service.ISysPostService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -41,6 +44,8 @@ import com.tsingshan.framework.web.page.TableDataInfo;
 @RequestMapping("/roster/dimission")
 public class DimissionController extends BaseController
 {
+    private static final Logger logger = LoggerFactory.getLogger(DimissionController.class);
+
     private String prefix = "roster/dimission";
 	
 	@Autowired
@@ -54,6 +59,9 @@ public class DimissionController extends BaseController
 
 	@Autowired
 	private IJobService jobService;
+
+	@Autowired
+    private IContractService contractService;
 	
 	@RequiresPermissions("roster:dimission:view")
 	@GetMapping()
@@ -95,10 +103,46 @@ public class DimissionController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(Dimission dimission)
 	{
-		dimission.setCreateBy(ShiroUtils.getLoginName());
-		AjaxResult ajaxResult = dimissionService.insertDimission(dimission);
-		return ajaxResult;
+        try {
+            if (StringUtils.isEmpty(dimission.getEmployeeNo())) {
+                return AjaxResult.error("工号不能为空");
+            } else if (dimission.getDimissionDate() == null) {
+                return AjaxResult.error("离职日期不能为空");
+            } else if (StringUtils.isEmpty(dimission.getDimissionType())) {
+                return AjaxResult.error("离职类型不能为空");
+            } else if (StringUtils.isEmpty(dimission.getDimissionReason())) {
+                return AjaxResult.error("离职原因不能为空");
+            }
+            dimission.setCreateBy(ShiroUtils.getLoginName());
+            dimissionService.insertDimission(dimission);
+            //更新员工信息表
+            updateEmployee(dimission.getEmployeeId());
+            //更新合同信息
+            updateContract(dimission.getEmployeeId());
+            return AjaxResult.success();
+        } catch (Exception e) {
+            logger.error("添加异常{}", e.getMessage());
+            return AjaxResult.error("添加异常");
+        }
+
 	}
+    private void updateEmployee(long employeeId) {
+        Employee employee = employeeService.selectEmployeeById(employeeId);
+        employee.setState("1");
+        employee.setContractStatus("1");
+        employeeService.updateEmployee(employee);
+    }
+    private void updateContract(long employeeId) {
+        Contract contract = new Contract();
+        contract.setEmployeeId(employeeId);
+        List<Contract> contractList = contractService.selectContractList(contract);
+        for (Contract con : contractList) {
+            if (con.getState().equals("0")) {
+                con.setState("1");
+                contractService.updateContract(con);
+            }
+        }
+    }
 
 	/**
 	 * 修改离职

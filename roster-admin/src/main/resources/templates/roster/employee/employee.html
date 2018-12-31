@@ -115,6 +115,7 @@
         var nation_datas = [[${@dict.getType('roster_nation_type')}]];
         var roster_education = [[${@dict.getType('roster_education')}]];
         var roster_politics_status = [[${@dict.getType('roster_politics_status')}]];
+        var roster_employeeContract_status = [[${@dict.getType('roster_employeeContract_status')}]];
 
         var prefix = ctx + "roster/employee";
 
@@ -272,14 +273,11 @@
 					field : 'contractStatus',
 					title : '签订合同',
                     formatter: function(value, row, index) {
-                        var actions = [];
-                        var sta = row.contractStatus == '0' ? '已签订' : '未签订';
-                        actions.push("<span class='badge badge-primary'>" + sta + "</span>");
-                        return actions;
+                        return $.table.selectDictLabel(	roster_employeeContract_status, value);
                     }
 				},
 				{
-					field: 'status',
+					field: 'state',
 					title: '状态',
 					align: 'center',
 					formatter: function(value, row, index) {

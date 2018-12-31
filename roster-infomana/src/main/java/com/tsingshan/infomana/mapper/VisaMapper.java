@@ -24,10 +24,10 @@ public interface VisaMapper
 	/**
 	 * 查询护照签证信息
 	 * @param employeeNo 工号
-	 * @param status	状态
+	 * @param state	状态
 	 * @return 护照签证信息
 	 */
-	Visa selectVisaByEmployeeNoStatus(@Param("employeeNo") String employeeNo,@Param("status") String status);
+	Visa selectVisaByEmployeeNoState(@Param("employeeNo") String employeeNo,@Param("state") String state);
 	
 	/**
      * 查询护照签证列表

@@ -21,7 +21,7 @@ public interface SalaryMapper
      */
 	Salary selectSalaryById(Long id);
 
-	Salary selectSalaryByEmployeeNoStatus(@Param("employeeNo") String employeeNo, @Param("status") String status);
+	Salary selectSalaryByEmployeeNoState(@Param("employeeNo") String employeeNo, @Param("state") String state);
 	
 	/**
      * 查询调薪列表

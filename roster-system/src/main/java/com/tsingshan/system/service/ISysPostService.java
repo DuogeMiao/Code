@@ -89,7 +89,7 @@ public interface ISysPostService
      * @param post 岗位信息
      * @return 结果
      */
-    public String checkPostCodeUnique(SysPost post);
+    String checkPostCodeUnique(SysPost post);
 
     /**
      * 根据id查询显示任意列表
@@ -97,4 +97,6 @@ public interface ISysPostService
      * @return
      */
     public List<SysPost> selectExport(String ids);
+
+    SysPost selectPostByPostName(String postName);
 }

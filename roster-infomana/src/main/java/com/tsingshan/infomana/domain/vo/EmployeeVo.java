@@ -132,7 +132,7 @@ public class EmployeeVo extends BaseEntity{
 
     /** 状态（0在职 1离职） */
     @Excel(name="在职状态")
-    private String status;
+    private String state;
 
     @Excel(name="签订合同")
     private String contractStatus;

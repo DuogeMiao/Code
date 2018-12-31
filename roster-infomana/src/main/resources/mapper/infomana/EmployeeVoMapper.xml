@@ -33,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             e.bank_card,
             e.account_bank,
             e.entry_date,
-            e.`status`,
+            e.state,
             e.contract_status,
             e.remark,
             e.del_flag,
@@ -53,11 +53,127 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <select id="selectExport" resultType="com.tsingshan.infomana.domain.vo.EmployeeVo"  statementType="STATEMENT">
-        <include refid="selectEmployeeVo" />
+        SELECT
+            e.employee_id,
+            e.employee_no,
+            e.employee_name,
+            e.identity_card,
+            e.birth_date,
+            -- e.sex,
+            (
+              SELECT
+                f.dict_label
+              FROM
+                sys_dict_data f
+              WHERE
+                f.dict_type = 'sys_user_sex'
+              AND f.dict_value = e.sex
+            ) sex,
+            -- e.nation,
+            (
+              SELECT
+                f.dict_label
+              FROM
+                sys_dict_data f
+              WHERE
+                f.dict_type = 'roster_nation_type'
+              AND f.dict_value = e.nation
+            ) nation,
+            -- e.marital_status,
+            (
+              SELECT
+                f.dict_label
+              FROM
+                sys_dict_data f
+              WHERE
+                f.dict_type = 'roster_marital_status'
+              AND f.dict_value = e.marital_status
+            ) marital_status,
+            e.native_place,
+            e.address,
+            -- e.residence_type,
+            (
+              SELECT
+                f.dict_label
+              FROM
+                sys_dict_data f
+              WHERE
+                f.dict_type = 'roster_residence_type'
+              AND f.dict_value = e.residence_type
+            ) residence_type,
+            -- e.education,
+            (
+              SELECT
+                f.dict_label
+              FROM
+                sys_dict_data f
+              WHERE
+                f.dict_type = 'roster_education'
+              AND f.dict_value = e.education
+            ) education,
+            -- e.politics_status,
+            (
+              SELECT
+                f.dict_label
+              FROM
+                sys_dict_data f
+              WHERE
+                f.dict_type = 'roster_politics_status'
+              AND f.dict_value = e.politics_status
+            ) politics_status,
+            e.graduate_institutions,
+            e.major,
+            e.contact_number,
+            e.emergency_call,
+            e.join_work_date,
+            e.job_title,
+            e.get_time,
+            c.company_code,
+            d.dept_name,
+            p.post_name,
+            j.job_name,
+            e.work_age,
+            e.bank_card,
+            e.account_bank,
+            e.entry_date,
+            -- e.state,roster_employee_status
+            (
+              SELECT
+                f.dict_label
+              FROM
+                sys_dict_data f
+              WHERE
+                f.dict_type = 'roster_employee_status'
+              AND f.dict_value = e.state
+            ) state,
+            -- e.contract_status,roster_contract_status
+            (
+              SELECT
+                f.dict_label
+              FROM
+                sys_dict_data f
+              WHERE
+                f.dict_type = 'roster_contract_status'
+              AND f.dict_value = e.contract_status
+            ) contract_status,
+            e.remark,
+            e.del_flag,
+            e.create_by,
+            e.create_time,
+            e.update_by,
+            e.update_time
+        FROM
+            employee e
+        LEFT JOIN companys c ON e.company_id = c.company_id
+        LEFT JOIN sys_dept d ON e.dept_id = d.dept_id
+        LEFT JOIN sys_post p ON e.post_id = p.post_id
+        LEFT JOIN job j ON e.job_id = j.job_id
+        WHERE
+            e.del_flag = '0'
         AND e.employee_id in
-            <foreach collection="ids" item="ids" open="(" separator="," close=")">
-                ${ids}
-            </foreach>
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            ${ids}
+        </foreach>
     </select>
     
     <select id="selectEmployeeVoByEmployeeNo" parameterType="java.lang.String" resultType="com.tsingshan.infomana.domain.vo.EmployeeVo">
@@ -65,11 +181,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND e.employee_no = #{employeeNo}
     </select>
 
-    <select id="selectEmployeeVoListByStatus" parameterType="java.lang.String" resultType="com.tsingshan.infomana.domain.vo.EmployeeVo">
+    <select id="selectEmployeeVoListByState" parameterType="java.lang.String" resultType="com.tsingshan.infomana.domain.vo.EmployeeVo">
         <include refid="selectEmployeeVo"/>
-        <if test="status != null  and status != '' ">
-            and e.`status` = #{status}
-        </if>
+        and e.state = #{state} and e.contract_status = #{contractStatus}
+
 
     </select>
 	
@@ -126,7 +241,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          <if test="bankCard != null  and bankCard != '' "> and e.bank_card = #{bankCard}</if>
          <if test="accountBank != null  and accountBank != '' "> and e.account_bank = #{accountBank}</if>
          <if test="entryDate != null  and entryDate != '' "> and e.entry_date = #{entryDate}</if>
-         <if test="status != null  and status != '' "> and e.status = #{status}</if>
+         <if test="state != null  and state != '' "> and e.state = #{state}</if>
          <if test="contractStatus != null and contractStatus != '' "> and e.contract_status = #{contractStatus}</if>
          <if test="delFlag != null  and delFlag != '' "> and e.del_flag = #{delFlag}</if>
          <if test="createBy != null  and createBy != '' "> and e.create_by = #{createBy}</if>

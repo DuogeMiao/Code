@@ -54,7 +54,7 @@ public class Visa extends BaseEntity
 
 	/** 签证编号 */
 	@Excel(name="签证编号")
-	private String visaNo;
+	private Integer visaNo;
 
 	/** 签证类型 */
 	@Excel(name="签证类型")
@@ -85,7 +85,7 @@ public class Visa extends BaseEntity
 	private Date outMineTime;
 
 	/** 状态（0正常 1停用） */
-	private String status;
+	private String state;
 	/** 删除标志（0代表存在 2代表删除） */
 	private String delFlag;
 
@@ -106,7 +106,7 @@ public class Visa extends BaseEntity
             .append("exitTime", getExitTime())
             .append("inMineTime", getInMineTime())
             .append("outMineTime", getOutMineTime())
-            .append("status", getStatus())
+            .append("state", getState())
             .append("delFlag", getDelFlag())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

@@ -19,6 +19,8 @@ public interface ICompanysService
      * @return 公司信息
      */
 	Companys selectCompanysById(long companyId);
+
+	Companys selectCompanysByCompanyCode(String companyCode);
 	
 	/**
      * 查询公司列表

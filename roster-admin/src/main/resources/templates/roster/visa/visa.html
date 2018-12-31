@@ -47,6 +47,9 @@
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:visa:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
+                <a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:visa:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
 
 				<!--<a class="btn btn-info menuItem" onclick="employee()" shiro:hasPermission="roster:employee:">
 					<i class="fa fa-link"></i> 员工
@@ -87,6 +90,7 @@
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
                 queryParams : queryParams,
                 responseHandler: responseHandler,
                 modalName: "护照签证",
@@ -146,7 +150,7 @@
 				},
 				{
 					field : 'exitTime', 
-					title : '处境时间' 
+					title : '出境时间'
 				},
 				{
 					field : 'inMineTime', 
@@ -157,7 +161,7 @@
 					title : '出矿时间' 
 				},
 				{
-					field : 'status', 
+					field : 'state',
 					title : '状态',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(roster_visa_status, value);

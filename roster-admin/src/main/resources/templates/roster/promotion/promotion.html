@@ -43,6 +43,9 @@
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:promotion:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
+                <a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:promotion:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
 
 				<!--<a class="btn btn-info menuItem" onclick="employee()" shiro:hasPermission="roster:employee:">
 					<i class="fa fa-link"></i> 员工
@@ -84,8 +87,7 @@
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
-                queryParams : queryParams,
-                responseHandler: responseHandler,
+                exportUrl: prefix + "/export",
                 modalName: "晋升",
                 columns: [{
 		            checkbox: true
@@ -132,10 +134,10 @@
 					field : 'execDate', 
 					title : '执行日期' 
 				},
-				/*{
+				{
 					field : 'counts', 
 					title : '晋升次数' 
-				},*/
+				},
 				{
 					field : 'backDate', 
 					title : '回传日期' 
@@ -202,7 +204,7 @@
             createMenuItem(url, "离职信息");
         }
 
-        function queryParams(params) {
+        /*function queryParams(params) {
             return {
                 employeeId:    	$("#employeeId").val(),//向后台传入id参数
                 pageSize:       params.limit,
@@ -226,7 +228,7 @@
                 $.modal.alertWarning(res.msg);
                 return { rows: [], total: 0 };
             }
-        }
+        }*/
     </script>
 </body>
 </html>

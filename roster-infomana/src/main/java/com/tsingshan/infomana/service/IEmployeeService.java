@@ -35,9 +35,9 @@ public interface IEmployeeService
 	List<EmployeeVo> selectEmployeeVoList(EmployeeVo employeeVo);
 
 
-	List<Employee> selectEmployeeListByStatus(String status);
+	List<Employee> selectEmployeeListByState(String state);
 
-	List<EmployeeVo> selectEmployeeVoListByStatus(String status);
+	List<EmployeeVo> selectEmployeeVoListByState(String state,String contractStatus);
 
 	/**
      * 新增员工

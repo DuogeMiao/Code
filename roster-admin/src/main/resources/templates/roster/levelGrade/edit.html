@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-levelGrade-edit" th:object="${levelGrade}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+            <input id="treeId" name="parentId" type="hidden" th:field="*{parentId}" />
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">上级级档：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" onclick="selectLevelGradeTree()" id="treeName" readonly="true" th:value="${levelGrade.parentName == null ? '无' : levelGrade.parentName}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">级档类型：</label>
+                <div class="col-sm-8">
+                    <label class="radio-box"> <input type="radio" th:field="*{levelGradeType}" name="levelGradeType" value="L" /> 级 </label>
+                    <label class="radio-box"> <input type="radio" th:field="*{levelGradeType}" name="levelGradeType" value="G" /> 档 </label>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">级档名称：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="levelGradeName" id="levelGradeName" th:field="*{levelGradeName}">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">显示顺序：</label>
+                <div class="col-sm-8">
+                    <input id="sortOrder" name="sortOrder" th:field="*{sortOrder}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">基本薪资：</label>
+                <div class="col-sm-8">
+                    <input id="baseSalary" name="baseSalary" th:field="*{baseSalary}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">职务薪资：</label>
+                <div class="col-sm-8">
+                    <input id="jobSalary" name="jobSalary" th:field="*{jobSalary}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">每档增幅：</label>
+                <div class="col-sm-8">
+                    <input id="everyGradeChange" name="everyGradeChange" th:field="*{everyGradeChange}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">职务名称：</label>
+                <div class="col-sm-8">
+                    <input id="jobName" name="jobName" th:field="*{jobName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">图标：</label>
+                <div class="col-sm-8">
+                    <input id="icon" name="icon" class="form-control" type="text" placeholder="选择图标" th:field="*{icon}">
+                    <div class="ms-parent" style="width: 100%;">
+                        <div class="icon-drop animated flipInX" style="display: none;max-height:200px;overflow-y:auto">
+                            <div data-th-include="roster/levelGrade/icon"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input id="remark" name="remark" th:field="*{remark}" class="form-control" type="text">
+                </div>
+            </div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "roster/levelGrade";
+
+        $(function() {
+            var levelGradeType = $('input[name="levelGradeType"]:checked').val();
+            levelGradeTypeVisible(levelGradeType);
+        });
+
+		$("#form-levelGrade-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-levelGrade-edit').serialize());
+	        }
+	    }
+        $(function() {
+            $("input[name='icon']").focus(function() {
+                $(".icon-drop").show();
+            });
+            $("#form-levelGrade-edit").click(function(event) {
+                var obj = event.srcElement || event.target;
+                if (!$(obj).is("input[name='icon']")) {
+                    $(".icon-drop").hide();
+                }
+            });
+            $(".icon-drop").find(".ico-list i").on("click",
+                function() {
+                    $('#icon').val($(this).attr('class'));
+                });
+            $('input').on('ifChecked',
+                function(event) {
+                    var levelGradeType = $(event.target).val();
+                    levelGradeTypeVisible(levelGradeType);
+                });
+        });
+        function levelGradeTypeVisible(levelGradeType) {
+            if (levelGradeType == "L") {
+                $("#baseSalary").parents(".form-group").hide();
+                $("#jobSalary").parents(".form-group").hide();
+                $("#everyGradeChange").parents(".form-group").hide();
+                $("#jobName").parents(".form-group").hide();
+                $("#icon").parents(".form-group").show();
+            } else if (levelGradeType == "G") {
+                $("#baseSalary").parents(".form-group").show();
+                $("#jobSalary").parents(".form-group").show();
+                $("#everyGradeChange").parents(".form-group").show();
+                $("#jobName").parents(".form-group").show();
+                $("#icon").parents(".form-group").hide();
+            }
+        }
+
+        /*级档管理-修改-选择级档树*/
+        function selectLevelGradeTree() {
+            var id = $("#treeId").val();
+            if(id > 0) {
+                var url = prefix + "/selectLevelGradeTree/" + id;
+                $.modal.open("选择级别", url, '380', '380');
+            } else {
+                $.modal.alertError("主级别不能选择");
+            }
+        }
+        function selectLevelGradeTree() {
+            var menuId = $("#treeId").val();
+            if(menuId > 0) {
+                var url = prefix + "/selectLevelGradeTree/" + menuId;
+                var options = {
+                    title: '级档选择',
+                    width: "380",
+                    url: url,
+                    callBack: doSubmit
+                };
+                $.modal.openOptions(options);
+            } else {
+                $.modal.alertError("主级别不能选择");
+            }
+        }
+
+        function doSubmit(index, layero){
+            var body = layer.getChildFrame('body', index);
+            $("#treeId").val(body.find('#treeId').val());
+            $("#treeName").val(body.find('#treeName').val());
+            layer.close(index);
+        }
+	</script>
+</body>
+</html>
