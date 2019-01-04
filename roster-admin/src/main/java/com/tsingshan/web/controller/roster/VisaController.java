@@ -179,6 +179,17 @@ public class VisaController extends BaseController
 	    Visa visa = visaService.selectVisaByEmployeeNoState(employeeNo,"0");
 	    return AjaxResult.success(visa);
     }
+    @PostMapping("/passportNo")
+    @ResponseBody
+    public AjaxResult findVisaByPassportNo(String passportNo) {
+	    Visa visa = new Visa();
+	    visa.setPassportNo(passportNo);
+        List<Visa> list = visaService.selectVisaList(visa);
+        if (list.size() > 0) {
+            return AjaxResult.success(list.get(0));
+        }
+        return AjaxResult.success(null);
+    }
 
 	@Override
 	public void initBinder(WebDataBinder binder) {

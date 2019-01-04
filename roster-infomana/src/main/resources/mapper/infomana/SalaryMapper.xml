@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectSalaryVo">
-        select id, employee_id, employee_no, employee_name, identity_card, company_name, dept_name, job_name, post_name, base_salary, job_salary, performance, back_date, counts, adjustment_type, subsidy, adjustment_date, effective_date, state, del_flag, create_by, create_time, update_by, update_time, remark from adjustment_salary
+        select id, employee_id, employee_no, employee_name, identity_card, company_name, dept_name, job_name, post_name, base_salary, job_salary, performance,  subsidy, back_date, counts, adjustment_type, adjustment_date, effective_date, state, del_flag, create_by, create_time, update_by, update_time, remark from adjustment_salary
     </sql>
 
     <select id="selectExport" resultType="com.tsingshan.infomana.domain.Salary"  statementType="STATEMENT">
@@ -46,10 +46,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             base_salary,
             job_salary,
             performance,
+            subsidy,
             back_date,
             counts,
             adjustment_type,
-            subsidy,
             adjustment_date,
             effective_date,
             state,
@@ -168,9 +168,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="backDate != null  ">#{backDate},</if>
 			<if test="counts != null  ">#{counts},</if>
 			<if test="adjustmentType != null  and adjustmentType != ''  ">#{adjustmentType},</if>
-			<if test="adjustmentDate != null  ">#{adjustmentDate},</if>
-			<if test="effectiveDate != null  ">#{effectiveDate},</if>
-			<if test="subsidy != null  ">#{subsidy},</if>
+            <if test="subsidy != null  ">#{subsidy},</if>
+            <if test="adjustmentDate != null  ">#{adjustmentDate},</if>
+            <if test="effectiveDate != null  ">#{effectiveDate},</if>
 			<if test="state != null  and state != ''  ">#{state},</if>
 			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
 			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>

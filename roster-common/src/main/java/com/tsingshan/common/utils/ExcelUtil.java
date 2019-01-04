@@ -356,22 +356,22 @@ public class ExcelUtil<T>
                                     Class<?> fieldType = field.getType();
                                     //时间格式处理
                                     if (java.util.Date.class == fieldType) {
+                                        SimpleDateFormat sdf = null;
                                         if (vo == null || field.get(vo) == null) {
                                             cell.setCellValue("");
                                         } else {
-                                            String temp = "0:00:00";
-                                            DateFormat df = DateFormat.getTimeInstance();//只取出时分秒
-                                            String sfm = df.format(field.get(vo));
-                                            if (temp.compareTo(sfm) != 0) {
-                                                //如果时间格式是yyyy-MM-dd HH:mm:ss
-                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                            cell.setCellType(CellType.STRING);
+                                            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                            String format = sdf.format(field.get(vo));
+                                            long dataToData = DateUtils.getDataToData(sdf.parse(format));
+                                            long dataToSecond = DateUtils.getDataToSecond(sdf.parse(format));
+                                            if ((dataToData - dataToSecond ) == 0 ) {
+                                                //如果时间格式是yyyy-MM-dd
+                                                sdf = new SimpleDateFormat("yyyy-MM-dd");
                                                 String c  = sdf.format(field.get(vo));
                                                 cell.setCellValue(c);
                                             } else {
-                                                //如果时间格式是yyyy-MM-dd
-                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                                                String c  = sdf.format(field.get(vo));
-                                                cell.setCellValue(c);
+                                                cell.setCellValue(format);
                                             }
                                         }
                                     } else {

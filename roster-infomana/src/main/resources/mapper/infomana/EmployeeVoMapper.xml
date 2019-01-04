@@ -183,7 +183,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectEmployeeVoListByState" parameterType="java.lang.String" resultType="com.tsingshan.infomana.domain.vo.EmployeeVo">
         <include refid="selectEmployeeVo"/>
-        and e.state = #{state} and e.contract_status = #{contractStatus}
+        <if test="state != null and state != '' ">
+            and e.state = #{state}
+        </if>
+        <if test="contractStatus != null and contractStatus != '' ">
+            and e.contract_status = #{contractStatus}
+        </if>
 
 
     </select>

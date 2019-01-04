@@ -91,17 +91,16 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                queryParams : queryParams,
-                responseHandler: responseHandler,
+                uniqueId: "id",
                 modalName: "护照签证",
                 columns: [{
 		            checkbox: true
 		        },
-				{
+				/*{
 					field : 'id', 
 					title : 'ID',
                     visible : false
-				},
+				},*/
 				{
 					field : 'employeeId', 
 					title : '员工ID',
@@ -217,7 +216,7 @@
             createMenuItem(url, "离职信息");
         }
 
-        function queryParams(params) {
+       /* function queryParams(params) {
             return {
                 employeeId:    	$("#employeeId").val(),//向后台传入id参数
                 pageSize:       params.limit,
@@ -241,7 +240,7 @@
                 $.modal.alertWarning(res.msg);
                 return { rows: [], total: 0 };
             }
-        }
+        }*/
 
     </script>
 </body>
