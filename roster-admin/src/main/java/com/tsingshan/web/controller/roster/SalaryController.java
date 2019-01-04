@@ -96,7 +96,6 @@ public class SalaryController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(Salary salary)
 	{
-		;
 		salary.setCreateBy(ShiroUtils.getLoginName());
 		if (StringUtils.isEmpty(salary.getJobName()) || StringUtils.isEmpty(salary.getPostName())) {
 			return AjaxResult.error("岗位和职务不能为空");

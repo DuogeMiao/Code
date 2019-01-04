@@ -15,7 +15,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">工号：</label>
 				<div class="col-sm-8">
-					<select name="employeeNo" onchange="getByEmployeeNo()" id="employeeNo" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeVoListByState('0','1')}">
+					<select name="employeeNo" onchange="getByEmployeeNo()" id="employeeNo" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeVoListByState('','1')}">
 						<option value=""></option>
 						<option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeNo}" ></option>
 					</select>
@@ -156,11 +156,36 @@
 		var prefix = ctx + "roster/contract";
 		$("#form-contract-add").validate({
 			rules:{
-				xxxx:{
-					required:true,
+                contractNo: {
+					required:true
 				},
-			}
+                trialPeriod: {
+                    required: true,
+                    isNumber: true
+                },
+                yearLimit: {
+                    required: true,
+                    isNumber: true
+                }
+			},
+            messages:{
+                contractNo:{
+                    required: "请填写合同号"
+                },
+                trialPeriod: {
+                    required: "请填写试用期",
+                    isNumber: "必须为数字"
+                },
+                yearLimit: {
+                    required: "请填写试用期",
+                    isNumber: "必须为数字"
+                },
+            }
 		});
+        jQuery.validator.addMethod("isNumber", function(value, element) {
+            var reg = /^[0-9]*$/;
+            return this.optional(element) || ( reg.test(value));
+        }, "必须为数字");
 		
 		function submitHandler() {
 	        if ($.validate.form()) {

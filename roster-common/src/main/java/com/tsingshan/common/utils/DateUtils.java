@@ -1,5 +1,6 @@
 package com.tsingshan.common.utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -177,5 +178,43 @@ public class DateUtils
         calendar.setTime(date);
         return calendar;
     }
+
+    /**
+     * 把日期的 年月日转换为 long
+     * @param date
+     * @return long日期
+     * @throws Exception
+     */
+    public static Long getDataToData(Date date) throws Exception{
+        //日期格式，精确到日
+        DateFormat df = DateFormat.getDateInstance();
+        return dateToLong(df,date);
+    }
+    public static Long getDataToSecond(Date date) throws Exception{
+        //可以精确到时分秒
+        DateFormat df = DateFormat.getDateTimeInstance();
+        return dateToLong(df,date);
+    }
+    private static Long dateToLong(DateFormat df,Date date) throws Exception{
+        String format = df.format(date);
+        Date parse = df.parse(format);
+        return parse.getTime();
+    }
+
+//    public static void main(String[] args) throws Exception{
+//        Date date = new Date();
+//        DateFormat df1 = DateFormat.getDateInstance();//日期格式，精确到日
+//        String format = df1.format(date);
+//        Date parse = df1.parse(format);
+//        long time = parse.getTime();
+//
+//        DateFormat df2 = DateFormat.getDateTimeInstance();//可以精确到时分秒
+//        String format1 = df2.format(date);
+//        Date parse1 = df2.parse(format1);
+//        long time1 = parse1.getTime();
+//
+//
+//        System.out.println(time1 -time);
+//    }
 
 }

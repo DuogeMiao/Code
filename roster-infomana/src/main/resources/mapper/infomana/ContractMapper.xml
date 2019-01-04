@@ -74,6 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectExport" resultType="com.tsingshan.infomana.domain.Contract"  statementType="STATEMENT">
         SELECT
             contract_no,
+            employee_no,
             employee_name,
             identity_card,
             entry_date,
@@ -88,7 +89,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             bank_card,
             account_bank,
             trial_period,
-            contract_type,
+            (
+                SELECT
+                f.dict_label
+                FROM
+                sys_dict_data f
+                WHERE
+                f.dict_type = 'roster_contract_type'
+                AND f.dict_value = contract_type
+            ) contract_type,
             sign_date,
             year_limit,
             expire_date,

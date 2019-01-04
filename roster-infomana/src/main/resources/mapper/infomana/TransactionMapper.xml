@@ -34,7 +34,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectExport" resultType="com.tsingshan.infomana.domain.Transaction"  statementType="STATEMENT">
-        <include refid="selectTransactionVo" />
+        SELECT
+            employee_no,
+            employee_name,
+            identity_card,
+            trans_out_company,
+            trans_out_dept,
+            trans_out_post,
+            trans_in_company,
+            trans_in_dept,
+            trans_in_post,
+            span_company,
+            effective_date,
+            back_date,
+            counts,
+            (
+                SELECT
+                  f.dict_label
+                FROM
+                  sys_dict_data f
+                WHERE
+                  f.dict_type = 'roster_span_company'
+                AND f.dict_value = state
+            ) state,
+            remark
+        FROM
+          transaction
         where id in
         <foreach collection="ids" item="ids" open="(" separator="," close=")">
             ${ids}

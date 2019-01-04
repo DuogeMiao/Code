@@ -62,12 +62,12 @@ public class VisaServiceImpl implements IVisaService
 	public AjaxResult insertVisa(Visa visa)
 	{
 		try {
-			Visa vs = new Visa();
-			vs.setPassportNo(visa.getPassportNo());
-			List<Visa> visas = visaMapper.selectVisaList(vs);
-			if (visas.size() > 0) {
-				return AjaxResult.error("已经有该护照信息");
-			}
+//			Visa vs = new Visa();
+//			vs.setPassportNo(visa.getPassportNo());
+//			List<Visa> visas = visaMapper.selectVisaList(vs);
+//			if (visas.size() > 0) {
+//				return AjaxResult.error("已经有该护照信息");
+//			}
 			//更新旧护照信息状态
             Visa visaByEmployeeNoStatus= visaMapper.selectVisaByEmployeeNoState(visa.getEmployeeNo(), "0");
 			if (visaByEmployeeNoStatus != null) {

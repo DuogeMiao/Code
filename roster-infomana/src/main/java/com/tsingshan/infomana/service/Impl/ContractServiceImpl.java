@@ -85,6 +85,7 @@ public class ContractServiceImpl implements IContractService
             contractMapper.insertContract(contract);
 			Employee employee = employeeMapper.selectEmployeeById(contract.getEmployeeId());
 			//更新员工的合同状态  0 已签订  1 未签订
+            employee.setState("0");
 			employee.setContractStatus("0");
 			employeeMapper.updateEmployee(employee);
             return AjaxResult.success();

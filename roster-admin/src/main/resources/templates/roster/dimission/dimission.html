@@ -35,7 +35,7 @@
 
 			<div class="btn-group-sm hidden-xs" id="toolbar" role="group">
 				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="roster:dimission:add">
-					<i class="fa fa-plus"></i> 添加
+					<i class="fa fa-plus"></i> 新增
 				</a>
 				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="roster:dimission:edit">
 					<i class="fa fa-edit"></i> 修改
@@ -149,14 +149,14 @@
 					field : 'dimissionReason', 
 					title : '离职原因' 
 				},
-				{
+				/*{
 					field: 'state',
 					title: '状态',
 					align: 'center',
 					formatter: function(value, row, index) {
 						return $.table.selectDictLabel(status_datas, value);
 					}
-				},
+				},*/
 				{
 					field : 'remark', 
 					title : '备注' 
