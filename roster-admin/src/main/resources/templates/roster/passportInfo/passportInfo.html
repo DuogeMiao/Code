@@ -5,13 +5,13 @@
 <body class="gray-bg">
     <div class="container-div">
 		<div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-			<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="roster:ratingForm:add">
+			<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="roster:passportInfo:add">
 				<i class="fa fa-plus"></i> 新增
 			</a>
-			<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="roster:ratingForm:edit">
+			<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="roster:passportInfo:edit">
 	            <i class="fa fa-edit"></i> 修改
 	        </a>
-			<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:ratingForm:remove">
+			<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:passportInfo:remove">
 				<i class="fa fa-remove"></i> 删除
 			</a>
             <a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:ratingForm:export">
@@ -25,60 +25,58 @@
     </div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('roster:ratingForm:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('roster:ratingForm:remove')}]];
-        var prefix = ctx + "roster/ratingForm";
+        var editFlag = [[${@permission.hasPermi('roster:passportInfo:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('roster:passportInfo:remove')}]];
+        var roster_passport_state = [[${@dict.getType('roster_passport_state')}]];
+        var prefix = ctx + "roster/passportInfo";
 
         $(function() {
             var options = {
+                uniqueId: "id",
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "员工考核",
+                modalName: "护照",
                 columns: [{
 		            checkbox: true
 		        },
+                {
+                    field : 'employeeId',
+                    title : '员工ID',
+                    visible : false
+                },
 				{
-					field : 'id', 
-					title : '序号'
+					field : 'passportNo', 
+					title : '护照号' 
+				},
+                {
+                    field : 'employeeName',
+                    title : '姓名'
+                },
+                {
+					field : 'identityCard',
+					title : '身份证'
+				},
+                {
+                    field : 'employeeNo',
+                    title : '工号'
+                },
+				{
+					field : 'passportIssueDate', 
+					title : '护照签发日期' 
 				},
 				{
-					field : 'institutionName', 
-					title : '制度名称' 
+					field : 'passportDeadline', 
+					title : '护照截止日期' 
 				},
 				{
-					field : 'employeeNo', 
-					title : '工号' 
-				},
-				{
-					field : 'companyCode', 
-					title : '公司' 
-				},
-				{
-					field : 'deptName', 
-					title : '部门' 
-				},
-				{
-					field : 'byCheckPeople', 
-					title : '被考核人' 
-				},
-				{
-					field : 'identityCard', 
-					title : '身份证' 
-				},
-				{
-					field : 'checkTime', 
-					title : '考核时间' 
-				},
-				{
-					field : 'incidentName', 
-					title : '事件名称' 
-				},
-				{
-					field : 'byCheckMoney', 
-					title : '被考核金额' 
+					field : 'state', 
+					title : '状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(roster_passport_state, value);
+                    }
 				},
 				{
 					field : 'remark', 

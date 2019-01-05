@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsingshan.infomana.mapper.VisaInfoMapper">
+    
+    <resultMap type="VisaInfo" id="VisaInfoResult">
+        <result property="id"    column="id"    />
+        <result property="visaNo"    column="visa_no"    />
+        <result property="visaType"    column="visa_type"    />
+        <result property="visaValidity"    column="visa_validity"    />
+        <result property="entryTime"    column="entry_time"    />
+        <result property="exitTime"    column="exit_time"    />
+        <result property="inMineTime"    column="in_mine_time"    />
+        <result property="outMineTime"    column="out_mine_time"    />
+        <result property="passportId"    column="passport_id"    />
+        <result property="state"    column="state"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectVisaInfoVo">
+        select id, visa_no, visa_type, visa_validity, entry_time, exit_time, in_mine_time, out_mine_time, passport_id, state, del_flag, create_by, create_time, update_by, update_time, remark from ros_visa_info
+    </sql>
+	
+    <select id="selectVisaInfoList" parameterType="VisaInfo" resultMap="VisaInfoResult">
+        <include refid="selectVisaInfoVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="visaNo != null "> and visa_no = #{visaNo}</if>
+             <if test="visaType != null  and visaType != '' "> and visa_type = #{visaType}</if>
+             <if test="visaValidity != null "> and visa_validity = #{visaValidity}</if>
+             <if test="entryTime != null "> and entry_time = #{entryTime}</if>
+             <if test="exitTime != null "> and exit_time = #{exitTime}</if>
+             <if test="inMineTime != null "> and in_mine_time = #{inMineTime}</if>
+             <if test="outMineTime != null "> and out_mine_time = #{outMineTime}</if>
+             <if test="passportId != null "> and passport_id = #{passportId}</if>
+             <if test="state != null  and state != '' "> and state = #{state}</if>
+             <if test="delFlag != null  and delFlag != '' "> and del_flag = #{delFlag}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectVisaInfoById" parameterType="Long" resultMap="VisaInfoResult">
+        <include refid="selectVisaInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertVisaInfo" parameterType="VisaInfo">
+        insert into ros_visa_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="visaNo != null  ">visa_no,</if>
+			<if test="visaType != null  and visaType != ''  ">visa_type,</if>
+			<if test="visaValidity != null  ">visa_validity,</if>
+			<if test="entryTime != null  ">entry_time,</if>
+			<if test="exitTime != null  ">exit_time,</if>
+			<if test="inMineTime != null  ">in_mine_time,</if>
+			<if test="outMineTime != null  ">out_mine_time,</if>
+			<if test="passportId != null  ">passport_id,</if>
+			<if test="state != null  and state != ''  ">state,</if>
+			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="visaNo != null  ">#{visaNo},</if>
+			<if test="visaType != null  and visaType != ''  ">#{visaType},</if>
+			<if test="visaValidity != null  ">#{visaValidity},</if>
+			<if test="entryTime != null  ">#{entryTime},</if>
+			<if test="exitTime != null  ">#{exitTime},</if>
+			<if test="inMineTime != null  ">#{inMineTime},</if>
+			<if test="outMineTime != null  ">#{outMineTime},</if>
+			<if test="passportId != null  ">#{passportId},</if>
+			<if test="state != null  and state != ''  ">#{state},</if>
+			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+            sysdate()
+         </trim>
+    </insert>
+	 
+    <update id="updateVisaInfo" parameterType="VisaInfo">
+        update ros_visa_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="visaNo != null  ">visa_no = #{visaNo},</if>
+            <if test="visaType != null  and visaType != ''  ">visa_type = #{visaType},</if>
+            <if test="visaValidity != null  ">visa_validity = #{visaValidity},</if>
+            <if test="entryTime != null  ">entry_time = #{entryTime},</if>
+            <if test="exitTime != null  ">exit_time = #{exitTime},</if>
+            <if test="inMineTime != null  ">in_mine_time = #{inMineTime},</if>
+            <if test="outMineTime != null  ">out_mine_time = #{outMineTime},</if>
+            <if test="passportId != null  ">passport_id = #{passportId},</if>
+            <if test="state != null  and state != ''  ">state = #{state},</if>
+            <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteVisaInfoById" parameterType="Long">
+        delete from ros_visa_info where id = #{id}
+    </delete>
+	
+    <delete id="deleteVisaInfoByIds" parameterType="Long">
+        delete from ros_visa_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
