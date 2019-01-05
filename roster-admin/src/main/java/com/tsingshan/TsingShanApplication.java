@@ -16,6 +16,7 @@ public class TsingShanApplication
 {
     public static void main(String[] args)
     {
+
         System.setProperty("spring.devtools.restart.enabled", "true");
         SpringApplication.run(TsingShanApplication.class, args);
         System.out.println("(♥◠‿◠)ﾉﾞ 花名册系统启动成功  ლ(´ڡ`ლ)ﾞ  \n" +
