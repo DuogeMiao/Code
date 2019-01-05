@@ -105,7 +105,7 @@ public interface SysUserMapper
      * @param email 用户邮箱
      * @return 结果
      */
-    public SysUser checkEmailUnique(String email);
+    SysUser checkEmailUnique(String email);
 
     /**
      * 根据id查询显示任意列表

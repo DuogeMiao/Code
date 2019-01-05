@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-visaInfo-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">护照号：</label>
+                <div class="col-sm-8">
+                    <select name="passportId" id="passportId" class="form-control select2-hidden-accessible" th:with="passportList=${@passportInfoServiceImpl.selectPassportInfoAllByState('0')}">
+                        <option></option>
+                        <option th:each="passport : ${passportList}" th:text="${passport.passportNo}" th:value="${passport.id}" ></option>
+                    </select>
+                </div>
+            </div>
+			<!--<div class="form-group">
+                <label class="col-sm-3 control-label">签证编号：</label>
+                <div class="col-sm-8">
+                    <input id="visaNo" name="visaNo" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">签证类型：</label>
+                <div class="col-sm-8">
+                    <select name="visaType" id="visaType" class="form-control m-b" th:with="type=${@dict.getType('roster_visa_type')}">
+                        <option></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">签证有效期（天）：</label>
+                <div class="col-sm-8">
+                    <input id="visaValidity" name="visaValidity" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">入境时间：</label>
+                <div class="col-sm-8">
+                    <input id="entryTime" name="entryTime" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">出境时间：</label>
+                <div class="col-sm-8">
+                    <input id="exitTime" name="exitTime" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">入矿时间：</label>
+                <div class="col-sm-8">
+                    <input id="inMineTime" name="inMineTime" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">出矿时间：</label>
+                <div class="col-sm-8">
+                    <input id="outMineTime" name="outMineTime" class="form-control" type="text">
+                </div>
+            </div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remark" name="remark" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script th:src="@{/ajax/libs/select/select2.js}"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "roster/visaInfo";
+		$("#form-visaInfo-add").validate({
+			rules: {
+                visaValidity:{
+					required: true,
+                    isNumber: true
+				}
+			},
+            messages: {
+                visaValidity: {
+                    required: "请填写签证有效期（天）",
+                    isNumber: "必须为整数字"
+                }
+            }
+		});
+
+        jQuery.validator.addMethod("isNumber", function(value, element) {
+            var reg = /^[0-9]*$/;
+            return this.optional(element) || ( reg.test(value));
+        }, "必须为数字");
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-visaInfo-add').serialize());
+	        }
+	    }
+
+        // laydate 时间控件绑定
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            var entryTime = laydate.render({
+                elem: '#entryTime',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click'
+            });
+            var exitTime = laydate.render({
+                elem: '#exitTime',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click'
+            });
+            var inMineTime = laydate.render({
+                elem: '#inMineTime',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click'
+            });
+            var outMineTime = laydate.render({
+                elem: '#outMineTime',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click'
+            });
+        });
+	</script>
+</body>
+</html>

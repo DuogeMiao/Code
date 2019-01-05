@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-passportInfo-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">护照号：</label>
+				<div class="col-sm-8">
+					<input id="passportNo" name="passportNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">护照签发日期：</label>
+				<div class="col-sm-8">
+					<input id="passportIssueDate" name="passportIssueDate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">护照截止日期：</label>
+				<div class="col-sm-8">
+					<input id="passportDeadline" name="passportDeadline" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">员工工号：</label>
+				<div class="col-sm-8">
+                    <select name="employeeId" id="employeeId" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeVoListByState('0','0')}">
+                        <option value=""></option>
+                        <option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeId}"></option>
+                    </select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remark" name="remark" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script th:src="@{/ajax/libs/select/select2.js}"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "roster/passportInfo";
+		$("#form-passportInfo-add").validate({
+            rules:{
+                passportNo:{
+                    required:true,
+                    isPassport: true,
+                    remote: {
+                        url: prefix + "/checkPassportNoUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "passportNo" : function () {
+                                return $.common.trim($("#passportNo").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            return $.validate.unique(data);
+                        }
+                    }
+                }
+            },
+            messages:{
+                passportNo:{
+                    required: "请填写护照号",
+                    isPassport: "护照格式不正确",
+                    remote: "护照已经存在"
+                }
+            }
+		});
+
+        jQuery.validator.addMethod("isPassport", function(value, element) {
+            var passportNo1 = /^1[45][0-9]{7}$|(^[P|p|S|s]\d{7}$)|(^[S|s|G|g|E|e]\d{8}$)|(^[Gg|Tt|Ss|Ll|Qq|Dd|Aa|Ff]\d{8}$)|(^[H|h|M|m]\d{8,10}$)/;
+            var passportNo2 = /^[a-zA-Z0-9]{5,17}$/;
+            return this.optional(element) || ( passportNo2.test(value) || passportNo1.test(value));
+        }, "护照格式不正确");
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-passportInfo-add').serialize());
+	        }
+	    }
+
+        // laydate 时间控件绑定
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            var passportIssueDate = laydate.render({
+                elem: '#passportIssueDate',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click'
+            });
+            var passportDeadline = laydate.render({
+                elem: '#passportDeadline',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click'
+            });
+        });
+	</script>
+</body>
+</html>
