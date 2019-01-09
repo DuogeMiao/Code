@@ -4,23 +4,49 @@
 <head th:include="include :: header"></head>
 <body class="gray-bg">
     <div class="container-div">
-        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="roster:passportInfo:add">
-                <i class="fa fa-plus"></i> 新增
-            </a>
-            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="roster:passportInfo:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:passportInfo:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
-            <a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:passportInfo:export">
-                <i class="fa fa-download"></i> 导出
-            </a>
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="visaInfo-form">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                护照号：<input type="text" name="passportNo"/>
+                            </li>
+                            <li>
+                                工号：<input type="text" name="employeeNo"/>
+                            </li>
+                            <li>
+                                姓名：<input type="text" name="employeeName"/>
+                            </li>
+                            <li>
+                                身份证：<input type="text" name="identityCard"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="roster:passportInfo:add">
+                    <i class="fa fa-plus"></i> 新增
+                </a>
+                <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="roster:passportInfo:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="roster:passportInfo:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:passportInfo:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-mobile-responsive="true"></table>
+            </div>
         </div>
-		<div class="col-sm-12 select-table table-striped">
-			<table id="bootstrap-table" data-mobile-responsive="true"></table>
-		</div>
     </div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">

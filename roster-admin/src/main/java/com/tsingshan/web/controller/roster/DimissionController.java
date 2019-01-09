@@ -115,9 +115,9 @@ public class DimissionController extends BaseController
             dimission.setCreateBy(ShiroUtils.getLoginName());
             dimissionService.insertDimission(dimission);
             //更新员工信息表
-            updateEmployee(dimission.getEmployeeId());
+            //updateEmployee(dimission.getEmployeeId());
             //更新合同信息
-            updateContract(dimission.getEmployeeId());
+            //updateContract(dimission.getEmployeeId());
             return AjaxResult.success();
         } catch (Exception e) {
             logger.error("添加异常{}", e.getMessage());
@@ -125,23 +125,23 @@ public class DimissionController extends BaseController
         }
 
 	}
-    private void updateEmployee(long employeeId) {
-        Employee employee = employeeService.selectEmployeeById(employeeId);
-        employee.setState("1");
-        employee.setContractStatus("1");
-        employeeService.updateEmployee(employee);
-    }
-    private void updateContract(long employeeId) {
-        Contract contract = new Contract();
-        contract.setEmployeeId(employeeId);
-        List<Contract> contractList = contractService.selectContractList(contract);
-        for (Contract con : contractList) {
-            if (con.getState().equals("0")) {
-                con.setState("1");
-                contractService.updateContract(con);
-            }
-        }
-    }
+//    private void updateEmployee(long employeeId) {
+//        Employee employee = employeeService.selectEmployeeById(employeeId);
+//        employee.setState("1");
+//        employee.setContractStatus("1");
+//        employeeService.updateEmployee(employee);
+//    }
+//    private void updateContract(long employeeId) {
+//        Contract contract = new Contract();
+//        contract.setEmployeeId(employeeId);
+//        List<Contract> contractList = contractService.selectContractList(contract);
+//        for (Contract con : contractList) {
+//            if (con.getState().equals("0")) {
+//                con.setState("1");
+//                contractService.updateContract(con);
+//            }
+//        }
+//    }
 
 	/**
 	 * 修改离职
