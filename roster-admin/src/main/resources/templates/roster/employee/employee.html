@@ -43,16 +43,15 @@
 								</select>
 							</li>
 							<li>
-								是否签订合同：<select  name="contractStatus">
-                                            <option>所有</option>
-											<option value="已签订合同">已签订合同</option>
-											<option value="未签订合同">未签订合同</option>
+								是否签订合同：<select  name="contractStatus" th:with="contractStatus=${@dict.getType('roster_employeeContract_status')}" >
+                                            <option value="">所有</option>
+                                            <option th:each="status : ${contractStatus}" th:text="${status.dictLabel}" th:value="${status.dictValue}"></option>
 										</select>
 							</li>
 							<li>
-								在职状态：<select name="status" id="status"  th:with="employeeStatus=${@dict.getType('roster_employee_status')}">
+								在职状态：<select name="state" id="state"  th:with="employeeStatus=${@dict.getType('roster_employee_status')}">
 											<option value="">所有</option>
-											<option th:each="status : ${employeeStatus}" th:text="${status.dictLabel}" th:value="${status.dictLabel}"></option>
+											<option th:each="status : ${employeeStatus}" th:text="${status.dictLabel}" th:value="${status.dictValue}"></option>
 										</select>
 							</li>
 							<li>
