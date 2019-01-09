@@ -126,7 +126,7 @@
 				<div class="col-sm-8">
 					<select name="contractType" id="contractType" class="form-control m-b" th:with="contractType=${@dict.getType('roster_contract_type')}">
 						<option></option>
-						<option th:each="ct : ${contractType}" th:text="${ct.dictLabel}" th:value="${ct.dictValue}"></option>
+						<option th:each="ct : ${contractType}" th:text="${ct.dictLabel}" th:value="${ct.dictLabel}"></option>
 					</select>
 				</div>
 			</div>

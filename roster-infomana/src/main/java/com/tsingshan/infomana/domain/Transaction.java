@@ -77,7 +77,6 @@ public class Transaction extends BaseEntity
 	private String backDate;
 
 	/** 异动次数 */
-	@Excel(name="异动次数")
 	private Integer counts;
 
 	/** 状态（0正常 1停用） */

@@ -291,16 +291,19 @@ public class DateUtils {
         return parse.getTime();
     }
 
-//    public static void main(String[] args) throws Exception{
-//        String value = "2018-08-09 23:10:32";
-//        if (DateUtils.isRightDateStr(value,"yyyy-MM-dd")) {
-//            System.out.println("1: " +DateUtils.dateTime("yyyy-MM-dd",value));
-//        } else if (DateUtils.isRightDateStr(value,"yyyy-MM-dd HH:mm:ss")) {
-//            System.out.println("2: " +DateUtils.dateTime("yyyy-MM-dd HH:mm:ss",value));
-//        } else if (DateUtils.isRightDateStr(value,"yyyyMMdd")) {
-//            System.out.println("3: " +DateUtils.dateTime("yyyyMMdd",value));
-//        }
-//
-//    }
+    /*public static void main(String[] args) throws Exception{
+        String date = "2019-01-29";
+        long daySub = getDaySub(DateUtils.getDate(), date, "yyyy-MM-dd");
+        System.out.println(daySub);
+        if (daySub <= 15 && daySub > 0) {
+            System.out.println( "合同还有" + daySub + "天到期");
+        } else if (daySub == 0){
+            System.out.println("今天合同到期");
+        } else if (daySub < 0){
+            System.out.println("合同已过期");
+        }
+        System.out.println("");
+
+    }*/
 
 }

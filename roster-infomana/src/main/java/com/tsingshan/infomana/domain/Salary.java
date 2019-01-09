@@ -69,10 +69,9 @@ public class Salary extends BaseEntity
 	/** 回传日期 */
 	@Excel(name="回传日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date backDate;
+	private String backDate;
 
 	/** 调整次数 */
-	@Excel(name="调整次数")
 	private Integer counts;
 
 	/** 类型（晋升、转正、调薪） */
@@ -85,11 +84,11 @@ public class Salary extends BaseEntity
 
 	/** 调薪日期 */
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date adjustmentDate;
+	private String adjustmentDate;
 
 	/** 生效日期 */
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date effectiveDate;
+	private String effectiveDate;
 	/** 状态（0正常 1停用） */
 	private String state;
 	/** 删除标志（0代表存在 2代表删除） */

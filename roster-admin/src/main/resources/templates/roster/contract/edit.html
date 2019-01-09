@@ -11,7 +11,7 @@
             <div class="form-group">	
                 <label class="col-sm-3 control-label">合同编号：</label>
                 <div class="col-sm-8">
-                    <input id="contractNo" name="contractNo" readonly="true" th:field="*{contractNo}" class="form-control" type="text">
+                    <input id="contractNo" name="contractNo"  th:field="*{contractNo}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -121,7 +121,7 @@
                 <div class="col-sm-8">
                     <select name="contractType" id="contractType" class="form-control m-b" th:with="contractType=${@dict.getType('roster_contract_type')}">
                         <option></option>
-                        <option th:each="ct : ${contractType}" th:text="${ct.dictLabel}" th:value="${ct.dictValue}" th:field="*{contractType}"></option>
+                        <option th:each="ct : ${contractType}" th:text="${ct.dictLabel}" th:value="${ct.dictLabel}" th:field="*{contractType}"></option>
                     </select>
                 </div>
             </div>

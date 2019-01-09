@@ -129,11 +129,14 @@ public class Contract extends BaseEntity
         try {
             if (getExpireDate() != null) {
                 long daySub = DateUtils.getDaySub(DateUtils.getDate(), getExpireDate(), "yyyy-MM-dd");
-                if (daySub <= 15 && daySub >= 0) {
+                if (daySub <= 15 && daySub > 0) {
                     note = "合同还有" + daySub + "天到期";
-                } else {
-                    note = "已过期";
+                } else if (daySub == 0) {
+                    note = "合同今天到期";
+                } else if (daySub < 0) {
+                    note = "合同已经到期";
                 }
+                note = "";
             }
         } catch (Exception e) {
             e.printStackTrace();

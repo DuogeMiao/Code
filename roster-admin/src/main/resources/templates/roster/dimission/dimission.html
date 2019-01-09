@@ -19,9 +19,9 @@
 								身份证：<input type="text" name="identityCard"/>
 							</li>
 							<li>
-								公司：<select name="companyName" th:with="type=${@dict.getType('roster_company_name')}">
+								公司：<select name="companyCode" th:with="type=${@dict.getType('roster_company_name')}">
 									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}"></option>
 								</select>
 							</li>
 							<li>
@@ -110,7 +110,7 @@
 					title : '身份证' 
 				},
 				{
-					field : 'companyName', 
+					field : 'companyCode',
 					title : '公司名称' 
 				},
 				{

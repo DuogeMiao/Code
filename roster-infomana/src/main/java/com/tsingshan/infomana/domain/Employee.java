@@ -138,11 +138,9 @@ public class Employee extends BaseEntity
 	private String entryDate;
 
 	/** 状态（0正常 1离职） */
-	@Excel(name="状态")
 	private String state;
 
 	/** 0已签订，1未签订 */
-	@Excel(name="签订合同")
 	private String contractStatus;
 
 	/** 删除标志（0代表存在 1代表删除） */

@@ -14,7 +14,7 @@
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">护照签发日期：</label>
 				<div class="col-sm-8">
-					<input id="passportIssueDate" name="passportIssueDate" class="form-control" type="text">
+					<input id="passportIssueDate" onchange="passportDeadline()"  name="passportIssueDate" class="form-control" type="text">
 				</div>
 			</div>
 			<div class="form-group">	
@@ -24,13 +24,13 @@
 				</div>
 			</div>
 			<div class="form-group">	
-				<label class="col-sm-3 control-label">员工工号：</label>
+				<label class="col-sm-3 control-label">工号：</label>
 				<div class="col-sm-8">
-                    <select name="employeeNo" id="employeeNo" onchange="getByEmployeeNo()" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeListByStateAndContractStatus('0','0')}">
+                    <select name="employeeId" id="employeeId" onchange="getByEmployeeId()" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeListByStateAndContractStatus('0','0')}">
                         <option value=""></option>
-                        <option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeNo}"></option>
+                        <option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeId}"></option>
                     </select>
-                    <input id="employeeId" name="employeeId" type="hidden">
+                    <input id="employeeNo" name="employeeNo" type="hidden">
 				</div>
 			</div>
             <div class="form-group">
@@ -91,13 +91,13 @@
             var passportNo2 = /^[a-zA-Z0-9]{5,17}$/;
             return this.optional(element) || ( passportNo2.test(value) || passportNo1.test(value));
         }, "护照格式不正确");
-		
+
 		function submitHandler() {
 	        if ($.validate.form()) {
 	            $.operate.save(prefix + "/add", $('#form-passportInfo-add').serialize());
 	        }
 	    }
-
+        var strDate = '';
         // laydate 时间控件绑定
         layui.use('laydate', function() {
             var laydate = layui.laydate;
@@ -105,7 +105,22 @@
                 elem: '#passportIssueDate',
                 type: 'date',
                 theme: 'molv',
-                trigger: 'click'
+                trigger: 'click',
+                done: function (value,date,endDate) {
+                    var year = date.year;
+                    var month = date.month;
+                    var day = date.date;
+                    if (month < 10) {
+                        month = '0' + month;
+                    }
+                    if (day < 10) {
+                        day = '0'  + day;
+                    }
+                    strDate = (year+10) + '-' + month + '-' + day;
+                    ins1.
+                    // console.log(strDate);
+
+                }
             });
             var passportDeadline = laydate.render({
                 elem: '#passportDeadline',
@@ -114,20 +129,23 @@
                 trigger: 'click'
             });
         });
-
-        function getByEmployeeNo() {
+        console.log(strDate);
+        function passportDeadline (strDate){
+            $('#passportDeadline').val = strDate;
+        }
+        function getByEmployeeId() {
             try{
                 //根据员工工号查询数据
                 $.ajax({
                     type: "post",
-                    url: "/roster/employee/employeeNo",
+                    url: "/roster/employee/employeeId",
                     async: false,
                     data: {
-                        "employeeNo": document.getElementById('employeeNo').value
+                        "employeeId": document.getElementById('employeeId').value
                     },
                     dataType: "json",
                     success: function (e) {
-                        document.getElementById('employeeId').value = e.data.employeeId;
+                        document.getElementById('employeeNo').value = e.data.employeeNo;
                         document.getElementById('employeeName').value = e.data.employeeName;
                         document.getElementById('identityCard').value = e.data.identityCard;
                     }

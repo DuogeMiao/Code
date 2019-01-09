@@ -47,9 +47,9 @@
 				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="roster:contract:add">
 					<i class="fa fa-plus"></i> 新增
 				</a>
-				<a class="btn btn-primary btn-sigle disabled" onclick="reSignContract()" shiro:hasPermission="roster:contract:edit">
+				<!--<a class="btn btn-primary btn-sigle disabled" onclick="reSignContract()" shiro:hasPermission="roster:contract:edit">
 					<i class="fa fa-edit"></i> 重签
-				</a>
+				</a>-->
 				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="roster:contract:edit">
 					<i class="fa fa-edit"></i> 修改
 				</a>
@@ -175,9 +175,9 @@
 					field : 'contractType',
 					title : '合同类型',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    /*formatter: function(value, row, index) {
                         return $.table.selectDictLabel(roster_contract_type, value);
-                    }
+                    }*/
 
 				},
 				{

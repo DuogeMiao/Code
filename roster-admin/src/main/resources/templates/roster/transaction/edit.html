@@ -10,37 +10,37 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">工号：</label>
                 <div class="col-sm-8">
-                    <input id="employeeNo" name="employeeNo" th:field="*{employeeNo}" class="form-control" type="text">
+                    <input id="employeeNo" name="employeeNo" readonly="readonly" th:field="*{employeeNo}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
-                <label class="col-sm-3 control-label">员工姓名：</label>
+                <label class="col-sm-3 control-label">姓名：</label>
                 <div class="col-sm-8">
-                    <input id="employeeName" name="employeeName" th:field="*{employeeName}" class="form-control" type="text">
+                    <input id="employeeName" name="employeeName" readonly="readonly" th:field="*{employeeName}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">身份证：</label>
                 <div class="col-sm-8">
-                    <input id="identityCard" name="identityCard" th:field="*{identityCard}" class="form-control" type="text">
+                    <input id="identityCard" name="identityCard" readonly="readonly" th:field="*{identityCard}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">异动出公司：</label>
                 <div class="col-sm-8">
-                    <input id="transOutCompany" name="transOutCompany" th:field="*{transOutCompany}" class="form-control" type="text">
+                    <input id="transOutCompany" name="transOutCompany" readonly="readonly" th:field="*{transOutCompany}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">异动出部门：</label>
                 <div class="col-sm-8">
-                    <input id="transOutDept" name="transOutDept" th:field="*{transOutDept}" class="form-control" type="text">
+                    <input id="transOutDept" name="transOutDept" readonly="readonly" th:field="*{transOutDept}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">异动出岗位：</label>
                 <div class="col-sm-8">
-                    <input id="transOutPost" name="transOutPost" th:field="*{transOutPost}" class="form-control" type="text">
+                    <input id="transOutPost" name="transOutPost" readonly="readonly" th:field="*{transOutPost}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
@@ -61,7 +61,7 @@
                     <input id="transInPost" name="transInPost" th:field="*{transInPost}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">	
+            <!--<div class="form-group">
                 <label class="col-sm-3 control-label">是否跨公司：</label>
                 <div class="col-sm-8">
                     <div class="radio-box" th:each="dict : ${@dict.getType('roster_span_company')}">
@@ -69,7 +69,7 @@
                         <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <div class="form-group">	
                 <label class="col-sm-3 control-label">生效日期：</label>
                 <div class="col-sm-8">
@@ -88,12 +88,12 @@
                     <input id="counts" name="counts" th:field="*{counts}" class="form-control" type="text">
                 </div>
             </div>-->
-            <div class="form-group">	
+            <!--<div class="form-group">
                 <label class="col-sm-3 control-label">状态：</label>
                 <div class="col-sm-8">
                     <input id="state" name="state" th:field="*{state}" class="form-control" type="text">
                 </div>
-            </div>
+            </div>-->
             <!--<div class="form-group">
                 <label class="col-sm-3 control-label">删除标志（0代表存在 2代表删除）：</label>
                 <div class="col-sm-8">

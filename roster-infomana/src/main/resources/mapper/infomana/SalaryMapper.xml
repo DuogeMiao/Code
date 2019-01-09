@@ -98,7 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="performance != null ">
                  and performance like concat('%', #{performance}, '%')
              </if>
-             <if test="backDate != null "> and back_date = #{backDate}</if>
+             <if test="backDate != null and backDate != ''"> and back_date = #{backDate}</if>
              <if test="counts != null "> and counts = #{counts}</if>
              <if test="adjustmentType != null  and adjustmentType != '' ">
                  and adjustment_type like concat('%', #{adjustmentType}, '%')
@@ -106,7 +106,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="subsidy != null ">
                  and subsidy like concat('%', #{subsidy}, '%')
              </if>
-             <if test="state != null  and state != '' "> and state = #{state}</if>
+            <if test="adjustmentDate != null  and adjustmentDate != '' "> and adjustment_date = #{adjustmentDate}</if>
+            <if test="effectiveDate != null  and effectiveDate != '' "> and effective_date = #{effectiveDate}</if>
+            <if test="state != null  and state != '' "> and state = #{state}</if>
              <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
          </where>
     </select>
