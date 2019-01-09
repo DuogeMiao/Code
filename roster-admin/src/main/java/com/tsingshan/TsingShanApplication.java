@@ -12,8 +12,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  */
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
 @MapperScan("com.tsingshan.*.mapper")
-public class TsingShanApplication
-{
+public class TsingShanApplication {
     public static void main(String[] args) {
         System.setProperty("spring.devtools.restart.enabled", "true");
         SpringApplication.run(TsingShanApplication.class, args);
