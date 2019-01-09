@@ -55,7 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectPromotionList" parameterType="Promotion" resultMap="PromotionResult">
         <include refid="selectPromotionVo"/>
-        <where>  
+        <where>
+            del_flag = '0'
             <if test="id != null "> and id = #{id}</if>
              <if test="employeeId != null ">
                  and employee_id = #{employeeId}
@@ -90,11 +91,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                  and promotion_type = #{promotionType}
              </if>
              <if test="state != null  and state != '' "> and state = #{state}</if>
-             <if test="delFlag != null  and delFlag != '' "> and del_flag = #{delFlag}</if>
-             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
-             <if test="createTime != null "> and create_time = #{createTime}</if>
-             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
-             <if test="updateTime != null "> and update_time = #{updateTime}</if>
              <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
          </where>
     </select>
@@ -173,11 +169,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
 	<delete id="deletePromotionById" parameterType="Long">
-        delete from promotion where id = #{id}
+        update promotion set del_flag = '1' where id = #{id}
     </delete>
 	
     <delete id="deletePromotionByIds" parameterType="Long">
-        delete from promotion where id in 
+        update promotion set del_flag = '1' where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

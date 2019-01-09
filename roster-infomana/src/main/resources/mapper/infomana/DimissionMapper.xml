@@ -57,7 +57,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
     <select id="selectDimissionList" parameterType="Dimission" resultMap="DimissionResult">
         <include refid="selectDimissionVo"/>
-        <where>  
+        <where>
+            del_flag = '0'
             <if test="id != null ">
                 and id = #{id}
             </if>
@@ -103,11 +104,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="state != null  and state != '' ">
                  and state = #{state}
              </if>
-             <if test="delFlag != null  and delFlag != '' "> and del_flag = #{delFlag}</if>
-             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
-             <if test="createTime != null "> and create_time = #{createTime}</if>
-             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
-             <if test="updateTime != null "> and update_time = #{updateTime}</if>
              <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
          </where>
     </select>
@@ -189,11 +185,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
 	<delete id="deleteDimissionById" parameterType="Long">
-        delete from dimission where id = #{id}
+        update dimission set del_flag = '1' where id = #{id}
     </delete>
 	
     <delete id="deleteDimissionByIds" parameterType="Long">
-        delete from dimission where id in 
+        update dimission set del_flag = '1' where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
