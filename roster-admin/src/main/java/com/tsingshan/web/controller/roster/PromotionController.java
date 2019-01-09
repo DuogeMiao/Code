@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.github.pagehelper.PageInfo;
 import com.tsingshan.common.annotation.Log;
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.enums.BusinessType;
@@ -12,13 +11,10 @@ import com.tsingshan.common.utils.ExcelUtil;
 import com.tsingshan.common.utils.StringUtils;
 import com.tsingshan.framework.util.ShiroUtils;
 import com.tsingshan.infomana.domain.Employee;
-import com.tsingshan.infomana.domain.vo.EmployeeVo;
 import com.tsingshan.infomana.service.IEmployeeService;
 import com.tsingshan.system.domain.Job;
-import com.tsingshan.system.domain.SysDept;
 import com.tsingshan.system.domain.SysPost;
 import com.tsingshan.system.service.IJobService;
-import com.tsingshan.system.service.ISysDeptService;
 import com.tsingshan.system.service.ISysPostService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -106,20 +102,28 @@ public class PromotionController extends BaseController
 	public AjaxResult addSave(Promotion promotion, Long postId, Long jobId)
 	{
         try {
-            if (postId == null || jobId == null) {
-                return AjaxResult.error("岗位和职务不能为空");
+            if (StringUtils.isEmpty(promotion.getJobName())) {
+                return AjaxResult.error("职务不能为空");
             }
-            SysPost sysPost = postService.selectPostById(postId);
-            Job job = jobService.selectJobById(jobId);
-            if (promotion.getJobName().equals(job.getJobName())) {
+            Employee employee = employeeService.selectEmployeeById(promotion.getEmployeeId());
+            if (promotion.getJobName().equals(employee.getJobName())) {
                 return AjaxResult.error("职务必须改变");
             }
-            promotion.setPostName(sysPost.getPostName());
-            promotion.setJobName(job.getJobName());
+            Promotion pro = new Promotion();
+            pro.setEmployeeId(promotion.getEmployeeId());
+            pro.setState("0");
+            List<Promotion> list = promotionService.selectPromotionList(pro);
+            if (list != null && list.size() > 0) {
+                Promotion oldPromotion = list.get(0);
+                oldPromotion.setState("1");
+                promotionService.updatePromotion(oldPromotion);
+            }
             promotion.setCreateBy(ShiroUtils.getLoginName());
+            promotion.setState("0");
             promotionService.insertPromotion(promotion);
             //更新员工岗位或者职务
-            updateEmployee(promotion.getEmployeeId(), postId, jobId);
+            employee.setJobName(promotion.getJobName());
+            employeeService.updateEmployee(employee);
             return AjaxResult.success();
         } catch (Exception e) {
             logger.error("新增晋升信息异常{}", e.getMessage());
@@ -127,21 +131,21 @@ public class PromotionController extends BaseController
         }
 	}
 
-    private void updateEmployee(long employeeId, long postId, long jobId) {
-        Employee employee = employeeService.selectEmployeeById(employeeId);
-        employee.setPostId(postId);
-        employee.setJobId(jobId);
-        employeeService.updateEmployee(employee);
-    }
+//    private void updateEmployee(long employeeId, String jobName) {
+//        Employee employee = employeeService.selectEmployeeById(employeeId);
+//        employee.setJobName(jobName);
+//        employeeService.updateEmployee(employee);
+//    }
 
 	/**
 	 * 修改晋升
 	 */
 	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Integer id, ModelMap mmap)
+	public String edit(@PathVariable("id") Long id, ModelMap mmap)
 	{
 		Promotion promotion = promotionService.selectPromotionById(id);
 		mmap.put("promotion", promotion);
+		mmap.put("jobs", jobService.selectJobAll());
 	    return prefix + "/edit";
 	}
 	
@@ -206,7 +210,7 @@ public class PromotionController extends BaseController
 	@GetMapping("/add/{employeeId}")
 	public String addByEmployeeId(@PathVariable("employeeId") Long employeeId, ModelMap map)
 	{
-		EmployeeVo employee = employeeService.selectEmployeeVoById(employeeId);
+		Employee employee = employeeService.selectEmployeeById(employeeId);
 		map.put("employeeId", employee.getEmployeeId());
 		map.put("employeeName", employee.getEmployeeName());
 		map.put("employeeNo", employee.getEmployeeNo());

@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.support.Convert;
-import com.tsingshan.infomana.domain.vo.VisaInfoVo;
-import com.tsingshan.infomana.mapper.VisaInfoVoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +27,6 @@ public class VisaInfoServiceImpl implements IVisaInfoService
 	@Autowired
 	private VisaInfoMapper visaInfoMapper;
 
-	@Autowired
-    private VisaInfoVoMapper visaInfoVoMapper;
 
 	/**
      * 查询签证信息
@@ -56,10 +52,6 @@ public class VisaInfoServiceImpl implements IVisaInfoService
 	    return visaInfoMapper.selectVisaInfoList(visaInfo);
 	}
 
-    @Override
-    public List<VisaInfoVo> selectVisaInfoVoList(VisaInfoVo visaInfoVo) {
-        return visaInfoVoMapper.selectVisaInfoVoList(visaInfoVo);
-    }
 
     /**
      * 新增签证
@@ -81,7 +73,7 @@ public class VisaInfoServiceImpl implements IVisaInfoService
                 visaInfo.setVisaNo(oldVisaInfo.getVisaNo() + 1);
                 visaInfoMapper.updateVisaInfo(oldVisaInfo);
             } else {
-                visaInfo.setVisaNo(1);
+                visaInfo.setVisaNo("1");
             }
             visaInfoMapper.insertVisaInfo(visaInfo);
             return AjaxResult.success();
@@ -115,9 +107,5 @@ public class VisaInfoServiceImpl implements IVisaInfoService
 		return visaInfoMapper.deleteVisaInfoByIds(Convert.toLongArray(ids));
 	}
 
-    @Override
-    public List<VisaInfoVo> exportVisaInfoVo(String ids) {
-        return visaInfoVoMapper.exportVisaInfoVo(Convert.toLongArray(ids));
-    }
 
 }

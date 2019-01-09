@@ -96,6 +96,7 @@
 
         $(function() {
             var options = {
+                uniqueId: "contractId",
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
@@ -106,11 +107,6 @@
                 columns: [{
 		            checkbox: true
 		        },
-				{
-					field : 'contractId', 
-					title : '合同ID',
-                    visible : false
-				},
 				{
 					field : 'contractNo', 
 					title : '合同编号' 

@@ -83,6 +83,7 @@
 
         $(function() {
             var options = {
+                uniqueId: "id",
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
@@ -92,11 +93,6 @@
                 columns: [{
 		            checkbox: true
 		        },
-				{
-					field : 'id', 
-					title : 'ID',
-                    visible : false
-				},
 				{
 					field : 'employeeId', 
 					title : '员工ID',
@@ -115,20 +111,20 @@
 					title : '身份证' 
 				},
 				{
-					field : 'companyName', 
+					field : 'companyCode',
 					title : '公司名称' 
 				},
 				{
 					field : 'deptName', 
 					title : '部门名称' 
 				},
+                {
+                    field : 'postName',
+                    title : '岗位名称'
+                },
 				{
 					field : 'jobName', 
 					title : '职务名称' 
-				},
-				{
-					field : 'postName', 
-					title : '岗位名称' 
 				},
 				{
 					field : 'execDate', 

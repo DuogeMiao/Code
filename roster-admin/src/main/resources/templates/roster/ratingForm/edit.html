@@ -70,7 +70,7 @@
     </div>
     <div th:include="include::footer"></div>
     <script type="text/javascript">
-		var prefix = ctx + "roster/ratingForm"
+		var prefix = ctx + "roster/ratingForm";
 		$("#form-ratingForm-edit").validate({
 			rules:{
 				xxxx:{
@@ -84,6 +84,18 @@
 	            $.operate.save(prefix + "/edit", $('#form-ratingForm-edit').serialize());
 	        }
 	    }
+
+        // laydate 时间控件绑定
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            var checkTime = laydate.render({
+                elem: '#checkTime',
+                type: 'date',
+                theme: 'molv',
+                trigger: 'click',
+            });
+
+        });
 	</script>
 </body>
 </html>

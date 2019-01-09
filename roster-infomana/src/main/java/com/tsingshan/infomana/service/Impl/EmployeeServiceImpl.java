@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.support.Convert;
-import com.tsingshan.infomana.domain.vo.EmployeeVo;
-import com.tsingshan.infomana.mapper.EmployeeVoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +27,6 @@ public class EmployeeServiceImpl implements IEmployeeService
 	@Autowired
 	private EmployeeMapper employeeMapper;
 
-	@Autowired
-	private EmployeeVoMapper employeeVoMapper;
-
 	/**
      * 查询员工信息
      * 
@@ -42,11 +37,6 @@ public class EmployeeServiceImpl implements IEmployeeService
 	public Employee selectEmployeeById(long employeeId)
 	{
 	    return employeeMapper.selectEmployeeById(employeeId);
-	}
-
-	@Override
-	public EmployeeVo selectEmployeeVoById(long employeeId) {
-		return employeeVoMapper.selectEmployeeVoById(employeeId);
 	}
 
 	/**
@@ -61,23 +51,19 @@ public class EmployeeServiceImpl implements IEmployeeService
 	    return employeeMapper.selectEmployeeList(employee);
 	}
 
-	@Override
-	public List<EmployeeVo> selectEmployeeVoList(EmployeeVo employeeVo) {
-		return employeeVoMapper.selectEmployeeVoList(employeeVo);
-	}
 
 	@Override
 	public List<Employee> selectEmployeeListByState(String state) {
 		return employeeMapper.selectEmployeeListByStatus(state);
 	}
 
-	@Override
-	public List<EmployeeVo> selectEmployeeVoListByState(String state,String contractStatus) {
-		return employeeVoMapper.selectEmployeeVoListByState(state,contractStatus);
-	}
+    @Override
+    public List<Employee> selectEmployeeListByStateAndContractStatus(String state, String contractStatus) {
+        return employeeMapper.selectEmployeeListByStateAndContractStatus(state, contractStatus);
+    }
 
 
-	/**
+    /**
      * 新增员工
      * 
      * @param employee 员工信息
@@ -98,8 +84,19 @@ public class EmployeeServiceImpl implements IEmployeeService
             return AjaxResult.error("增加异常");
 		}
 	}
-	
-	/**
+
+    @Override
+    public AjaxResult batchInsertEmployee(List<Employee> employeeList) {
+        try {
+            employeeMapper.batchInsertEmployee(employeeList);
+            return AjaxResult.success();
+        } catch (Exception e) {
+            logger.error("批量插入异常{}", e.getMessage());
+            return AjaxResult.error("批量增加异常");
+        }
+    }
+
+    /**
      * 修改员工
      * 
      * @param employee 员工信息
@@ -137,8 +134,8 @@ public class EmployeeServiceImpl implements IEmployeeService
 	}
 
 	@Override
-	public List<EmployeeVo> selectExport(String ids) {
-		return employeeVoMapper.selectExport(Convert.toLongArray(ids));
+	public List<Employee> selectExport(String ids) {
+		return employeeMapper.selectExport(Convert.toLongArray(ids));
 	}
 
     @Override

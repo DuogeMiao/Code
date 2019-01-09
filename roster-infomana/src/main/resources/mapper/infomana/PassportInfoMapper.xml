@@ -7,6 +7,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="PassportInfo" id="PassportInfoResult">
         <result property="id"    column="id"    />
         <result property="passportNo"    column="passport_no"    />
+        <result property="employeeName"    column="employee_name"    />
+        <result property="identityCard"    column="identity_card"    />
+        <result property="employeeNo"    column="employee_no"    />
         <result property="passportIssueDate"    column="passport_issue_date"    />
         <result property="passportDeadline"    column="passport_deadline"    />
         <result property="employeeId"    column="employee_id"    />
@@ -20,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectPassportInfoVo">
-        select id, passport_no, passport_issue_date, passport_deadline, employee_id, state, del_flag, create_by, create_time, update_by, update_time, remark from ros_passport_info
+        select id, passport_no, employee_name,identity_card,employee_no,passport_issue_date, passport_deadline, employee_id, state, del_flag, create_by, create_time, update_by, update_time, remark from ros_passport_info
     </sql>
 	
     <select id="selectPassportInfoList" parameterType="PassportInfo" resultMap="PassportInfoResult">
@@ -28,6 +31,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="id != null "> and id = #{id}</if>
              <if test="passportNo != null  and passportNo != '' "> and passport_no = #{passportNo}</if>
+             <if test="employeeName != null  and employeeName != '' "> and employee_name = #{employeeName}</if>
+            <if test="identityCard != null  and identityCard != '' "> and identity_card = #{identityCard}</if>
+            <if test="employeeNo != null  and employeeNo != '' "> and employee_no = #{employeeNo}</if>
              <if test="passportIssueDate != null "> and passport_issue_date = #{passportIssueDate}</if>
              <if test="passportDeadline != null "> and passport_deadline = #{passportDeadline}</if>
              <if test="employeeId != null "> and employee_id = #{employeeId}</if>
@@ -45,6 +51,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectPassportInfoVo"/>
         where id = #{id}
     </select>
+    <select id="exportPassportInfo" parameterType="Long" resultMap="PassportInfoResult">
+        SELECT
+            passport_no,
+            employee_name,
+            identity_card,
+            employee_no,
+            passport_issue_date,
+            passport_deadline,
+            state,
+            remark
+        FROM
+          ros_passport_info
+        where id IN
+        <foreach item="ids" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
     <select id="checkPassportNoUnique" parameterType="String" resultMap="PassportInfoResult">
         <include refid="selectPassportInfoVo"/>
         where passport_no = #{passportNo}
@@ -53,6 +76,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
             id,
             passport_no,
+            employee_name,
+            identity_card,
+            employee_no,
             passport_issue_date,
             passport_deadline,
             employee_id,
@@ -72,6 +98,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null  ">id,</if>
 			<if test="passportNo != null  and passportNo != ''  ">passport_no,</if>
+			<if test="employeeName != null  and employeeName != ''  ">employee_name,</if>
+			<if test="identityCard != null  and identityCard != ''  ">identity_card,</if>
+			<if test="employeeNo != null  and employeeNo != ''  ">employee_no,</if>
 			<if test="passportIssueDate != null  ">passport_issue_date,</if>
 			<if test="passportDeadline != null  ">passport_deadline,</if>
 			<if test="employeeId != null  ">employee_id,</if>
@@ -84,6 +113,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null  ">#{id},</if>
 			<if test="passportNo != null  and passportNo != ''  ">#{passportNo},</if>
+			<if test="employeeName != null  and employeeName != ''  ">#{employeeName},</if>
+			<if test="identityCard != null  and identityCard != ''  ">#{identityCard},</if>
+			<if test="employeeNo != null  and employeeNo != ''  ">#{employeeNo},</if>
 			<if test="passportIssueDate != null  ">#{passportIssueDate},</if>
 			<if test="passportDeadline != null  ">#{passportDeadline},</if>
 			<if test="employeeId != null  ">#{employeeId},</if>
@@ -99,6 +131,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update ros_passport_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="passportNo != null  and passportNo != ''  ">passport_no = #{passportNo},</if>
+            <if test="employeeName != null  and employeeName != ''  ">employee_name = #{employeeName},</if>
+            <if test="identityCard != null  and identityCard != ''  ">identity_card = #{identityCard},</if>
+            <if test="employeeNo != null  and employeeNo != ''  ">employee_no = #{employeeNo},</if>
             <if test="passportIssueDate != null  ">passport_issue_date = #{passportIssueDate},</if>
             <if test="passportDeadline != null  ">passport_deadline = #{passportDeadline},</if>
             <if test="employeeId != null  ">employee_id = #{employeeId},</if>

@@ -8,10 +8,29 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">护照号：</label>
                 <div class="col-sm-8">
-                    <select name="passportId" id="passportId" class="form-control select2-hidden-accessible" th:with="passportList=${@passportInfoServiceImpl.selectPassportInfoAllByState('0')}">
+                    <select name="passportId" id="passportId" onchange="getByPassportId()" class="form-control select2-hidden-accessible" th:with="passportList=${@passportInfoServiceImpl.selectPassportInfoAllByState('0')}">
                         <option></option>
                         <option th:each="passport : ${passportList}" th:text="${passport.passportNo}" th:value="${passport.id}" ></option>
                     </select>
+                    <input id="passportNo" name="passportNo" type="hidden">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">姓名：</label>
+                <div class="col-sm-8">
+                    <input id="employeeName" readonly="readonly" name="employeeName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">身份证：</label>
+                <div class="col-sm-8">
+                    <input id="identityCard" readonly="readonly" name="identityCard" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">工号：</label>
+                <div class="col-sm-8">
+                    <input id="employeeNo" readonly="readonly" name="employeeNo" class="form-control" type="text">
                 </div>
             </div>
 			<!--<div class="form-group">
@@ -125,6 +144,29 @@
                 trigger: 'click'
             });
         });
+		
+		function getByPassportId() {
+            try{
+                //根据护照ID查询数据
+                $.ajax({
+                    type: "post",
+                    url: "/roster/passportInfo/passportId",
+                    async: false,
+                    data: {
+                        "passportId": document.getElementById('passportId').value
+                    },
+                    dataType: "json",
+                    success: function (e) {
+                        document.getElementById('passportNo').value = e.data.passportNo;
+                        document.getElementById('employeeName').value = e.data.employeeName;
+                        document.getElementById('identityCard').value = e.data.identityCard;
+                        document.getElementById('employeeNo').value = e.data.employeeNo;
+                    }
+                });
+            } catch(e){
+                $.modal.closeLoading();
+            }
+        }
 	</script>
 </body>
 </html>

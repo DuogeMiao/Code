@@ -34,7 +34,7 @@
 				<label class="col-sm-3 control-label">性别：</label>
 				<div class="col-sm-8">
 					<div class="radio-box" th:each="dict : ${@dict.getType('sys_user_sex')}">
-						<input type="radio" th:id="${dict.dictCode}" name="sex" th:value="${dict.dictValue}" th:checked="${dict.isDefault == 'Y' ? true : false}">
+						<input type="radio" th:id="${dict.dictCode}" name="sex" th:value="${dict.dictLabel}" th:checked="${dict.isDefault == 'Y' ? true : false}">
 						<label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
 					</div>
 				</div>
@@ -44,7 +44,7 @@
 				<div class="col-sm-8">
 					<select name="nation" id="nation" class="form-control m-b" th:with="nations=${@dict.getType('roster_nation_type')}">
 						<option></option>
-						<option th:each="nation : ${nations}" th:text="${nation.dictLabel}" th:value="${nation.dictValue}"></option>
+						<option th:each="nation : ${nations}" th:text="${nation.dictLabel}" th:value="${nation.dictLabel}"></option>
 					</select>
 				</div>
 			</div>
@@ -53,7 +53,7 @@
 				<div class="col-sm-8">
 					<select name="maritalStatus" id="maritalStatus" class="form-control m-b" th:with="maritals=${@dict.getType('roster_marital_status')}">
 						<option></option>
-						<option th:each="marital : ${maritals}" th:text="${marital.dictLabel}" th:value="${marital.dictValue}"></option>
+						<option th:each="marital : ${maritals}" th:text="${marital.dictLabel}" th:value="${marital.dictLabel}"></option>
 					</select>
 				</div>
 			</div>
@@ -74,7 +74,7 @@
 				<div class="col-sm-8">
 					<select name="residenceType" id="residenceType" class="form-control m-b" th:with="residences=${@dict.getType('roster_residence_type')}">
 						<option></option>
-						<option th:each="res : ${residences}" th:text="${res.dictLabel}" th:value="${res.dictValue}"></option>
+						<option th:each="res : ${residences}" th:text="${res.dictLabel}" th:value="${res.dictLabel}"></option>
 					</select>
 				</div>
 			</div>
@@ -83,7 +83,7 @@
 				<div class="col-sm-8">
 					<select name="education" id="education" class="form-control m-b" th:with="educations=${@dict.getType('roster_education')}">
 						<option></option>
-						<option th:each="edu : ${educations}" th:text="${edu.dictLabel}" th:value="${edu.dictValue}"></option>
+						<option th:each="edu : ${educations}" th:text="${edu.dictLabel}" th:value="${edu.dictLabel}"></option>
 					</select>
 				</div>
 			</div>
@@ -92,7 +92,7 @@
 				<div class="col-sm-8">
 					<select name="politicsStatus" id="politicsStatus" class="form-control m-b" th:with="politics=${@dict.getType('roster_politics_status')}">
 						<option></option>
-						<option th:each="ps : ${politics}" th:text="${ps.dictLabel}" th:value="${ps.dictValue}" ></option>
+						<option th:each="ps : ${politics}" th:text="${ps.dictLabel}" th:value="${ps.dictLabel}" ></option>
 					</select>
 				</div>
 			</div>
@@ -141,9 +141,9 @@
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">公司：</label>
 				<div class="col-sm-8">
-					<select id="companyId" name="companyId" class="form-control select2-hidden-accessible">
+					<select id="companyCode" name="companyCode" class="form-control select2-hidden-accessible">
 						<option></option>
-						<option th:each="comp:${companys}" th:value="${comp.companyId}" th:text="${comp.companyCode}" th:disabled="${comp.status == '1'}"></option>
+						<option th:each="comp:${companys}" th:value="${comp.companyCode}" th:text="${comp.companyCode}" th:disabled="${comp.status == '1'}"></option>
 					</select>
 				</div>
 			</div>
@@ -156,18 +156,18 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">岗位：</label>
 				<div class="col-sm-8">
-					<select id="postId" name="postId" class="form-control select2-hidden-accessible">
+					<select id="postName" name="postName" class="form-control select2-hidden-accessible">
 						<option></option>
-						<option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}" th:disabled="${post.status == '1'}"></option>
+						<option th:each="post:${posts}" th:value="${post.postName}" th:text="${post.postName}" th:disabled="${post.status == '1'}"></option>
 					</select>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">职务：</label>
 				<div class="col-sm-8">
-					<select id="jobId" name="jobId" class="form-control select2-hidden-accessible">
+					<select id="jobName" name="jobName" class="form-control select2-hidden-accessible">
 						<option></option>
-						<option th:each="job:${jobs}" th:value="${job.jobId}" th:text="${job.jobName}" th:disabled="${job.status == '1'}"></option>
+						<option th:each="job:${jobs}" th:value="${job.jobName}" th:text="${job.jobName}" th:disabled="${job.status == '1'}"></option>
 					</select>
 				</div>
 			</div>
@@ -189,15 +189,6 @@
 					<input type="text" class="form-control"  id="accountBank" name="accountBank"/>
 				</div>
 			</div>
-			<!--<div class="form-group">
-				<label class="col-sm-3 control-label">状态：</label>
-				<div class="col-sm-8">
-					<div class="radio-box" th:each="dict : ${@dict.getType('roster_employee_status')}">
-						<input type="radio" th:id="${dict.dictCode}" name="state" th:value="${dict.dictValue}" th:checked="${dict.isDefault == 'Y' ? true : false}">
-						<label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
-					</div>
-				</div>
-			</div>-->
 			<div class="form-group">
 				<label class="col-sm-3 control-label">备注：</label>
 				<div class="col-sm-8">
@@ -209,7 +200,7 @@
     <div th:include="include::footer"></div>
 	<script th:src="@{/ajax/libs/select/select2.js}"></script>
     <script type="text/javascript">
-		var prefix = ctx + "roster/employee"
+		var prefix = ctx + "roster/employee";
 		$("#form-employee-add").validate({
 			rules:{
 				xxxx:{

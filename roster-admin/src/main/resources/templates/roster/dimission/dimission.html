@@ -82,6 +82,7 @@
 
         $(function() {
             var options = {
+                uniqueId: "id",
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
@@ -91,11 +92,6 @@
                 columns: [{
 		            checkbox: true
 		        },
-				{
-					field : 'id', 
-					title : 'ID',
-                    visible : false
-				},
 				{
 					field : 'employeeId', 
 					title : '员工ID',

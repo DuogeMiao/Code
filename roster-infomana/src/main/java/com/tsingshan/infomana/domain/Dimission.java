@@ -39,34 +39,34 @@ public class Dimission extends BaseEntity
 	private String identityCard;
 
 	/** 公司名称 */
-	@Excel(name="公司名称")
-	private String companyName;
+	@Excel(name="公司")
+	private String companyCode;
 
 	/** 部门名称 */
-	@Excel(name="部门名称")
+	@Excel(name="部门")
 	private String deptName;
 
 	/** 岗位名称 */
-	@Excel(name="岗位名称")
+	@Excel(name="岗位")
 	private String jobName;
 
 	/** 职务名称 */
-	@Excel(name="职务名称")
+	@Excel(name="职务")
 	private String postName;
 
 	/** 入职日期 */
 	@Excel(name="入职日期")
-	private Date entryDate;
+	private String entryDate;
 
 	/** 离职日期 */
 	@Excel(name="离职日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date dimissionDate;
+	private String dimissionDate;
 
 	/** 回传日期 */
 	@Excel(name="回传日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date backDate;
+	private String backDate;
 
 	/** 离职类型（异动、自请、解雇、自动） */
 	@Excel(name="离职类型")
@@ -88,7 +88,7 @@ public class Dimission extends BaseEntity
             .append("employeeNo", getEmployeeNo())
             .append("employeeName", getEmployeeName())
             .append("identityCard", getIdentityCard())
-            .append("companyName", getCompanyName())
+            .append("companyCode", getCompanyCode())
             .append("deptName", getDeptName())
             .append("jobName", getJobName())
             .append("postName", getPostName())

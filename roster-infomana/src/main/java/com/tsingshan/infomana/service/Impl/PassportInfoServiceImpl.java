@@ -1,11 +1,8 @@
 package com.tsingshan.infomana.service.Impl;
 
 import java.util.List;
-
 import com.tsingshan.common.support.Convert;
 import com.tsingshan.common.utils.StringUtils;
-import com.tsingshan.infomana.domain.vo.PassportInfoVo;
-import com.tsingshan.infomana.mapper.PassportInfoVoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.tsingshan.infomana.mapper.PassportInfoMapper;
@@ -25,8 +22,6 @@ public class PassportInfoServiceImpl implements IPassportInfoService
 	@Autowired
 	private PassportInfoMapper passportInfoMapper;
 
-	@Autowired
-    private PassportInfoVoMapper passportInfoVoMapper;
 
 	/**
      * 查询护照信息
@@ -57,11 +52,6 @@ public class PassportInfoServiceImpl implements IPassportInfoService
         return passportInfoMapper.selectPassportInfoAllByState(state);
     }
 
-    @Override
-	public List<PassportInfoVo> selectPassportInfoVoList(PassportInfoVo passportInfoVo)
-	{
-	    return passportInfoVoMapper.selectPassportInfoVoList(passportInfoVo);
-	}
 	
     /**
      * 新增护照
@@ -109,8 +99,8 @@ public class PassportInfoServiceImpl implements IPassportInfoService
     }
 
     @Override
-    public List<PassportInfoVo> exportPassportInfo(String ids) {
-        return passportInfoVoMapper.exportPassportInfoVo(Convert.toLongArray(ids));
+    public List<PassportInfo> exportPassportInfo(String ids) {
+        return passportInfoMapper.exportPassportInfo(Convert.toLongArray(ids));
     }
 
 

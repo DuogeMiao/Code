@@ -6,6 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="VisaInfo" id="VisaInfoResult">
         <result property="id"    column="id"    />
+        <result property="passportNo"    column="passport_no"    />
+        <result property="employeeName"    column="employee_name"    />
+        <result property="identityCard"    column="identity_card"    />
+        <result property="employeeNo"    column="employee_no"    />
         <result property="visaNo"    column="visa_no"    />
         <result property="visaType"    column="visa_type"    />
         <result property="visaValidity"    column="visa_validity"    />
@@ -24,15 +28,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectVisaInfoVo">
-        select id, visa_no, visa_type, visa_validity, entry_time, exit_time, in_mine_time, out_mine_time, passport_id, state, del_flag, create_by, create_time, update_by, update_time, remark from ros_visa_info
+        select id,passport_no,employee_name, identity_card, employee_no, visa_no, visa_type, visa_validity, entry_time, exit_time, in_mine_time, out_mine_time, passport_id, state, del_flag, create_by, create_time, update_by, update_time, remark from ros_visa_info
     </sql>
 	
     <select id="selectVisaInfoList" parameterType="VisaInfo" resultMap="VisaInfoResult">
         <include refid="selectVisaInfoVo"/>
         <where>  
             <if test="id != null "> and id = #{id}</if>
-             <if test="visaNo != null "> and visa_no = #{visaNo}</if>
-             <if test="visaType != null  and visaType != '' "> and visa_type = #{visaType}</if>
+            <if test="passportNo != null  and passportNo != '' "> and passport_no = #{passportNo}</if>
+            <if test="employeeName != null  and employeeName != '' "> and employee_name = #{employeeName}</if>
+            <if test="identityCard != null  and identityCard != '' "> and identity_card = #{identityCard}</if>
+            <if test="employeeNo != null  and employeeNo != '' "> and employee_no = #{employeeNo}</if>
+            <if test="visaNo != null "> and visa_no = #{visaNo}</if>
+            <if test="visaType != null  and visaType != '' "> and visa_type = #{visaType}</if>
              <if test="visaValidity != null "> and visa_validity = #{visaValidity}</if>
              <if test="entryTime != null "> and entry_time = #{entryTime}</if>
              <if test="exitTime != null "> and exit_time = #{exitTime}</if>
@@ -58,8 +66,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into ros_visa_info
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null  ">id,</if>
-			<if test="visaNo != null  ">visa_no,</if>
-			<if test="visaType != null  and visaType != ''  ">visa_type,</if>
+            <if test="passportNo != null  and passportNo != ''  ">passport_no,</if>
+            <if test="employeeName != null  and employeeName != ''  ">employee_name,</if>
+            <if test="identityCard != null  and identityCard != ''  ">identity_card,</if>
+            <if test="employeeNo != null  and employeeNo != ''  ">employee_no,</if>
+            <if test="visaNo != null  ">visa_no,</if>
+            <if test="visaType != null  and visaType != ''  ">visa_type,</if>
 			<if test="visaValidity != null  ">visa_validity,</if>
 			<if test="entryTime != null  ">entry_time,</if>
 			<if test="exitTime != null  ">exit_time,</if>
@@ -74,8 +86,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null  ">#{id},</if>
-			<if test="visaNo != null  ">#{visaNo},</if>
-			<if test="visaType != null  and visaType != ''  ">#{visaType},</if>
+            <if test="passportNo != null  and passportNo != ''  ">#{passportNo},</if>
+            <if test="employeeName != null  and employeeName != ''  ">#{employeeName},</if>
+            <if test="identityCard != null  and identityCard != ''  ">#{identityCard},</if>
+            <if test="employeeNo != null  and employeeNo != ''  ">#{employeeNo},</if>
+            <if test="visaNo != null  ">#{visaNo},</if>
+            <if test="visaType != null  and visaType != ''  ">#{visaType},</if>
 			<if test="visaValidity != null  ">#{visaValidity},</if>
 			<if test="entryTime != null  ">#{entryTime},</if>
 			<if test="exitTime != null  ">#{exitTime},</if>
@@ -93,6 +109,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateVisaInfo" parameterType="VisaInfo">
         update ros_visa_info
         <trim prefix="SET" suffixOverrides=",">
+            <if test="passportNo != null  and passportNo != ''  ">passport_no = #{passportNo},</if>
+            <if test="employeeName != null  and employeeName != ''  ">employee_name = #{employeeName},</if>
+            <if test="identityCard != null  and identityCard != ''  ">identity_card = #{identityCard},</if>
+            <if test="employeeNo != null  and employeeNo != ''  ">employee_no = #{employeeNo},</if>
             <if test="visaNo != null  ">visa_no = #{visaNo},</if>
             <if test="visaType != null  and visaType != ''  ">visa_type = #{visaType},</if>
             <if test="visaValidity != null  ">visa_validity = #{visaValidity},</if>

@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,12 +53,12 @@ public class Contract extends BaseEntity
 	/** 入职日期 */
 	@Excel(name="入职日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date entryDate;
+	private String entryDate;
 
 	/** 最早入职日期 */
 	@Excel(name="最早入职日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date earliestEntryDate;
+	private String earliestEntryDate;
 
 	/** 意外险 */
 	@Excel(name="意外险")
@@ -106,11 +107,11 @@ public class Contract extends BaseEntity
 
 	/** 签订日期 */
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date signDate;
+	private String signDate;
 
 	/** 到期日期 */
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date expireDate;
+	private String expireDate;
 
 	/** 提醒 */
 	private String note;
@@ -124,6 +125,21 @@ public class Contract extends BaseEntity
 	/** 删除标志（0代表存在 2代表删除） */
 	private String delFlag;
 
+    public String getNote() {
+        try {
+            if (getExpireDate() != null) {
+                long daySub = DateUtils.getDaySub(DateUtils.getDate(), getExpireDate(), "yyyy-MM-dd");
+                if (daySub <= 15 && daySub >= 0) {
+                    note = "合同还有" + daySub + "天到期";
+                } else {
+                    note = "已过期";
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return note;
+    }
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
                 .append("contractId", getEmployeeId())

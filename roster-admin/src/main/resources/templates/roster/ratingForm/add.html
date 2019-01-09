@@ -5,7 +5,6 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-ratingForm-add">
-            <input  id="employeeId" name="employeeId"  th:value="${employeeId}" class="form-control" type="hidden">
             <div class="form-group">
                 <label class="col-sm-3 control-label">制度名称：</label>
                 <div class="col-sm-8">
@@ -15,10 +14,11 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">工号：</label>
                 <div class="col-sm-8">
-                    <select name="employeeNo" onchange="getByEmployeeNo()" id="employeeNo" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeVoListByState('0','0')}">
+                    <select name="employeeaId" onchange="getByEmployeeId()" id="employeeId" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeListByStateAndContractStatus('0','0')}">
                         <option value=""></option>
-                        <option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeNo}"></option>
+                        <option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeId}"></option>
                     </select>
+                    <input  id="employeeNo" name="employeeNo" class="form-control" type="hidden">
                 </div>
             </div>
 			<div class="form-group">
@@ -102,22 +102,24 @@
         });
 
 
-        function getByEmployeeNo() {
+        function getByEmployeeId() {
             try{
                 //根据员工工号查询数据
                 $.ajax({
                     type: "post",
-                    url: "/roster/employee/employeeNo",
+                    url: "/roster/employee/employeeId",
                     async: false,
                     data: {
-                        "employeeNo": document.getElementById('employeeNo').value
+                        "employeeId": document.getElementById('employeeId').value
                     },
                     dataType: "json",
                     success: function (e) {
-                        document.getElementById('employeeId').value = e.data.employeeId;
+                        document.getElementById('employeeNo').value = e.data.employeeNo;
                         document.getElementById('identityCard').value = e.data.identityCard;
                         document.getElementById('byCheckPeople').value = e.data.employeeName;
-                        //根据公司id获取公司信息
+                        document.getElementById('companyCode').value = e.data.companyCode;
+                        document.getElementById('deptName').value = e.data.deptName;
+                       /* //根据公司id获取公司信息
                         $.ajax({
                             type: "post",
                             url: "/system/companys/companyId",
@@ -142,7 +144,7 @@
                             success: function (d) {
                                 document.getElementById('deptName').value = d.data.deptName;
                             }
-                        });
+                        });*/
 
                     }
                 });

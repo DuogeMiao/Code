@@ -1,8 +1,6 @@
 package com.tsingshan.infomana.service;
 
 import com.tsingshan.infomana.domain.PassportInfo;
-import com.tsingshan.infomana.domain.vo.PassportInfoVo;
-
 import java.util.List;
 
 /**
@@ -30,8 +28,6 @@ public interface IPassportInfoService
 	List<PassportInfo> selectPassportInfoList(PassportInfo passportInfo);
 
 	List<PassportInfo> selectPassportInfoAllByState(String state);
-
-	List<PassportInfoVo> selectPassportInfoVoList(PassportInfoVo passportInfoVo);
 
 	/**
      * 新增护照
@@ -69,5 +65,5 @@ public interface IPassportInfoService
      * @param ids
      * @return
      */
-    List<PassportInfoVo> exportPassportInfo(String ids);
+    List<PassportInfo> exportPassportInfo(String ids);
 }

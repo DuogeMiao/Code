@@ -39,8 +39,8 @@ public class Salary extends BaseEntity
 	private String identityCard;
 
 	/** 公司名称 */
-	@Excel(name="公司名称")
-	private String companyName;
+	@Excel(name="公司")
+	private String companyCode;
 
 	/** 部门名称 */
 	@Excel(name="部门名称")
@@ -102,7 +102,7 @@ public class Salary extends BaseEntity
             .append("employeeNo", getEmployeeNo())
             .append("employeeName", getEmployeeName())
             .append("identityCard", getIdentityCard())
-            .append("companyName", getCompanyName())
+            .append("companyCode", getCompanyCode())
             .append("deptName", getDeptName())
             .append("jobName", getJobName())
             .append("postName", getPostName())

@@ -39,7 +39,7 @@ public class Employee extends BaseEntity
 	/** 出生日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
 	@Excel(name="出生日期")
-	private Date birthDate;
+	private String birthDate;
 
 	/** 用户性别（0男 1女 2未知） */
 	@Excel(name="性别")
@@ -92,7 +92,7 @@ public class Employee extends BaseEntity
 	/** 参加工作时间 */
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Excel(name="参加工作时间")
-	private Date joinWorkDate;
+	private String joinWorkDate;
 
 
 	/** 职称或从业资格 */
@@ -102,22 +102,27 @@ public class Employee extends BaseEntity
 	/** 获得时间 */
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Excel(name="获得时间")
-	private Date getTime;
+	private String getTime;
 
-	/** 公司ID */
-	private Long companyId;
+	/** 公司 */
+    @Excel(name="公司")
+	private String companyCode;
 
-	/** 部门ID */
-	private Long deptId;
+	/** 部门 */
+    @Excel(name="部门")
+	private String deptName;
 
-	/** 岗位ID */
-	private Long postId;
+	/** 岗位 */
+    @Excel(name="岗位")
+	private String postName;
 
-	/** 职务ID */
-	private Long jobId;
+	/** 职务 */
+    @Excel(name="职务")
+	private String jobName;
 
 	/** 工龄 */
-	private Integer workAge;
+    @Excel(name="工龄")
+	private String workAge;
 
 	/** 银行卡号 */
 	@Excel(name="银行卡号")
@@ -130,7 +135,7 @@ public class Employee extends BaseEntity
 	/** 入职日期 */
 	@Excel(name="入职日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date entryDate;
+	private String entryDate;
 
 	/** 状态（0正常 1离职） */
 	@Excel(name="状态")
@@ -165,10 +170,10 @@ public class Employee extends BaseEntity
             .append("joinWorkDate", getJoinWorkDate())
             .append("jobTitle", getJobTitle())
             .append("getTime", getGetTime())
-            .append("companyId", getCompanyId())
-            .append("deptId", getDeptId())
-			.append("postId", getPostId())
-			.append("jobId", getJobId())
+            .append("companyCode", getCompanyCode())
+            .append("deptName", getDeptName())
+			.append("postName", getPostName())
+			.append("jobName", getJobName())
 			.append("workAge", getWorkAge())
             .append("bankCard", getBankCard())
             .append("accountBank", getAccountBank())

@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="employeeNo"    column="employee_no"    />
         <result property="employeeName"    column="employee_name"    />
         <result property="identityCard"    column="identity_card"    />
-        <result property="companyName"    column="company_name"    />
+        <result property="companyCode"    column="company_code"    />
         <result property="deptName"    column="dept_name"    />
         <result property="jobName"    column="job_name"    />
         <result property="postName"    column="post_name"    />
@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectSalaryVo">
-        select id, employee_id, employee_no, employee_name, identity_card, company_name, dept_name, job_name, post_name, base_salary, job_salary, performance,  subsidy, back_date, counts, adjustment_type, adjustment_date, effective_date, state, del_flag, create_by, create_time, update_by, update_time, remark from adjustment_salary
+        select id, employee_id, employee_no, employee_name, identity_card, company_code, dept_name, job_name, post_name, base_salary, job_salary, performance,  subsidy, back_date, counts, adjustment_type, adjustment_date, effective_date, state, del_flag, create_by, create_time, update_by, update_time, remark from adjustment_salary
     </sql>
 
     <select id="selectExport" resultType="com.tsingshan.infomana.domain.Salary"  statementType="STATEMENT">
@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             employee_no,
             employee_name,
             identity_card,
-            company_name,
+            company_code,
             dept_name,
             job_name,
             post_name,
@@ -76,8 +76,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="identityCard != null  and identityCard != '' ">
                  and identity_card like concat('%', #{identityCard}, '%')
              </if>
-             <if test="companyName != null  and companyName != '' ">
-                 and company_name like concat('%', #{companyName}, '%')
+             <if test="companyCode != null  and companyCode != '' ">
+                 and company_code like concat('%', #{companyCode}, '%')
              </if>
              <if test="deptName != null  and deptName != '' ">
                  and dept_name like concat('%', #{deptName}, '%')
@@ -133,7 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="employeeNo != null  and employeeNo != ''  ">employee_no,</if>
 			<if test="employeeName != null  and employeeName != ''  ">employee_name,</if>
 			<if test="identityCard != null  and identityCard != ''  ">identity_card,</if>
-			<if test="companyName != null  and companyName != ''  ">company_name,</if>
+			<if test="companyCode != null  and companyCode != ''  ">company_code,</if>
 			<if test="deptName != null  and deptName != ''  ">dept_name,</if>
 			<if test="jobName != null  and jobName != ''  ">job_name,</if>
 			<if test="postName != null  and postName != ''  ">post_name,</if>
@@ -158,7 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="employeeNo != null  and employeeNo != ''  ">#{employeeNo},</if>
 			<if test="employeeName != null  and employeeName != ''  ">#{employeeName},</if>
 			<if test="identityCard != null  and identityCard != ''  ">#{identityCard},</if>
-			<if test="companyName != null  and companyName != ''  ">#{companyName},</if>
+			<if test="companyCode != null  and companyCode != ''  ">#{companyCode},</if>
 			<if test="deptName != null  and deptName != ''  ">#{deptName},</if>
 			<if test="jobName != null  and jobName != ''  ">#{jobName},</if>
 			<if test="postName != null  and postName != ''  ">#{postName},</if>
@@ -186,7 +186,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="employeeNo != null  and employeeNo != ''  ">employee_no = #{employeeNo},</if>
             <if test="employeeName != null  and employeeName != ''  ">employee_name = #{employeeName},</if>
             <if test="identityCard != null  and identityCard != ''  ">identity_card = #{identityCard},</if>
-            <if test="companyName != null  and companyName != ''  ">company_name = #{companyName},</if>
+            <if test="companyCode != null  and companyCode != ''  ">company_code = #{companyCode},</if>
             <if test="deptName != null  and deptName != ''  ">dept_name = #{deptName},</if>
             <if test="jobName != null  and jobName != ''  ">job_name = #{jobName},</if>
             <if test="postName != null  and postName != ''  ">post_name = #{postName},</if>

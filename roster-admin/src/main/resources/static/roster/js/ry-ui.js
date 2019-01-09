@@ -84,22 +84,12 @@
     		        search.orderByColumn = params.sort;
     		        search.isAsc = params.order;
     		        return search;
-    		    }
+    		    };
     		    $("#bootstrap-table").bootstrapTable('refresh', params);
     		},
     		// 下载
     		exportExcel: function(formId) {
     			var $table = $('#bootstrap-table');
-                /*var cols = $table.bootstrapTable('getVisibleColumns');
-                var colsName = [];
-                if($.common.isNotEmpty(cols)){
-                    for (var i = 0; i < cols.length; i++) {
-                    	if (cols[i].checkbox != true){
-                    		colsName.push(cols[i].field);
-						}
-                    }
-                    colsName.join(',');
-                }*/
                 var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
                 if (rows.length == 0) {
                     $.modal.alertWarning("请至少选择一条记录");

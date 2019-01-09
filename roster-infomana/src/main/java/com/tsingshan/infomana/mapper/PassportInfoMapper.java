@@ -1,7 +1,7 @@
 package com.tsingshan.infomana.mapper;
 
 import com.tsingshan.infomana.domain.PassportInfo;
-import com.tsingshan.infomana.domain.vo.PassportInfoVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;	
 
@@ -70,4 +70,6 @@ public interface PassportInfoMapper
 
 
     List<PassportInfo> selectPassportInfoAllByState(String state);
+
+    List<PassportInfo> exportPassportInfo(@Param("ids") Long[] ids);
 }

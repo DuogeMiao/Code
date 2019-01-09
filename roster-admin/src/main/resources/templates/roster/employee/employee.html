@@ -44,15 +44,15 @@
 							</li>
 							<li>
 								是否签订合同：<select  name="contractStatus">
-                                            <option value="">所有</option>
-											<option value="0">已签订合同</option>
-											<option value="1">未签订合同</option>
+                                            <option>所有</option>
+											<option value="已签订合同">已签订合同</option>
+											<option value="未签订合同">未签订合同</option>
 										</select>
 							</li>
 							<li>
 								在职状态：<select name="status" id="status"  th:with="employeeStatus=${@dict.getType('roster_employee_status')}">
 											<option value="">所有</option>
-											<option th:each="status : ${employeeStatus}" th:text="${status.dictLabel}" th:value="${status.dictValue}"></option>
+											<option th:each="status : ${employeeStatus}" th:text="${status.dictLabel}" th:value="${status.dictLabel}"></option>
 										</select>
 							</li>
 							<li>
@@ -77,11 +77,11 @@
 				<a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:employee:export">
 					<i class="fa fa-download"></i> 导出
 				</a>
-
-				<!--<a class="btn btn-info menuItem" onclick="contract()"  shiro:hasPermission="roster:contract:view">
-					<i class="fa fa-link"></i> 合同
+				<a class="btn btn-info menuItem" onclick="uploadExcel()"  shiro:hasPermission="roster:employee:import">
+					<i class="fa fa-link"></i> 导入
 				</a>
-				<a class="btn btn-info menuItem" onclick="visa()" shiro:hasPermission="roster:employee:">
+                <!--
+                <a class="btn btn-info menuItem" onclick="visa()" shiro:hasPermission="roster:employee:">
 					<i class="fa fa-link"></i> 护照
 				</a>
 				<a class="btn btn-info menuItem" onclick="transaction()" shiro:hasPermission="roster:employee:">
@@ -161,25 +161,25 @@
 					field: 'sex',
 					title: '性别',
 					align: 'center',
-					formatter: function(value, row, index) {
+					/*formatter: function(value, row, index) {
 						return $.table.selectDictLabel(sex_datas, value);
-					}
+					}*/
 				},
 				{
 					field : 'nation', 
 					title : '民族',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                   /* formatter: function(value, row, index) {
                         return $.table.selectDictLabel(nation_datas, value);
-                    }
+                    }*/
 				},
 				{
 					field: 'maritalStatus',
 					title: '婚姻状况',
 					align: 'center',
-					formatter: function(value, row, index) {
+					/*formatter: function(value, row, index) {
 						return $.table.selectDictLabel(marital_datas, value);
-					}
+					}*/
 				},
 				{
 					field : 'nativePlace', 
@@ -193,25 +193,25 @@
 					field: 'residenceType',
 					title: '户口类型',
 					align: 'center',
-					formatter: function(value, row, index) {
+					/*formatter: function(value, row, index) {
 						return $.table.selectDictLabel(residence_datas, value);
-					}
+					}*/
 				},
 				{
 					field : 'education',
 					title : '学历',
 					align: 'center',
-					formatter: function(value, row, index) {
+					/*formatter: function(value, row, index) {
 						return $.table.selectDictLabel(roster_education, value);
-					}
+					}*/
 				},
 				{
 					field : 'politicsStatus', 
 					title : '政治面貌',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    /*formatter: function(value, row, index) {
                         return $.table.selectDictLabel(roster_politics_status, value);
-                    }
+                    }*/
 				},
 				{
 					field : 'graduateInstitutions', 
@@ -273,7 +273,7 @@
 					field : 'contractStatus',
 					title : '签订合同',
                     formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(	roster_employeeContract_status, value);
+                        return $.table.selectDictLabel(roster_employeeContract_status, value);
                     }
 				},
 				{
@@ -301,6 +301,12 @@
             };
             $.table.init(options);
         });
+        
+        
+        function uploadExcel() {
+            var url = "/roster/employee/uploadExcel";
+            $.modal.open("导入" + $.table._option.modalName,url);
+        }
 
         /* 获取选择的员工id值*/
         function getEmployeeId() {

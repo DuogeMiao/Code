@@ -5,14 +5,14 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-dimission-add">
-			<input id="employeeId" name="employeeId" class="form-control" type="hidden">
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">工号：</label>
 				<div class="col-sm-8">
-					<select name="employeeNo" onchange="getByEmployeeNo()" id="employeeNo" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeVoListByState('0','0')}">
+					<select name="employeeId" onchange="getByEmployeeId()" id="employeeId" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeListByStateAndContractStatus('0','0')}">
 						<option value=""></option>
-						<option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeNo}"></option>
+						<option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeId}"></option>
 					</select>
+                    <input id="employeeNo" name="employeeNo" class="form-control" type="text">
 				</div>
 			</div>
 			<div class="form-group">	
@@ -30,7 +30,7 @@
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">公司：</label>
 				<div class="col-sm-8">
-					<input id="companyName" name="companyName" readonly="true" class="form-control" type="text">
+					<input id="companyCode" name="companyCode" readonly="true" class="form-control" type="text">
 				</div>
 			</div>
 			<div class="form-group">	
@@ -48,7 +48,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">职务：</label>
 				<div class="col-sm-8">
-					<input id="jobName" name="jobName" readonly="true" class="form-control" type="text">
+					<input id="jobName" name="jobName"  readonly="true" class="form-control" type="text">
 				</div>
 			</div>
 			<div class="form-group">
@@ -122,12 +122,12 @@
         // laydate 时间控件绑定
         layui.use('laydate', function() {
             var laydate = layui.laydate;
-            var entryDate = laydate.render({
+            /*var entryDate = laydate.render({
                 elem: '#entryDate',
                 type: 'date',
                 theme: 'molv',
                 trigger: 'click',
-            });
+            });*/
             var dimissionDate = laydate.render({
                 elem: '#dimissionDate',
                 type: 'date',
@@ -142,23 +142,27 @@
             });
         });
 
-        function getByEmployeeNo() {
+        function getByEmployeeId() {
             try{
                 //根据员工工号查询数据
                 $.ajax({
                     type: "post",
-                    url: "/roster/employee/employeeNo",
+                    url: "/roster/employee/employeeId",
                     async: false,
                     data: {
-                        "employeeNo": document.getElementById('employeeNo').value
+                        "employeeId": document.getElementById('employeeId').value
                     },
                     dataType: "json",
                     success: function (e) {
                         document.getElementById('employeeName').value = e.data.employeeName;
-                        document.getElementById('employeeId').value = e.data.employeeId;
+                        document.getElementById('employeeNo').value = e.data.employeeNo;
                         document.getElementById('identityCard').value = e.data.identityCard;
                         document.getElementById('entryDate').value = e.data.entryDate;
-                        //根据公司id获取公司信息
+                        document.getElementById('companyCode').value = e.data.companyCode;
+                        document.getElementById('deptName').value = e.data.deptName;
+                        document.getElementById('postName').value = e.data.postName;
+                        document.getElementById('jobName').value = e.data.jobName;
+                       /* //根据公司id获取公司信息
                         $.ajax({
                             type: "post",
                             url: "/system/companys/companyId",
@@ -209,7 +213,7 @@
                             success: function (j) {
                                 document.getElementById('jobName').value = j.data.jobName;
                             }
-                        });
+                        });*/
                     }
                 });
             } catch(e){

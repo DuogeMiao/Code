@@ -5,14 +5,14 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-transaction-add">
-			<input  id="employeeId" name="employeeId"  th:value="${employeeId}" class="form-control" type="hidden">
 			<div class="form-group">
 				<label class="col-sm-3 control-label">工号：</label>
 				<div class="col-sm-8">
-                    <select name="employeeNo" onchange="getByEmployeeNo()" id="employeeNo" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeListByState('0')}">
+                    <select name="employeeId" onchange="getByEmployeeId()" id="employeeId" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeListByState('0')}">
                         <option value=""></option>
-                        <option th:each="employee : ${employeeVos}" th:text="${employee.employeeNo}" th:value="${employee.employeeNo}" ></option>
+                        <option th:each="employee : ${employeeVos}" th:text="${employee.employeeNo}" th:value="${employee.employeeId}" ></option>
                     </select>
+                    <input id="employeeNo" name="employeeNo"  th:value="${employeeNo}"  type="text">
 				</div>
 			</div>
 			<div class="form-group">
@@ -58,7 +58,7 @@
 				<label class="col-sm-3 control-label">异动入部门：</label>
 				<div class="col-sm-8">
                     <input class="form-control" type="text" name="transInDept" onclick="selectDeptTree()"  id="treeName">
-					<input name="deptId"  type="hidden" id="treeId">
+					<!--<input name="deptId"  type="hidden" id="treeId">-->
 				</div>
 			</div>
 			<div class="form-group">	
@@ -125,22 +125,25 @@
             });
         });
 
-        function getByEmployeeNo() {
+        function getByEmployeeId() {
             try{
                 //根据员工工号查询数据
                 $.ajax({
                     type: "post",
-                    url: "/roster/employee/employeeNo",
+                    url: "/roster/employee/employeeId",
                     async: false,
                     data: {
-                        "employeeNo": document.getElementById('employeeNo').value
+                        "employeeId": document.getElementById('employeeId').value
                     },
                     dataType: "json",
                     success: function (e) {
-                        document.getElementById('employeeId').value = e.data.employeeId;
+                        document.getElementById('employeeNo').value = e.data.employeeNo;
                         document.getElementById('employeeName').value = e.data.employeeName;
                         document.getElementById('identityCard').value = e.data.identityCard;
-                        //根据公司id获取公司信息
+                        document.getElementById('transOutCompany').value = e.data.companyCode;
+                        document.getElementById('transOutDept').value = e.data.deptName;
+                        document.getElementById('transOutPost').value = e.data.postName;
+                        /*//根据公司id获取公司信息
                         $.ajax({
                             type: "post",
                             url: "/system/companys/companyId",
@@ -178,7 +181,7 @@
                             success: function (p) {
                                 document.getElementById('transOutPost').value = p.data.postName;
                             }
-                        });
+                        });*/
                     }
                 });
             } catch(e){

@@ -5,14 +5,14 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-salary-add">
-			<input  id="employeeId" name="employeeId"  th:value="${employeeId}" class="form-control" type="hidden">
 			<div class="form-group">
 				<label class="col-sm-3 control-label">工号：</label>
                 <div class="col-sm-8">
-                    <select name="employeeNo" onchange="getByEmployeeNo()" id="employeeNo" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeVoListByState('0','0')}">
+                    <select name="employeeId" onchange="getByEmployeeId()" id="employeeId" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeListByStateAndContractStatus('0','0')}">
                         <option value=""></option>
-                        <option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeNo}"></option>
+                        <option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeId}"></option>
                     </select>
+                    <input id="employeeNo" name="employeeNo" type="hidden">
                 </div>
 			</div>
 			<div class="form-group">
@@ -34,7 +34,7 @@
 						<option></option>
 						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}"></option>
 					</select>-->
-					<input id="companyName" name="companyName" readonly="readonly" class="form-control" type="text">
+					<input id="companyCode" name="companyCode" readonly="readonly" class="form-control" type="text">
 				</div>
 			</div>
 			<div class="form-group">	
@@ -47,19 +47,21 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">岗位：</label>
 				<div class="col-sm-8">
-					<select id="postName" name="postName" class="form-control select2-hidden-accessible">
+					<!--<select id="postName" name="postName" class="form-control select2-hidden-accessible">
 						<option></option>
 						<option th:each="post:${posts}" th:value="${post.postName}" th:text="${post.postName}" th:disabled="${post.status == '1'}" ></option>
-					</select>
+					</select>-->
+                    <input class="form-control" type="text" id="postName" name="postName"  readonly="true" >
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">职务：</label>
 				<div class="col-sm-8">
-					<select id="jobName" name="jobName" class="form-control select2-hidden-accessible">
+					<!--<select id="jobName" name="jobName" class="form-control select2-hidden-accessible">
 						<option></option>
 						<option th:each="job:${jobs}" th:value="${job.jobName}" th:text="${job.jobName}" th:disabled="${job.status == '1'}" ></option>
-					</select>
+					</select>-->
+                    <input class="form-control" type="text" id="jobName" name="jobName"  readonly="true" >
 				</div>
 			</div>
            <!-- <div class="form-group">
@@ -175,22 +177,26 @@
             });
         });
 
-        function getByEmployeeNo() {
+        function getByEmployeeId() {
             try{
                 //根据员工工号查询数据
                 $.ajax({
                     type: "post",
-                    url: "/roster/employee/employeeNo",
+                    url: "/roster/employee/employeeId",
                     async: false,
                     data: {
-                        "employeeNo": document.getElementById('employeeNo').value
+                        "employeeId": document.getElementById('employeeId').value
                     },
                     dataType: "json",
                     success: function (e) {
                         document.getElementById('employeeName').value = e.data.employeeName;
-                        document.getElementById('employeeId').value = e.data.employeeId;
+                        document.getElementById('employeeNo').value = e.data.employeeNo;
                         document.getElementById('identityCard').value = e.data.identityCard;
-                        //根据公司id获取公司信息
+                        document.getElementById('companyCode').value = e.data.companyCode;
+                        document.getElementById('deptName').value = e.data.deptName;
+                        document.getElementById('postName').value = e.data.postName;
+                        document.getElementById('jobName').value = e.data.jobName;
+                        /*//根据公司id获取公司信息
                         $.ajax({
                             type: "post",
                             url: "/system/companys/companyId",
@@ -242,7 +248,7 @@
                             success: function (j) {
                                 selectValue("jobName",j.data.jobName);
                             }
-                        });
+                        });*/
                     }
                 });
             } catch(e){

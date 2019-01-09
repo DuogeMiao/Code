@@ -41,24 +41,24 @@ public class Promotion extends BaseEntity
 
 	/** 公司名称 */
 	@Excel(name="公司名称")
-	private String companyName;
+	private String companyCode;
 
 	/** 部门名称 */
 	@Excel(name="部门名称")
 	private String deptName;
 
-	/** 职务名称 */
+    /** 岗位名称 */
+    @Excel(name="岗位名称")
+    private String postName;
+
+    /** 职务名称 */
 	@Excel(name="职务名称")
 	private String jobName;
-
-	/** 岗位名称 */
-	@Excel(name="岗位名称")
-	private String postName;
 
 	/** 执行日期 */
 	@Excel(name="执行日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date execDate;
+	private String execDate;
 
 	/** 晋升次数 */
 	@Excel(name="晋升次数")
@@ -67,7 +67,7 @@ public class Promotion extends BaseEntity
 	/** 回传日期 */
 	@Excel(name="回传日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date backDate;
+	private String backDate;
 
 	/** 晋升类型（升、降） */
 	@Excel(name="晋升类型")
@@ -85,7 +85,7 @@ public class Promotion extends BaseEntity
             .append("employeeNo", getEmployeeNo())
             .append("employeeName", getEmployeeName())
             .append("identityCard", getIdentityCard())
-            .append("companyName", getCompanyName())
+            .append("companyName", getCompanyCode())
             .append("deptName", getDeptName())
             .append("jobName", getJobName())
             .append("postName", getPostName())

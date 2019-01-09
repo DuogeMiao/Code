@@ -1,6 +1,7 @@
 package com.tsingshan.infomana.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tsingshan.common.annotation.Excel;
 import com.tsingshan.common.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,16 +23,38 @@ public class PassportInfo extends BaseEntity
 	
 	/** ID */
 	private Long id;
-	/** 护照号 */
-	private String passportNo;
+
+    /** 员工ID */
+    private Long employeeId;
+
+    /** 护照号 */
+    @Excel(name = "护照号")
+    private String passportNo;
+
+    @Excel(name = "姓名")
+    private String employeeName;
+
+    @Excel(name = "身份证")
+    private String identityCard;
+
+    @Excel(name = "工号")
+    private String employeeNo;
+
+
+
+
+
 	/** 护照签发日期 */
+    @Excel(name = "护照签发日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date passportIssueDate;
+
+
 	/** 护照截止日期 */
+    @Excel(name = "护照截止日期")
     @JsonFormat(pattern = "yyyy-MM-dd")
 	private Date passportDeadline;
-	/** 员工ID */
-	private Long employeeId;
+
 	/** 状态（0正常 1停用） */
 	private String state;
 	/** 删除标志（0代表存在 2代表删除） */

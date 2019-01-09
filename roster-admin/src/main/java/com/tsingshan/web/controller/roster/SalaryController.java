@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.github.pagehelper.PageInfo;
 import com.tsingshan.common.annotation.Log;
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.enums.BusinessType;
@@ -12,7 +11,6 @@ import com.tsingshan.common.utils.ExcelUtil;
 import com.tsingshan.common.utils.StringUtils;
 import com.tsingshan.framework.util.ShiroUtils;
 import com.tsingshan.infomana.domain.Employee;
-import com.tsingshan.infomana.domain.vo.EmployeeVo;
 import com.tsingshan.infomana.service.IEmployeeService;
 import com.tsingshan.system.service.IJobService;
 import com.tsingshan.system.service.ISysPostService;
@@ -176,14 +174,14 @@ public class SalaryController extends BaseController
 	 * @return
 	 */
 	@GetMapping("/add/{employeeId}")
-	public String addByEmployeeId(@PathVariable("employeeId") String employeeId, ModelMap map)
+	public String addByEmployeeId(@PathVariable("employeeId") Long employeeId, ModelMap map)
 	{
-		EmployeeVo employeeVo = employeeService.selectEmployeeVoById(Integer.valueOf(employeeId));
-		map.put("employeeVo", employeeVo);
-		map.put("employeeId", employeeVo.getEmployeeId());
-		map.put("employeeName", employeeVo.getEmployeeName());
-		map.put("employeeNo", employeeVo.getEmployeeNo());
-		map.put("identityCard", employeeVo.getIdentityCard());
+		Employee employee = employeeService.selectEmployeeById(employeeId);
+		map.put("employee", employee);
+		map.put("employeeId", employee.getEmployeeId());
+		map.put("employeeName", employee.getEmployeeName());
+		map.put("employeeNo", employee.getEmployeeNo());
+		map.put("identityCard", employee.getIdentityCard());
 		return prefix + "/add2";
 	}
 

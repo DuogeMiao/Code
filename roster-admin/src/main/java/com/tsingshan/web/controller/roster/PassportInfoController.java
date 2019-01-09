@@ -8,7 +8,6 @@ import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.enums.BusinessType;
 import com.tsingshan.common.utils.ExcelUtil;
 import com.tsingshan.framework.util.ShiroUtils;
-import com.tsingshan.infomana.domain.vo.PassportInfoVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -54,10 +53,10 @@ public class PassportInfoController extends BaseController
 	@RequiresPermissions("roster:passportInfo:list")
 	@PostMapping("/list")
 	@ResponseBody
-	public TableDataInfo list(PassportInfoVo passportInfoVo)
+	public TableDataInfo list(PassportInfo passportInfoVo)
 	{
 		startPage();
-        List<PassportInfoVo> list = passportInfoService.selectPassportInfoVoList(passportInfoVo);
+        List<PassportInfo> list = passportInfoService.selectPassportInfoList(passportInfoVo);
 		return getDataTable(list);
 	}
 	
@@ -126,9 +125,17 @@ public class PassportInfoController extends BaseController
     @ResponseBody
     public AjaxResult export(String  ids)
     {
-        List<PassportInfoVo> list = passportInfoService.exportPassportInfo(ids);
-        ExcelUtil<PassportInfoVo> util = new ExcelUtil<PassportInfoVo>(PassportInfoVo.class);
+        List<PassportInfo> list = passportInfoService.exportPassportInfo(ids);
+        ExcelUtil<PassportInfo> util = new ExcelUtil<PassportInfo>(PassportInfo.class);
         return util.exportExcel(list, "PassportInfoVo");
+    }
+
+    @Log(title = "根据护照ID获取护照信息", businessType = BusinessType.OTHER)
+    @PostMapping("/passportId")
+    @ResponseBody
+    public AjaxResult getPassportById(Long passportId) {
+        PassportInfo passportInfo = passportInfoService.selectPassportInfoById(passportId);
+        return AjaxResult.success(passportInfo);
     }
 
     /**
