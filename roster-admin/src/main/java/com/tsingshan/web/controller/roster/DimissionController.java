@@ -11,7 +11,6 @@ import com.tsingshan.common.utils.StringUtils;
 import com.tsingshan.framework.util.ShiroUtils;
 import com.tsingshan.infomana.domain.Contract;
 import com.tsingshan.infomana.domain.Employee;
-import com.tsingshan.infomana.domain.vo.EmployeeVo;
 import com.tsingshan.infomana.service.IContractService;
 import com.tsingshan.infomana.service.IEmployeeService;
 import com.tsingshan.system.service.IJobService;

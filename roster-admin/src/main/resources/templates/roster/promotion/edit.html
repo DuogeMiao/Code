@@ -7,54 +7,53 @@
         <form class="form-horizontal m" id="form-promotion-edit" th:object="${promotion}">
             <input id="id" name="id" th:field="*{id}"  type="hidden">
             <div class="form-group">	
-                <label class="col-sm-3 control-label">员工ID：</label>
-                <div class="col-sm-8">
-                    <input id="employeeId" name="employeeId" th:field="*{employeeId}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">	
                 <label class="col-sm-3 control-label">工号：</label>
                 <div class="col-sm-8">
-                    <input id="employeeNo" name="employeeNo" th:field="*{employeeNo}" class="form-control" type="text">
+                    <input id="employeeId" name="employeeId" th:field="*{employeeId}" class="form-control" type="hidden">
+                    <input id="employeeNo" name="employeeNo" readonly="readonly" th:field="*{employeeNo}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">员工姓名：</label>
                 <div class="col-sm-8">
-                    <input id="employeeName" name="employeeName" th:field="*{employeeName}" class="form-control" type="text">
+                    <input id="employeeName" name="employeeName" readonly="readonly" th:field="*{employeeName}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">身份证：</label>
                 <div class="col-sm-8">
-                    <input id="identityCard" name="identityCard" th:field="*{identityCard}" class="form-control" type="text">
+                    <input id="identityCard" name="identityCard" readonly="readonly" th:field="*{identityCard}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
-                <label class="col-sm-3 control-label">公司名称：</label>
+                <label class="col-sm-3 control-label">公司：</label>
                 <div class="col-sm-8">
-                    <input id="companyName" name="companyName" th:field="*{companyName}" class="form-control" type="text">
+                    <input id="companyName" name="companyCode" readonly="readonly" th:field="*{companyCode}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">	
-                <label class="col-sm-3 control-label">部门名称：</label>
+                <label class="col-sm-3 control-label">部门：</label>
                 <div class="col-sm-8">
-                    <input id="deptName" name="deptName" th:field="*{deptName}" class="form-control" type="text">
+                    <input id="deptName" name="deptName" readonly="readonly" th:field="*{deptName}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">	
-                <label class="col-sm-3 control-label">职务名称：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">岗位：</label>
                 <div class="col-sm-8">
-                    <input id="jobName" name="jobName" th:field="*{jobName}" class="form-control" type="text">
+                    <input id="postName" name="postName" readonly="readonly" th:field="*{postName}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">	
-                <label class="col-sm-3 control-label">岗位名称：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">职务：</label>
                 <div class="col-sm-8">
-                    <input id="postName" name="postName" th:field="*{postName}" class="form-control" type="text">
+                    <!--<input id="jobName" name="jobName" th:field="*{jobName}" class="form-control" type="text">-->
+                    <select id="jobName" name="jobName"  class="form-control select2-hidden-accessible">
+                        <option></option>
+                        <option th:each="job:${jobs}" th:value="${job.jobName}" th:text="${job.jobName}" th:selected="${job.jobName} == *{jobName} ? true : false" th:disabled="${job.status == '1'}"></option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">	
+            <div class="form-group">
                 <label class="col-sm-3 control-label">执行日期：</label>
                 <div class="col-sm-8">
                     <input id="execDate" name="execDate" th:field="*{execDate}" class="form-control" type="text">
@@ -90,8 +89,9 @@
 		</form>
     </div>
     <div th:include="include::footer"></div>
+    <script th:src="@{/ajax/libs/select/select2.js}"></script>
     <script type="text/javascript">
-		var prefix = ctx + "roster/promotion"
+		var prefix = ctx + "roster/promotion";
 		$("#form-promotion-edit").validate({
 			rules:{
 				xxxx:{

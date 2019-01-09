@@ -4,11 +4,6 @@ import java.util.List;
 
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.support.Convert;
-import com.tsingshan.infomana.domain.Employee;
-import com.tsingshan.infomana.domain.vo.EmployeeVo;
-import com.tsingshan.infomana.mapper.EmployeeMapper;
-import com.tsingshan.infomana.mapper.EmployeeVoMapper;
-import com.tsingshan.infomana.service.IEmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

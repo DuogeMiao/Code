@@ -2,8 +2,6 @@ package com.tsingshan.infomana.service;
 
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.infomana.domain.VisaInfo;
-import com.tsingshan.infomana.domain.vo.VisaInfoVo;
-
 import java.util.List;
 
 /**
@@ -30,7 +28,7 @@ public interface IVisaInfoService
      */
 	List<VisaInfo> selectVisaInfoList(VisaInfo visaInfo);
 
-	List<VisaInfoVo> selectVisaInfoVoList(VisaInfoVo visaInfoVo);
+//	List<VisaInfoVo> selectVisaInfoVoList(VisaInfoVo visaInfoVo);
 
 	/**
      * 新增签证
@@ -61,5 +59,5 @@ public interface IVisaInfoService
      * @param ids
      * @return
      */
-    List<VisaInfoVo> exportVisaInfoVo(String ids);
+//    List<VisaInfoVo> exportVisaInfoVo(String ids);
 }

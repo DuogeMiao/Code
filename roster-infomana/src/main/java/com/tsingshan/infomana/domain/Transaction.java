@@ -69,12 +69,12 @@ public class Transaction extends BaseEntity
 	/** 生效日期 */
 	@Excel(name="生效日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date effectiveDate;
+	private String effectiveDate;
 
 	/** 回传日期 */
 	@Excel(name="回传日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date backDate;
+	private String backDate;
 
 	/** 异动次数 */
 	@Excel(name="异动次数")

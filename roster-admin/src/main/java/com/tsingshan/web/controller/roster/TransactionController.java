@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.github.pagehelper.PageInfo;
 import com.tsingshan.common.annotation.Log;
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.enums.BusinessType;
@@ -12,7 +11,6 @@ import com.tsingshan.common.utils.ExcelUtil;
 import com.tsingshan.common.utils.StringUtils;
 import com.tsingshan.framework.util.ShiroUtils;
 import com.tsingshan.infomana.domain.Employee;
-import com.tsingshan.infomana.domain.vo.EmployeeVo;
 import com.tsingshan.infomana.service.IEmployeeService;
 import com.tsingshan.system.domain.Companys;
 import com.tsingshan.system.domain.SysPost;
@@ -112,25 +110,25 @@ public class TransactionController extends BaseController
         } else if (StringUtils.isEmpty(transaction.getTransInPost())) {
 	        return AjaxResult.error("异动入岗位不能为空");
         }
-        Companys companys = companysService.selectCompanysByCompanyCode(transaction.getTransInCompany());
-        SysPost sysPost = postService.selectPostByPostName(transaction.getTransInPost());
+//        Companys companys = companysService.selectCompanysByCompanyCode(transaction.getTransInCompany());
+//        SysPost sysPost = postService.selectPostByPostName(transaction.getTransInPost());
         //判断异动入公司 是否与 异动出公司相等  不相等就是跨公司异动
         if (!transaction.getTransInCompany().equals(transaction.getTransOutCompany())) {
             //设置 是否跨公司异动   0 是 1 否
-            transaction.setSpanCompany("0");
+            transaction.setSpanCompany("是");
         } else {
-            transaction.setSpanCompany("1");
+            transaction.setSpanCompany("否");
         }
         transaction.setCreateBy(ShiroUtils.getLoginName());
         transactionService.insertTransaction(transaction);
-        updateEmployee(transaction.getEmployeeId(),companys.getCompanyId(),deptId,sysPost.getPostId());
+        updateEmployee(transaction.getEmployeeId(),transaction.getTransInCompany(), transaction.getTransInDept(), transaction.getTransInPost());
         return AjaxResult.success();
 	}
-    private void updateEmployee (long employeeId, long companyId, long deptId, long postId) {
+    private void updateEmployee (long employeeId, String companyCode, String deptName, String postName) {
         Employee employee = employeeService.selectEmployeeById(employeeId);
-        employee.setCompanyId(companyId);
-        employee.setDeptId(deptId);
-        employee.setPostId(postId);
+        employee.setCompanyCode(companyCode);
+        employee.setDeptName(deptName);
+        employee.setPostName(postName);
         employeeService.updateEmployee(employee);
     }
 
@@ -206,8 +204,8 @@ public class TransactionController extends BaseController
 	@GetMapping("/add/{employeeId}")
 	public String addByEmployeeId(@PathVariable("employeeId") Long employeeId, ModelMap map)
 	{
-		EmployeeVo employeeVo = employeeService.selectEmployeeVoById(employeeId);
-        map.put("employeeVo", employeeVo);
+		Employee employee = employeeService.selectEmployeeById(employeeId);
+        map.put("employee", employee);
 //		map.put("employeeId", employee.getEmployeeId());
 //		map.put("employeeName", employee.getEmployeeName());
 //		map.put("employeeNo", employee.getEmployeeNo());

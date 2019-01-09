@@ -25,10 +25,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="joinWorkDate"    column="join_work_date"    />
         <result property="jobTitle"    column="job_title"    />
         <result property="getTime"    column="get_time"    />
-        <result property="companyId"    column="company_id"    />
-        <result property="deptId"    column="dept_id"    />
-        <result property="postId"    column="post_id"    />
-        <result property="jobId"    column="job_id"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="deptName"    column="dept_Name"    />
+        <result property="postName"    column="post_Name"    />
+        <result property="jobName"    column="job_Name"    />
         <result property="workAge"    column="work_age"    />
         <result property="bankCard"    column="bank_card"    />
         <result property="accountBank"    column="account_bank"    />
@@ -66,10 +66,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             join_work_date,
             job_title,
             get_time,
-            company_id,
-            dept_id,
-            post_id,
-            job_id,
+            company_code,
+            dept_name,
+            post_name,
+            job_name,
             work_age,
             bank_card,
             account_bank,
@@ -98,10 +98,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectEmployee"/>
         WHERE state = #{state}
     </select>
+    <select id="selectEmployeeListByStateAndContractStatus"  resultMap="EmployeeResult">
+        <include refid="selectEmployee"/>
+        <where>
+            del_flag = '0'
+            <if test="state != null and state != '' ">
+                and state = #{state}
+            </if>
+            <if test="contractStatus != null and contractStatus != '' ">
+                and contract_status = #{contractStatus}
+            </if>
+        </where>
+    </select>
 	
     <select id="selectEmployeeList" parameterType="Employee" resultMap="EmployeeResult">
         <include refid="selectEmployee"/>
         <where>
+            del_flag = '0'
             <if test="employeeId != null ">
                 and employee_id = #{employeeId}
             </if>
@@ -114,7 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="identityCard != null  and identityCard != '' ">
                 and identity_card = #{identityCard}
             </if>
-            <if test="birthDate != null "> and birth_date = #{birthDate}</if>
+            <if test="birthDate != null and birthDate != '' "> and birth_date = #{birthDate}</if>
             <if test="sex != null  and sex != '' "> and sex = #{sex}</if>
             <if test="nation != null  and nation != '' "> and nation = #{nation}</if>
             <if test="maritalStatus != null  and maritalStatus != '' "> and marital_status = #{maritalStatus}</if>
@@ -131,20 +144,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="emergencyCall != null  and emergencyCall != '' ">
                 and emergency_call like concat('%', #{emergencyCall}, '%')
             </if>
-            <if test="joinWorkDate != null "> and join_work_date = #{joinWorkDate}</if>
+            <if test="joinWorkDate != null and joinWorkDate != '' "> and join_work_date = #{joinWorkDate}</if>
             <if test="jobTitle != null  and jobTitle != '' "> and job_title = #{jobTitle}</if>
-            <if test="getTime != null "> and get_time = #{getTime}</if>
-            <if test="companyId != null ">
-                and company_id = #{companyId}
+            <if test="getTime != null and getTime != '' "> and get_time = #{getTime}</if>
+            <if test="companyCode != null and companyCode != ''">
+                and company_code = #{companyCode}
             </if>
-            <if test="deptId != null">
-                and dept_id =  #{deptId}
+            <if test="deptName != null and deptName != ''">
+                and dept_name =  #{deptName}
             </if>
-            <if test="jobId != null">
-                and job_id = #{jobId}
+            <if test="postName != null and postName != ''">
+                and post_name = #{postName}
             </if>
-            <if test="postId != null">
-                and post_id = #{postId}
+            <if test="jobName != null and jobName != ''">
+                and job_name = #{jobName}
             </if>
             <if test="workAge != null  and workAge != '' ">
                 and work_age = #{workAge}
@@ -171,6 +184,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectEmployee"/>
         WHERE  employee_no = #{employeeNo}
     </select>
+
+    <insert id="batchInsertEmployee" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.ArrayList">
+        insert into employee(employee_no, employee_name, identity_card, birth_date, sex,entry_date,nation,
+        marital_status,native_place,address,residence_type,education,politics_status,graduate_institutions,
+        major,contact_number,emergency_call,join_work_date,job_title,get_time,company_code,dept_name,
+        post_name,job_name,work_age,bank_card,account_bank,state,contract_status,del_flag,create_by,create_time,
+        update_by,update_time,remark)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+              #{item.employeeNo},#{item.employeeName},#{item.identityCard},#{item.birthDate},
+              #{item.sex},#{item.entryDate},#{item.nation},#{item.maritalStatus},#{item.nativePlace},
+              #{item.address},#{item.residenceType},#{item.education},#{item.politicsStatus},#{item.graduateInstitutions},
+              #{item.major},#{item.contactNumber},#{item.emergencyCall},#{item.joinWorkDate},#{item.jobTitle},
+              #{item.getTime},#{item.companyCode},#{item.deptName},#{item.postName},#{item.jobName},#{item.workAge},
+              #{item.bankCard},#{item.accountBank},#{item.state},#{item.contractStatus},"0",#{item.createBy},
+              sysdate(),#{item.updateBy},#{item.updateTime},#{item.remark}
+            )
+        </foreach>
+    </insert>
         
     <insert id="insertEmployee" parameterType="Employee">
         insert into employee
@@ -179,7 +212,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="employeeNo != null  and employeeNo != ''  ">employee_no,</if>
 			<if test="employeeName != null  and employeeName != ''  ">employee_name,</if>
 			<if test="identityCard != null  and identityCard != ''  ">identity_card,</if>
-			<if test="birthDate != null  ">birth_date,</if>
+			<if test="birthDate != null and birthDate != '' ">birth_date,</if>
 			<if test="sex != null  and sex != ''  ">sex,</if>
 			<if test="nation != null  and nation != ''  ">nation,</if>
 			<if test="maritalStatus != null  and maritalStatus != ''  ">marital_status,</if>
@@ -192,17 +225,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="major != null  and major != ''  ">major,</if>
 			<if test="contactNumber != null  and contactNumber != ''  ">contact_number,</if>
 			<if test="emergencyCall != null  and emergencyCall != ''  ">emergency_call,</if>
-			<if test="joinWorkDate != null  ">join_work_date,</if>
+			<if test="joinWorkDate != null and joinWorkDate != '' ">join_work_date,</if>
 			<if test="jobTitle != null  and jobTitle != ''  ">job_title,</if>
-			<if test="getTime != null  ">get_time,</if>
-			<if test="companyId != null ">company_id,</if>
-			<if test="deptId != null  and deptId != ''  ">dept_id,</if>
-			<if test="jobId != null  and jobId != ''  ">job_id,</if>
-			<if test="postId != null  and postId != ''  ">post_id,</if>
+			<if test="getTime != null and getTime != '' ">get_time,</if>
+			<if test="companyCode != null and companyCode != '' ">company_code,</if>
+			<if test="deptName != null  and deptName != ''  ">dept_name,</if>
+            <if test="postName != null  and postName != ''  ">post_name,</if>
+            <if test="jobName != null  and jobName != ''  ">job_name,</if>
 			<if test="workAge != null  and workAge != ''  ">work_age,</if>
 			<if test="bankCard != null  and bankCard != ''  ">bank_card,</if>
-			<if test="accountBank != null  and accountBank != ''  ">account_bank,</if>
-			<if test="entryDate != null ">entry_date,</if>
+			<if test="accountBank != null  and accountBank != '' ">account_bank,</if>
+			<if test="entryDate != null and entryDate != '' ">entry_date,</if>
 			<if test="state != null  and state != ''  ">state,</if>
 			<if test="contractStatus != null ">contract_status,</if>
 			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
@@ -215,7 +248,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="employeeNo != null  and employeeNo != ''  ">#{employeeNo},</if>
 			<if test="employeeName != null  and employeeName != ''  ">#{employeeName},</if>
 			<if test="identityCard != null  and identityCard != ''  ">#{identityCard},</if>
-			<if test="birthDate != null  ">#{birthDate},</if>
+			<if test="birthDate != null and birthDate != '' ">#{birthDate},</if>
 			<if test="sex != null  and sex != ''  ">#{sex},</if>
 			<if test="nation != null  and nation != ''  ">#{nation},</if>
 			<if test="maritalStatus != null  and maritalStatus != ''  ">#{maritalStatus},</if>
@@ -228,17 +261,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="major != null  and major != ''  ">#{major},</if>
 			<if test="contactNumber != null  and contactNumber != ''  ">#{contactNumber},</if>
 			<if test="emergencyCall != null  and emergencyCall != ''  ">#{emergencyCall},</if>
-			<if test="joinWorkDate != null  ">#{joinWorkDate},</if>
+			<if test="joinWorkDate != null and joinWorkDate != '' ">#{joinWorkDate},</if>
 			<if test="jobTitle != null  and jobTitle != ''  ">#{jobTitle},</if>
-			<if test="getTime != null  ">#{getTime},</if>
-			<if test="companyId != null ">#{companyId},</if>
-			<if test="deptId != null  and deptId != ''  ">#{deptId},</if>
-			<if test="jobId != null  and jobId != ''  ">#{jobId},</if>
-			<if test="postId != null  and postId != ''  ">#{postId},</if>
+			<if test="getTime != null and getTime != '' ">#{getTime},</if>
+			<if test="companyCode != null and companyCode !='' ">#{companyCode},</if>
+			<if test="deptName != null  and deptName != ''  ">#{deptName},</if>
+            <if test="postName != null  and postName != ''  ">#{postName},</if>
+            <if test="jobName != null  and jobName != ''  ">#{jobName},</if>
 			<if test="workAge != null  and workAge != ''  ">#{workAge},</if>
 			<if test="bankCard != null  and bankCard != ''  ">#{bankCard},</if>
 			<if test="accountBank != null  and accountBank != ''  ">#{accountBank},</if>
-			<if test="entryDate != null  ">#{entryDate},</if>
+			<if test="entryDate != null and entryDate != '' ">#{entryDate},</if>
 			<if test="state != null  and state != ''  ">#{state},</if>
 			<if test="contractStatus != null">#{contractStatus},</if>
 			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
@@ -254,7 +287,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="employeeNo != null  and employeeNo != ''  ">employee_no = #{employeeNo},</if>
             <if test="employeeName != null  and employeeName != ''  ">employee_name = #{employeeName},</if>
             <if test="identityCard != null  and identityCard != ''  ">identity_card = #{identityCard},</if>
-            <if test="birthDate != null  ">birth_date = #{birthDate},</if>
+            <if test="birthDate != null and birthDate != '' ">birth_date = #{birthDate},</if>
             <if test="sex != null  and sex != ''  ">sex = #{sex},</if>
             <if test="nation != null  and nation != ''  ">nation = #{nation},</if>
             <if test="maritalStatus != null  and maritalStatus != ''  ">marital_status = #{maritalStatus},</if>
@@ -267,17 +300,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="major != null  and major != ''  ">major = #{major},</if>
             <if test="contactNumber != null  and contactNumber != ''  ">contact_number = #{contactNumber},</if>
             <if test="emergencyCall != null  and emergencyCall != ''  ">emergency_call = #{emergencyCall},</if>
-            <if test="joinWorkDate != null  ">join_work_date = #{joinWorkDate},</if>
+            <if test="joinWorkDate != null and joinWorkDate != '' ">join_work_date = #{joinWorkDate},</if>
             <if test="jobTitle != null  and jobTitle != ''  ">job_title = #{jobTitle},</if>
-            <if test="getTime != null  ">get_time = #{getTime},</if>
-            <if test="companyId ">company_id = #{companyId},</if>
-            <if test="deptId != null  and deptId != ''  ">dept_id = #{deptId},</if>
-            <if test="jobId != null  and jobId != ''  ">job_id = #{jobId},</if>
-            <if test="postId != null  and postId != ''  ">post_id = #{postId},</if>
+            <if test="getTime != null and getTime != '' ">get_time = #{getTime},</if>
+            <if test="companyCode != null and companyCode != '' ">company_code = #{companyCode},</if>
+            <if test="deptName != null  and deptName != ''  ">dept_name = #{deptName},</if>
+            <if test="postName != null  and postName != ''  ">post_name = #{postName},</if>
+            <if test="jobName != null  and jobName != ''  ">job_name = #{jobName},</if>
             <if test="workAge != null  and workAge != ''  ">work_age = #{workAge},</if>
             <if test="bankCard != null  and bankCard != ''  ">bank_card = #{bankCard},</if>
             <if test="accountBank != null  and accountBank != ''  ">account_bank = #{accountBank},</if>
-            <if test="entryDate != null ">entry_date = #{entryDate},</if>
+            <if test="entryDate != null and entryDate != '' ">entry_date = #{entryDate},</if>
             <if test="state != null  and state != ''  ">state = #{state},</if>
             <if test="contractStatus != null ">contract_status = #{contractStatus},</if>
             <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>

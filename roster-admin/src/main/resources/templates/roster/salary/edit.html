@@ -6,11 +6,11 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-salary-edit" th:object="${salary}">
             <input id="id" name="id" th:field="*{id}"  type="hidden">
-            <input id="employeeId" name="employeeId" th:field="*{employeeId}" class="form-control" type="hidden">
-            <div class="form-group">	
+            <div class="form-group">
                 <label class="col-sm-3 control-label">工号：</label>
                 <div class="col-sm-8">
                     <input id="employeeNo" name="employeeNo" readonly="true" th:field="*{employeeNo}" class="form-control" type="text">
+                    <input id="employeeId" name="employeeId" th:field="*{employeeId}" class="form-control" type="hidden">
                 </div>
             </div>
             <div class="form-group">	
@@ -28,10 +28,11 @@
             <div class="form-group">	
                 <label class="col-sm-3 control-label">公司：</label>
                 <div class="col-sm-8">
-                    <select name="companyName" id="companyName" class="form-control m-b" th:with="type=${@dict.getType('roster_company_name')}">
+                    <input id="companyCode" name="companyCode" readonly="true" th:field="*{companyCode}" class="form-control" type="text">
+                    <!--<select name="companyCode" id="companyCode" class="form-control m-b" th:with="type=${@dict.getType('roster_company_name')}">
                         <option></option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{companyName}"></option>
-                    </select>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{companyCode}"></option>
+                    </select>-->
                 </div>
             </div>
             <div class="form-group">	
@@ -43,19 +44,21 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">岗位：</label>
                 <div class="col-sm-8">
-                    <select id="postName" name="postName" class="form-control select2-hidden-accessible">
+                    <!--<select id="postName" name="postName" class="form-control select2-hidden-accessible">
                         <option></option>
                         <option th:each="post:${posts}" th:value="${post.postName}" th:text="${post.postName}" th:disabled="${post.status == '1'}" th:field="*{postName}"></option>
-                    </select>
+                    </select>-->
+                    <input id="postName" name="postName" readonly="true" th:field="*{postName}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">职务：</label>
                 <div class="col-sm-8">
-                    <select id="jobName" name="jobName" class="form-control select2-hidden-accessible">
+                    <input id="jobName" name="jobName" readonly="true" th:field="*{jobName}" class="form-control" type="text">
+                    <!--<select id="jobName" name="jobName" class="form-control select2-hidden-accessible">
                         <option></option>
                         <option th:each="job:${jobs}" th:value="${job.jobName}" th:text="${job.jobName}" th:disabled="${job.status == '1'}" th:field="*{jobName}"></option>
-                    </select>
+                    </select>-->
                 </div>
             </div>
             <div class="form-group">

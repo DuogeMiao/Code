@@ -6,9 +6,6 @@ import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.support.Convert;
 import com.tsingshan.common.utils.DateUtils;
 import com.tsingshan.infomana.domain.Employee;
-import com.tsingshan.infomana.domain.Transaction;
-import com.tsingshan.infomana.domain.vo.ContractVo;
-import com.tsingshan.infomana.domain.vo.EmployeeVo;
 import com.tsingshan.infomana.mapper.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +28,6 @@ public class ContractServiceImpl implements IContractService
 
 	@Autowired
 	private ContractMapper contractMapper;
-
-	@Autowired
-    private EmployeeVoMapper employeeVoMapper;
 
 	@Autowired
     private EmployeeMapper employeeMapper;
@@ -80,8 +74,8 @@ public class ContractServiceImpl implements IContractService
 		    //设置合同状态 0 未过期  1 过期
 		    contract.setState("0");
 		    // 根据合同年限来设置合同过期时间
-            Date date = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate());
-            contract.setExpireDate(date);
+            String dateStr = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate(),"yyyy-MM-dd");
+            contract.setExpireDate(dateStr);
             contractMapper.insertContract(contract);
 			Employee employee = employeeMapper.selectEmployeeById(contract.getEmployeeId());
 			//更新员工的合同状态  0 已签订  1 未签订
@@ -111,8 +105,8 @@ public class ContractServiceImpl implements IContractService
             //插入新合同
             contract.setContractId(null);
             // 根据合同年限来设置合同过期时间
-            Date date = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate());
-            contract.setExpireDate(date);
+            String dateStr = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate(),"yyyy-MM-dd");
+            contract.setExpireDate(dateStr);
             contractMapper.insertContract(contract);
             return AjaxResult.success();
         } catch (Exception e) {
@@ -132,8 +126,8 @@ public class ContractServiceImpl implements IContractService
 	{
 	    try {
             // 根据合同年限来设置合同过期时间
-            Date date = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate());
-            contract.setExpireDate(date);
+            String dateStr = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate(), "yyyy-MM-dd");
+            contract.setExpireDate(dateStr);
             contractMapper.updateContract(contract);
             return AjaxResult.success();
         } catch (Exception e) {

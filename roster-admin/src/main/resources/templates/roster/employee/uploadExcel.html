@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form method="post" enctype="multipart/form-data" class="form-horizontal m" id="form-employee-uploadExcel">
+			<div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3 control-label">导入文件：</label>
+                    <div class="col-sm-6">
+                        <input id="upfile" name="upfile" class="form-control" type="file">
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="btn btn-success btn-block" id="btn" name="btn" type="button">导入</button>
+                    </div>
+                </div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+	<script th:src="@{/ajax/libs/select/select2.js}"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "roster/employee";
+		/*$("#form-employee-uploadExcel").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});*/
+
+        //ajax 方式上传文件操作
+        $(document).ready(function(){
+            $('#btn').click(function(){
+                if(checkData()){
+                    $('#form-employee-uploadExcel').ajaxSubmit({
+                        url: '/roster/employee/uploadExcel/import',
+                        dataType: 'text',
+                        success: function (data) {
+                            if (data === "success") {
+                                $.modal.alertSuccess("文件导入成功！");
+                                $('#upfile').val("");
+                            }
+                            if (data === "error") {
+                                $.modal.alertError("文件导入异常！");
+                            }
+                        },
+                        error: function (data) {
+                            $.modal.alertError("文件导入异常！");
+                        }
+                    });
+                   /* function resutlMsg(msg){
+                        $modal.alertSuccess(msg);
+                        $('#upfile').val("");
+                    }
+                    function errorMsg(){
+                        $modal.alertError("导入excel出错！");
+                    }*/
+                }
+            });
+        });
+
+        //JS校验form表单信息
+        function checkData(){
+            var fileDir = $("#upfile").val();
+            var suffix = fileDir.substr(fileDir.lastIndexOf("."));
+            if("" == fileDir){
+                $.modal.alertWarning("选择需要导入的Excel文件！");
+                return false;
+            }
+            if(".xls" != suffix && ".xlsx" != suffix ){
+                $.modal.alertWarning("选择Excel格式的文件导入！");
+                return false;
+            }
+            return true;
+        }
+		
+		/*function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-employee-add').serialize());
+            }
+        }*/
+
+	</script>
+</body>
+</html>

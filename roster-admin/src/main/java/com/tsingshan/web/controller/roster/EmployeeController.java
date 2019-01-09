@@ -1,5 +1,6 @@
 package com.tsingshan.web.controller.roster;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -8,27 +9,24 @@ import com.tsingshan.common.annotation.Log;
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.enums.BusinessType;
 import com.tsingshan.common.utils.ExcelUtil;
-import com.tsingshan.common.utils.StringUtils;
 import com.tsingshan.framework.util.ShiroUtils;
-import com.tsingshan.infomana.domain.vo.EmployeeVo;
 import com.tsingshan.system.service.ICompanysService;
 import com.tsingshan.system.service.IJobService;
 import com.tsingshan.system.service.ISysPostService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.tsingshan.infomana.domain.Employee;
 import com.tsingshan.infomana.service.IEmployeeService;
 import com.tsingshan.web.core.base.BaseController;
 import com.tsingshan.framework.web.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.tsingshan.common.base.AjaxResult.error;
 
@@ -42,6 +40,8 @@ import static com.tsingshan.common.base.AjaxResult.error;
 @RequestMapping("/roster/employee")
 public class EmployeeController extends BaseController
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
+
     private String prefix = "roster/employee";
 	
 	@Autowired
@@ -69,10 +69,10 @@ public class EmployeeController extends BaseController
 	@RequiresPermissions("roster:employee:list")
 	@PostMapping("/list")
 	@ResponseBody
-	public TableDataInfo list(EmployeeVo employeeVo)
+	public TableDataInfo list(Employee employee)
 	{
 		startPage();
-        List<EmployeeVo> list = employeeService.selectEmployeeVoList(employeeVo);
+        List<Employee> list = employeeService.selectEmployeeList(employee);
 		return getDataTable(list);
 	}
 	
@@ -112,8 +112,8 @@ public class EmployeeController extends BaseController
 	@GetMapping("/edit/{employeeId}")
 	public String edit(@PathVariable("employeeId") Long employeeId, ModelMap mmap)
 	{
-		EmployeeVo employeeVo = employeeService.selectEmployeeVoById(employeeId);
-		mmap.put("employeeVo", employeeVo);
+		Employee employee = employeeService.selectEmployeeById(employeeId);
+		mmap.put("employee", employee);
 		mmap.put("posts", postService.selectPostAll());
 		mmap.put("jobs", jobService.selectJobAll());
         mmap.put("companys",companysService.selectCompanyAll());
@@ -162,16 +162,53 @@ public class EmployeeController extends BaseController
 	@ResponseBody
 	public AjaxResult export(String  ids)
 	{
-		List<EmployeeVo> list = employeeService.selectExport(ids);
-		ExcelUtil<EmployeeVo> util = new ExcelUtil<EmployeeVo>(EmployeeVo.class);
+		List<Employee> list = employeeService.selectExport(ids);
+		ExcelUtil<Employee> util = new ExcelUtil<Employee>(Employee.class);
 		return util.exportExcel(list, "employee");
 	}
 
-    @Log(title = "根据工号查询员工信息", businessType = BusinessType.OTHER)
-    @PostMapping("/employeeNo")
+    /**
+     * 导入员工
+     */
+    @GetMapping("/uploadExcel")
+    public String uploadExcel()
+    {
+        return prefix + "/uploadExcel";
+    }
+
+	@Log(title = "员工", businessType = BusinessType.IMPORT)
+    @RequiresPermissions("roster:employee:import")
+    @PostMapping("/uploadExcel/import")
     @ResponseBody
-    public AjaxResult findByEmployeeNo(String employeeNo) {
-        Employee employee = employeeService.selectEmployeeByEmployeeNo(employeeNo);
+    public String employeeImport(@RequestParam(value = "upfile")MultipartFile file)
+    {
+        try {
+//            List<List<Object>> listob = null;
+            if(file.isEmpty()){
+                throw new Exception("文件不存在！");
+            }
+            InputStream in = file.getInputStream();
+            String fileName = file.getOriginalFilename();
+            ExcelUtil<Employee> util = new ExcelUtil<Employee>(Employee.class);
+            List<Employee> list = util.importExcel(fileName,in);
+//            for (Employee emp : list) {
+//                System.out.println(emp);
+//            }
+            employeeService.batchInsertEmployee(list);
+            return "success";
+        } catch (Exception e) {
+            LOGGER.error("导入异常{}", e.getMessage());
+            return "error";
+        }
+
+
+    }
+
+    @Log(title = "根据ID查询员工信息", businessType = BusinessType.OTHER)
+    @PostMapping("/employeeId")
+    @ResponseBody
+    public AjaxResult findByEmployeeNo(Long employeeId) {
+        Employee employee = employeeService.selectEmployeeById(employeeId);
         return AjaxResult.success(employee);
     }
 

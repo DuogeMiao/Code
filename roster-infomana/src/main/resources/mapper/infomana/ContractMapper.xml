@@ -131,10 +131,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="contractNo != null  and contractNo != '' ">
                  and contract_no like concat('%', #{contractNo}, '%')
              </if>
-             <if test="entryDate != null ">
+             <if test="entryDate != null and entryDate != ''">
                  and entry_date = #{entryDate}
              </if>
-             <if test="earliestEntryDate != null ">
+             <if test="earliestEntryDate != null and earliestEntryDate != '' ">
                  and earliest_entry_date = #{earliestEntryDate}
              </if>
              <if test="accidentInsurance != null  and accidentInsurance != '' ">
@@ -208,8 +208,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="employeeName != null  and employeeName != ''  ">employee_name,</if>
 			<if test="identityCard != null  and identityCard != ''  ">identity_card,</if>
 			<if test="employeeNo != null  and employeeNo != ''  ">employee_no,</if>
-			<if test="entryDate != null  ">entry_date,</if>
-			<if test="earliestEntryDate != null  ">earliest_entry_date,</if>
+			<if test="entryDate != null and entryDate != '' ">entry_date,</if>
+			<if test="earliestEntryDate != null and earliestEntryDate != '' ">earliest_entry_date,</if>
 			<if test="accidentInsurance != null  and accidentInsurance != ''  ">accident_insurance,</if>
 			<if test="socialInsurance != null  and socialInsurance != ''  ">social_insurance,</if>
 			<if test="injuryInsurance != null  and injuryInsurance != ''  ">injury_insurance,</if>
@@ -221,9 +221,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="accountBank != null  and accountBank != ''  ">account_bank,</if>
 			<if test="trialPeriod != null  and trialPeriod != ''  ">trial_period,</if>
 			<if test="contractType != null  and contractType != ''  ">contract_type,</if>
-			<if test="signDate != null  ">sign_date,</if>
+			<if test="signDate != null signDate != '' ">sign_date,</if>
 			<if test="yearLimit != null  ">year_limit,</if>
-			<if test="expireDate != null  ">expire_date,</if>
+			<if test="expireDate != null expireDate != '' ">expire_date,</if>
 			<if test="state != null  and state != ''  ">state,</if>
 			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
 			<if test="createBy != null  and createBy != ''  ">create_by,</if>
@@ -237,8 +237,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="employeeName != null  and employeeName != ''  ">#{employeeName},</if>
 			<if test="identityCard != null  and identityCard != ''  ">#{identityCard},</if>
 			<if test="employeeNo != null  and employeeNo != ''  ">#{employeeNo},</if>
-			<if test="entryDate != null  ">#{entryDate},</if>
-			<if test="earliestEntryDate != null  ">#{earliestEntryDate},</if>
+			<if test="entryDate != null and entryDate != '' ">#{entryDate},</if>
+			<if test="earliestEntryDate != null and earliestEntryDate != '' ">#{earliestEntryDate},</if>
 			<if test="accidentInsurance != null  and accidentInsurance != ''  ">#{accidentInsurance},</if>
 			<if test="socialInsurance != null  and socialInsurance != ''  ">#{socialInsurance},</if>
 			<if test="injuryInsurance != null  and injuryInsurance != ''  ">#{injuryInsurance},</if>
@@ -250,9 +250,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="accountBank != null  and accountBank != ''  ">#{accountBank},</if>
 			<if test="trialPeriod != null  and trialPeriod != ''  ">#{trialPeriod},</if>
             <if test="contractType != null  and contractType != ''  ">#{contractType},</if>
-            <if test="signDate != null  ">#{signDate},</if>
+            <if test="signDate != null and signDate != '' ">#{signDate},</if>
             <if test="yearLimit != null  ">#{yearLimit},</if>
-            <if test="expireDate != null  ">#{expireDate},</if>
+            <if test="expireDate != null and expireDate != '' ">#{expireDate},</if>
 			<if test="state != null  and state != ''  ">#{state},</if>
 			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
 			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
@@ -269,8 +269,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="employeeName != null  and employeeName != ''  ">employee_name = #{employeeName},</if>
             <if test="identityCard != null  and identityCard != ''  ">identity_card = #{identityCard},</if>
             <if test="employeeNo != null  and employeeNo != ''  ">employee_no = #{employeeNo},</if>
-            <if test="entryDate != null  ">entry_date = #{entryDate},</if>
-            <if test="earliestEntryDate != null  ">earliest_entry_date = #{earliestEntryDate},</if>
+            <if test="entryDate != null and entryDate != '' ">entry_date = #{entryDate},</if>
+            <if test="earliestEntryDate != null and earliestEntryDate != '' ">earliest_entry_date = #{earliestEntryDate},</if>
             <if test="accidentInsurance != null  and accidentInsurance != ''  ">accident_insurance = #{accidentInsurance},</if>
             <if test="socialInsurance != null  and socialInsurance != ''  ">social_insurance = #{socialInsurance},</if>
             <if test="injuryInsurance != null  and injuryInsurance != ''  ">injury_insurance = #{injuryInsurance},</if>
@@ -282,9 +282,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="accountBank != null  and accountBank != ''  ">account_bank = #{accountBank},</if>
             <if test="trialPeriod != null  and trialPeriod != ''  ">trial_period = #{trialPeriod},</if>
             <if test="contractType != null  and contractType != ''  ">contract_type = #{contractType},</if>
-            <if test="signDate != null ">sign_date = #{signDate},</if>
+            <if test="signDate != null and signDate != '' ">sign_date = #{signDate},</if>
             <if test="yearLimit != null ">year_limit = #{yearLimit},</if>
-            <if test="expireDate != null ">expire_date = #{expireDate},</if>
+            <if test="expireDate != null and expireDate != '' ">expire_date = #{expireDate},</if>
             <if test="state != null  and state != ''  ">state = #{state},</if>
             <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
             <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>

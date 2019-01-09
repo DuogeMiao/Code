@@ -2,10 +2,8 @@ package com.tsingshan.infomana.service;
 
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.infomana.domain.Employee;
-import com.tsingshan.infomana.domain.vo.EmployeeVo;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 员工 服务层
@@ -22,8 +20,6 @@ public interface IEmployeeService
      * @return 员工信息
      */
 	Employee selectEmployeeById(long employeeId);
-	EmployeeVo selectEmployeeVoById(long employeeId);
-
 	/**
      * 查询员工列表
      * 
@@ -32,12 +28,12 @@ public interface IEmployeeService
      */
 	List<Employee> selectEmployeeList(Employee employee);
 
-	List<EmployeeVo> selectEmployeeVoList(EmployeeVo employeeVo);
-
 
 	List<Employee> selectEmployeeListByState(String state);
 
-	List<EmployeeVo> selectEmployeeVoListByState(String state,String contractStatus);
+	List<Employee> selectEmployeeListByStateAndContractStatus(String state,String contractStatus);
+
+
 
 	/**
      * 新增员工
@@ -46,7 +42,9 @@ public interface IEmployeeService
      * @return 结果
      */
 	AjaxResult insertEmployee(Employee employee);
-	
+
+	AjaxResult batchInsertEmployee(List<Employee> employeeList);
+
 	/**
      * 修改员工
      * 
@@ -68,7 +66,7 @@ public interface IEmployeeService
 	 * @param ids
 	 * @return
 	 */
-	List<EmployeeVo> selectExport(String ids);
+	List<Employee> selectExport(String ids);
 
     /**
      * 根据工号获取员工信息
@@ -76,4 +74,5 @@ public interface IEmployeeService
      * @return
      */
     Employee selectEmployeeByEmployeeNo(String employeeNo);
+
 }

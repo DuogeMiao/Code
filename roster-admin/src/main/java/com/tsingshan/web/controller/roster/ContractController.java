@@ -4,17 +4,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.github.pagehelper.PageInfo;
 import com.tsingshan.common.annotation.Log;
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.enums.BusinessType;
-import com.tsingshan.common.utils.DateUtils;
 import com.tsingshan.common.utils.ExcelUtil;
 import com.tsingshan.common.utils.StringUtils;
 import com.tsingshan.framework.util.ShiroUtils;
 import com.tsingshan.infomana.domain.Employee;
-import com.tsingshan.infomana.domain.vo.ContractVo;
-import com.tsingshan.infomana.domain.vo.EmployeeVo;
 import com.tsingshan.infomana.service.IEmployeeService;
 import com.tsingshan.system.service.ICompanysService;
 import com.tsingshan.system.service.IJobService;
@@ -99,9 +95,9 @@ public class ContractController extends BaseController
 	 * @return
 	 */
 	@GetMapping("/add/{employeeId}")
-	public String addByEmployeeId(@PathVariable("employeeId") String employeeId, ModelMap map) {
-		EmployeeVo employeeVo = employeeService.selectEmployeeVoById(Long.valueOf(employeeId));
-		map.put("employeeVo", employeeVo);
+	public String addByEmployeeId(@PathVariable("employeeId") Long employeeId, ModelMap map) {
+		Employee employee = employeeService.selectEmployeeById(employeeId);
+		map.put("employee", employee);
 		map.put("companys", companysService.selectCompanyAll());
 		map.put("jobs", jobService.selectJobAll());
 		map.put("posts", postService.selectPostAll());

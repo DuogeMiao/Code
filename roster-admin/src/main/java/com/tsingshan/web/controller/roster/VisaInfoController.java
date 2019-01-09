@@ -9,7 +9,6 @@ import com.tsingshan.common.enums.BusinessType;
 import com.tsingshan.common.utils.ExcelUtil;
 import com.tsingshan.framework.util.ShiroUtils;
 import com.tsingshan.framework.web.page.TableDataInfo;
-import com.tsingshan.infomana.domain.vo.VisaInfoVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -49,10 +48,10 @@ public class VisaInfoController extends BaseController
 	@RequiresPermissions("roster:visaInfo:list")
 	@PostMapping("/list")
 	@ResponseBody
-	public TableDataInfo list(VisaInfoVo visaInfoVo)
+	public TableDataInfo list(VisaInfo visaInfoVo)
 	{
 		startPage();
-        List<VisaInfoVo> list = visaInfoService.selectVisaInfoVoList(visaInfoVo);
+        List<VisaInfo> list = visaInfoService.selectVisaInfoList(visaInfoVo);
 		return getDataTable(list);
 	}
 	
@@ -121,9 +120,10 @@ public class VisaInfoController extends BaseController
     @ResponseBody
     public AjaxResult export(String  ids)
     {
-        List<VisaInfoVo> list = visaInfoService.exportVisaInfoVo(ids);
-        ExcelUtil<VisaInfoVo> util = new ExcelUtil<VisaInfoVo>(VisaInfoVo.class);
-        return util.exportExcel(list, "VisaInfoVo");
+        //List<VisaInfo> list = visaInfoService.exportVisaInfo(ids);
+//        ExcelUtil<VisaInfo> util = new ExcelUtil<VisaInfo>(VisaInfo.class);
+//        return util.exportExcel(list, "VisaInfoVo");
+        return AjaxResult.success();
     }
 
 

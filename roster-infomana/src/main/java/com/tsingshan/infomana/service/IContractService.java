@@ -2,7 +2,6 @@ package com.tsingshan.infomana.service;
 
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.infomana.domain.Contract;
-import com.tsingshan.infomana.domain.vo.ContractVo;
 
 import java.util.List;
 
