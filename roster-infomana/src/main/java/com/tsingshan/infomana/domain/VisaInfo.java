@@ -38,7 +38,6 @@ public class VisaInfo extends BaseEntity
     @Excel(name = "工号")
     private String employeeNo;
 
-
 	/** 签证编号 */
     @Excel(name = "签证编号")
 	private String visaNo;
@@ -53,20 +52,19 @@ public class VisaInfo extends BaseEntity
 
 	/** 入境时间 */
     @Excel(name = "入境时间")
-	private Date entryTime;
+	private String entryTime;
 
 	/** 出境时间 */
     @Excel(name = "出境时间")
-	private Date exitTime;
+	private String exitTime;
 
 	/** 入矿时间 */
     @Excel(name = "入矿时间")
-	private Date inMineTime;
+	private String inMineTime;
 
 	/** 出矿时间 */
     @Excel(name = "出矿时间")
-	private Date outMineTime;
-
+	private String outMineTime;
 
 	/** 状态（0正常 1停用） */
 	private String state;

@@ -14,6 +14,7 @@
                         <option th:each="passport : ${passportList}" th:text="${passport.passportNo}" th:value="${passport.id}" th:selected="${passport.id} == *{passportId} ? true:false"></option>
                     </select>
                     <input id="passportNo" name="passportNo" th:field="*{passportNo}"  type="hidden">
+                    <input id="passport" name="passportId" th:field="*{passportId}"  type="text">
                 </div>
             </div>
             <div class="form-group">

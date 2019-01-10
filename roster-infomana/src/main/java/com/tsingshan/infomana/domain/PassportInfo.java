@@ -40,20 +40,16 @@ public class PassportInfo extends BaseEntity
     @Excel(name = "工号")
     private String employeeNo;
 
-
-
-
-
 	/** 护照签发日期 */
     @Excel(name = "护照签发日期")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date passportIssueDate;
+	private String passportIssueDate;
 
 
 	/** 护照截止日期 */
     @Excel(name = "护照截止日期")
     @JsonFormat(pattern = "yyyy-MM-dd")
-	private Date passportDeadline;
+	private String passportDeadline;
 
 	/** 状态（0正常 1停用） */
 	private String state;

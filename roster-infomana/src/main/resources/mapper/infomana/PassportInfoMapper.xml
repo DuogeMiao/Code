@@ -35,8 +35,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="employeeName != null  and employeeName != '' "> and employee_name = #{employeeName}</if>
             <if test="identityCard != null  and identityCard != '' "> and identity_card = #{identityCard}</if>
             <if test="employeeNo != null  and employeeNo != '' "> and employee_no = #{employeeNo}</if>
-             <if test="passportIssueDate != null "> and passport_issue_date = #{passportIssueDate}</if>
-             <if test="passportDeadline != null "> and passport_deadline = #{passportDeadline}</if>
+             <if test="passportIssueDate != null and passportIssueDate != '' "> and passport_issue_date = #{passportIssueDate}</if>
+             <if test="passportDeadline != null and passportDeadline != ''"> and passport_deadline = #{passportDeadline}</if>
              <if test="employeeId != null "> and employee_id = #{employeeId}</if>
              <if test="state != null  and state != '' "> and state = #{state}</if>
              <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
@@ -66,7 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <select id="checkPassportNoUnique" parameterType="String" resultMap="PassportInfoResult">
         <include refid="selectPassportInfoVo"/>
-        where passport_no = #{passportNo}
+        where del_flag = '0' and passport_no = #{passportNo}
     </select>
     <select id="selectPassportInfoAllByState" parameterType="String" resultMap="PassportInfoResult">
         SELECT
@@ -97,8 +97,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="employeeName != null  and employeeName != ''  ">employee_name,</if>
 			<if test="identityCard != null  and identityCard != ''  ">identity_card,</if>
 			<if test="employeeNo != null  and employeeNo != ''  ">employee_no,</if>
-			<if test="passportIssueDate != null  ">passport_issue_date,</if>
-			<if test="passportDeadline != null  ">passport_deadline,</if>
+			<if test="passportIssueDate != null and passportIssueDate != ''  ">passport_issue_date,</if>
+			<if test="passportDeadline != null and passportDeadline != '' ">passport_deadline,</if>
 			<if test="employeeId != null  ">employee_id,</if>
 			<if test="state != null  and state != ''  ">state,</if>
 			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
@@ -112,8 +112,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="employeeName != null  and employeeName != ''  ">#{employeeName},</if>
 			<if test="identityCard != null  and identityCard != ''  ">#{identityCard},</if>
 			<if test="employeeNo != null  and employeeNo != ''  ">#{employeeNo},</if>
-			<if test="passportIssueDate != null  ">#{passportIssueDate},</if>
-			<if test="passportDeadline != null  ">#{passportDeadline},</if>
+			<if test="passportIssueDate != null and passportIssueDate != ''  ">#{passportIssueDate},</if>
+			<if test="passportDeadline != null  and passportDeadline != '' ">#{passportDeadline},</if>
 			<if test="employeeId != null  ">#{employeeId},</if>
 			<if test="state != null  and state != ''  ">#{state},</if>
 			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
@@ -130,8 +130,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="employeeName != null  and employeeName != ''  ">employee_name = #{employeeName},</if>
             <if test="identityCard != null  and identityCard != ''  ">identity_card = #{identityCard},</if>
             <if test="employeeNo != null  and employeeNo != ''  ">employee_no = #{employeeNo},</if>
-            <if test="passportIssueDate != null  ">passport_issue_date = #{passportIssueDate},</if>
-            <if test="passportDeadline != null  ">passport_deadline = #{passportDeadline},</if>
+            <if test="passportIssueDate != null and passportIssueDate != '' ">passport_issue_date = #{passportIssueDate},</if>
+            <if test="passportDeadline != null and passportDeadline != '' ">passport_deadline = #{passportDeadline},</if>
             <if test="employeeId != null  ">employee_id = #{employeeId},</if>
             <if test="state != null  and state != ''  ">state = #{state},</if>
             <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>

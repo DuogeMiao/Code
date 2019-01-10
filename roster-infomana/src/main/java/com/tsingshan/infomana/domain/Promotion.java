@@ -61,7 +61,6 @@ public class Promotion extends BaseEntity
 	private String execDate;
 
 	/** 晋升次数 */
-	@Excel(name="晋升次数")
 	private Integer counts;
 
 	/** 回传日期 */

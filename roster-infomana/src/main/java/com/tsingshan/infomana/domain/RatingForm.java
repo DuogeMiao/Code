@@ -54,7 +54,7 @@ public class RatingForm extends BaseEntity
 	/** 考核时间 */
     @Excel(name = "考核时间")
     @JsonFormat(pattern = "yyyy-MM-dd")
-	private Date checkTime;
+	private String checkTime;
 
 	/** 事件名称 */
     @Excel(name = "事件名称")

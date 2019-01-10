@@ -43,10 +43,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="visaNo != null "> and visa_no = #{visaNo}</if>
             <if test="visaType != null  and visaType != '' "> and visa_type = #{visaType}</if>
              <if test="visaValidity != null "> and visa_validity = #{visaValidity}</if>
-             <if test="entryTime != null "> and entry_time = #{entryTime}</if>
-             <if test="exitTime != null "> and exit_time = #{exitTime}</if>
-             <if test="inMineTime != null "> and in_mine_time = #{inMineTime}</if>
-             <if test="outMineTime != null "> and out_mine_time = #{outMineTime}</if>
+             <if test="entryTime != null and entryTime != '' "> and entry_time = #{entryTime}</if>
+             <if test="exitTime != null and exitTime != '' "> and exit_time = #{exitTime}</if>
+             <if test="inMineTime != null and inMineTime != '' "> and in_mine_time = #{inMineTime}</if>
+             <if test="outMineTime != null and outMineTime != '' "> and out_mine_time = #{outMineTime}</if>
              <if test="passportId != null "> and passport_id = #{passportId}</if>
              <if test="state != null  and state != '' "> and state = #{state}</if>
              <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
@@ -69,10 +69,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="visaNo != null  ">visa_no,</if>
             <if test="visaType != null  and visaType != ''  ">visa_type,</if>
 			<if test="visaValidity != null  ">visa_validity,</if>
-			<if test="entryTime != null  ">entry_time,</if>
-			<if test="exitTime != null  ">exit_time,</if>
-			<if test="inMineTime != null  ">in_mine_time,</if>
-			<if test="outMineTime != null  ">out_mine_time,</if>
+			<if test="entryTime != null and entryTime != ''  ">entry_time,</if>
+			<if test="exitTime != null and exitTime != '' ">exit_time,</if>
+			<if test="inMineTime != null and inMineTime != ''  ">in_mine_time,</if>
+			<if test="outMineTime != null and outMineTime != ''  ">out_mine_time,</if>
 			<if test="passportId != null  ">passport_id,</if>
 			<if test="state != null  and state != ''  ">state,</if>
 			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
@@ -89,10 +89,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="visaNo != null  ">#{visaNo},</if>
             <if test="visaType != null  and visaType != ''  ">#{visaType},</if>
 			<if test="visaValidity != null  ">#{visaValidity},</if>
-			<if test="entryTime != null  ">#{entryTime},</if>
-			<if test="exitTime != null  ">#{exitTime},</if>
-			<if test="inMineTime != null  ">#{inMineTime},</if>
-			<if test="outMineTime != null  ">#{outMineTime},</if>
+			<if test="entryTime != null and entryTime != ''  ">#{entryTime},</if>
+			<if test="exitTime != null and exitTime != '' ">#{exitTime},</if>
+			<if test="inMineTime != null and inMineTime != '' ">#{inMineTime},</if>
+			<if test="outMineTime != null and outMineTime != '' ">#{outMineTime},</if>
 			<if test="passportId != null  ">#{passportId},</if>
 			<if test="state != null  and state != ''  ">#{state},</if>
 			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
@@ -112,10 +112,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="visaNo != null  ">visa_no = #{visaNo},</if>
             <if test="visaType != null  and visaType != ''  ">visa_type = #{visaType},</if>
             <if test="visaValidity != null  ">visa_validity = #{visaValidity},</if>
-            <if test="entryTime != null  ">entry_time = #{entryTime},</if>
-            <if test="exitTime != null  ">exit_time = #{exitTime},</if>
-            <if test="inMineTime != null  ">in_mine_time = #{inMineTime},</if>
-            <if test="outMineTime != null  ">out_mine_time = #{outMineTime},</if>
+            <if test="entryTime != null and entryTime != ''  ">entry_time = #{entryTime},</if>
+            <if test="exitTime != null and exitTime != '' ">exit_time = #{exitTime},</if>
+            <if test="inMineTime != null and inMineTime != '' ">in_mine_time = #{inMineTime},</if>
+            <if test="outMineTime != null and outMineTime != ''  ">out_mine_time = #{outMineTime},</if>
             <if test="passportId != null  ">passport_id = #{passportId},</if>
             <if test="state != null  and state != ''  ">state = #{state},</if>
             <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
