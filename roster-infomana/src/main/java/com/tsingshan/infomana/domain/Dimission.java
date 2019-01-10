@@ -76,6 +76,11 @@ public class Dimission extends BaseEntity
 	@Excel(name="离职原因")
 	private String dimissionReason;
 
+	/* 合同*/
+	private Long contractId;
+
+
+
 	/** 状态（0正常 1停用） */
 	private String state;
 	/** 删除标志（0代表存在 2代表删除） */
@@ -97,6 +102,7 @@ public class Dimission extends BaseEntity
             .append("backDate", getBackDate())
             .append("dimissionType", getDimissionType())
             .append("dimissionReason", getDimissionReason())
+            .append("contractId", getContractId())
             .append("state", getState())
             .append("delFlag", getDelFlag())
             .append("createBy", getCreateBy())

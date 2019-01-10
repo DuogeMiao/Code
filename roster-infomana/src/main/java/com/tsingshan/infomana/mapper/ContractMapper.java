@@ -84,4 +84,5 @@ public interface ContractMapper
 	List<Contract> selectByEmployeeIds(@Param("ids") Long[] ids);
 
 
+    List<Contract> selectContractListByEmployeeId(Long employeeId);
 }

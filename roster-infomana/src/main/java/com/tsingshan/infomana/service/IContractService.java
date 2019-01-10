@@ -28,6 +28,8 @@ public interface IContractService
      * @return 合同集合
      */
 	List<Contract> selectContractList(Contract contract);
+
+    List<Contract> selectContractListByEmployeeId(long EmployeeId);
 	
 	/**
      * 新增合同

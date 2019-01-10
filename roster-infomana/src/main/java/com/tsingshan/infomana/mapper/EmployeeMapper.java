@@ -50,6 +50,8 @@ public interface EmployeeMapper
      */
     List<Employee> selectEmployeeListByStateAndContractStatus(@Param("state") String state, @Param("contractStatus") String contractStatus);
 
+    List<Employee> selectEmployeeListByContractStatus(String contractStatus);
+
 	/**
      * 新增员工
      *

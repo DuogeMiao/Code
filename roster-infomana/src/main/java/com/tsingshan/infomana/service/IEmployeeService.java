@@ -29,9 +29,27 @@ public interface IEmployeeService
 	List<Employee> selectEmployeeList(Employee employee);
 
 
+    /**
+     * 根据 在职状态查询
+     * @param state
+     * @return
+     */
 	List<Employee> selectEmployeeListByState(String state);
 
+    /**
+     * 根据在职状态 与 合同签订状态
+     * @param state
+     * @param contractStatus
+     * @return
+     */
 	List<Employee> selectEmployeeListByStateAndContractStatus(String state,String contractStatus);
+
+    /**
+     * 根据签订合同状态
+     * @param contractStatus
+     * @return
+     */
+	List<Employee> selectEmployeeListByContractStatus(String contractStatus);
 
 
 

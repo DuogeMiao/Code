@@ -7,6 +7,7 @@ import java.util.List;
 import com.tsingshan.common.annotation.Log;
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.enums.BusinessType;
+import com.tsingshan.common.utils.DateUtils;
 import com.tsingshan.common.utils.ExcelUtil;
 import com.tsingshan.common.utils.StringUtils;
 import com.tsingshan.framework.util.ShiroUtils;
@@ -115,6 +116,11 @@ public class ContractController extends BaseController
 	public AjaxResult addSave(Contract contract)
 	{
 		contract.setCreateBy(ShiroUtils.getLoginName());
+        //设置合同状态 0 未过期  1 过期
+        contract.setState("0");
+        // 根据合同年限来设置合同过期时间
+        String dateStr = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate(),"yyyy-MM-dd");
+        contract.setExpireDate(dateStr);
 		AjaxResult result = contractService.insertContract(contract);
 		return result;
 	}
@@ -138,7 +144,10 @@ public class ContractController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(Contract contract)
 	{
-		contract.setUpdateBy(ShiroUtils.getLoginName());
+        contract.setUpdateBy(ShiroUtils.getLoginName());
+        // 根据合同年限来设置合同过期时间
+        String dateStr = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate(), "yyyy-MM-dd");
+        contract.setExpireDate(dateStr);
         AjaxResult ajaxResult = contractService.updateContract(contract);
         return ajaxResult;
 	}

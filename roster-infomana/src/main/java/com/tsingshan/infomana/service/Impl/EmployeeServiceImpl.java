@@ -62,6 +62,11 @@ public class EmployeeServiceImpl implements IEmployeeService
         return employeeMapper.selectEmployeeListByStateAndContractStatus(state, contractStatus);
     }
 
+    @Override
+    public List<Employee> selectEmployeeListByContractStatus(String contractStatus) {
+        return employeeMapper.selectEmployeeListByContractStatus(contractStatus);
+    }
+
 
     /**
      * 新增员工

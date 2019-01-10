@@ -6,6 +6,7 @@ import java.util.List;
 import com.tsingshan.common.annotation.Log;
 import com.tsingshan.common.base.AjaxResult;
 import com.tsingshan.common.enums.BusinessType;
+import com.tsingshan.common.utils.DateUtils;
 import com.tsingshan.common.utils.ExcelUtil;
 import com.tsingshan.common.utils.StringUtils;
 import com.tsingshan.framework.util.ShiroUtils;
@@ -113,11 +114,16 @@ public class DimissionController extends BaseController
                 return AjaxResult.error("离职原因不能为空");
             }
             dimission.setCreateBy(ShiroUtils.getLoginName());
+            Long contractId = selectContractByEmployeeId(dimission.getEmployeeId());
+            dimission.setContractId(contractId);
             dimissionService.insertDimission(dimission);
-            //更新员工信息表
-            //updateEmployee(dimission.getEmployeeId());
-            //更新合同信息
-            //updateContract(dimission.getEmployeeId());
+            long daySub = DateUtils.getDaySub(dimission.getDimissionDate(), DateUtils.getDate(), "yyyy-MM-dd");
+            if (daySub >= 0 ) {
+                //更新员工信息表
+                updateEmployee(dimission.getEmployeeId(),"1");
+                //更新合同信息
+                updateContract(dimission.getContractId(),dimission.getDimissionDate(),"1");
+            }
             return AjaxResult.success();
         } catch (Exception e) {
             logger.error("添加异常{}", e.getMessage());
@@ -125,23 +131,48 @@ public class DimissionController extends BaseController
         }
 
 	}
-//    private void updateEmployee(long employeeId) {
-//        Employee employee = employeeService.selectEmployeeById(employeeId);
-//        employee.setState("1");
-//        employee.setContractStatus("1");
-//        employeeService.updateEmployee(employee);
-//    }
-//    private void updateContract(long employeeId) {
-//        Contract contract = new Contract();
-//        contract.setEmployeeId(employeeId);
-//        List<Contract> contractList = contractService.selectContractList(contract);
-//        for (Contract con : contractList) {
-//            if (con.getState().equals("0")) {
-//                con.setState("1");
-//                contractService.updateContract(con);
-//            }
-//        }
-//    }
+
+    /**
+     * 根据工号获取 当前有效合同号 ID
+     * @param employeeId
+     * @return
+     */
+	private Long selectContractByEmployeeId(long employeeId) {
+        List<Contract> contractList = contractService.selectContractListByEmployeeId(employeeId);
+        for (Contract con : contractList) {
+            if (con.getState().equals("0")) {
+                return con.getContractId();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据员工ID更新合同
+     * @param employeeId
+     * @param flag
+     */
+    private void updateEmployee(long employeeId,String flag) {
+        Employee employee = employeeService.selectEmployeeById(employeeId);
+        employee.setState(flag);
+        employee.setContractStatus(flag);
+        employeeService.updateEmployee(employee);
+        logger.info("离职员工更新完成 updateEmployee");
+    }
+
+    /**
+     * 根据合同ID更新合同
+     * @param contractId
+     * @param expireDate
+     * @param flag
+     */
+    private void updateContract(long contractId, String expireDate,String flag) {
+        Contract contract = contractService.selectContractById(contractId);
+        contract.setState(flag);
+        contract.setExpireDate(expireDate);
+        contractService.updateContract(contract);
+        logger.info("离职合同更新完成 updateContract");
+    }
 
 	/**
 	 * 修改离职
@@ -163,7 +194,16 @@ public class DimissionController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(Dimission dimission)
 	{
-		dimission.setUpdateBy(ShiroUtils.getLoginName());
+
+        dimission.setUpdateBy(ShiroUtils.getLoginName());
+
+        long daySub = DateUtils.getDaySub(dimission.getDimissionDate(), DateUtils.getDate(), "yyyy-MM-dd");
+        String flag = (daySub >= 0 ? "1" : "0");
+
+        updateEmployee(dimission.getEmployeeId(),flag);
+        //更新合同信息
+        updateContract(dimission.getContractId(),dimission.getDimissionDate(),flag);
+
 		AjaxResult ajaxResult = dimissionService.updateDimission(dimission);
 		return ajaxResult;
 	}
@@ -191,13 +231,6 @@ public class DimissionController extends BaseController
 		List<Dimission> list = dimissionService.selectExport(ids);
 		ExcelUtil<Dimission> util = new ExcelUtil<Dimission>(Dimission.class);
 		return util.exportExcel(list, "dimission");
-	}
-
-	@Override
-	public void initBinder(WebDataBinder binder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		dateFormat.setLenient(false);
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 	}
 	
 }

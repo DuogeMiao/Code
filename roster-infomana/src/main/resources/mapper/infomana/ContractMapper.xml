@@ -110,6 +110,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{ids}
         </foreach>
     </select>
+    <select id="selectContractListByEmployeeId" resultMap="ContractResult" >
+        <include refid="selectContract"/>
+        where employee_id = #{employeeId}
+    </select>
 	
     <select id="selectContractList" parameterType="Contract" resultMap="ContractResult">
         <include refid="selectContract"/>

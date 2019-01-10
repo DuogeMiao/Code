@@ -60,7 +60,12 @@ public class ContractServiceImpl implements IContractService
 	    return contractMapper.selectContractList(contract);
 	}
 
-	/**
+    @Override
+    public List<Contract> selectContractListByEmployeeId(long employeeId) {
+        return contractMapper.selectContractListByEmployeeId(employeeId);
+    }
+
+    /**
      * 新增合同
      * 
      * @param contract 合同信息
@@ -70,11 +75,6 @@ public class ContractServiceImpl implements IContractService
 	public AjaxResult insertContract(Contract contract)
 	{
 		try {
-		    //设置合同状态 0 未过期  1 过期
-		    contract.setState("0");
-		    // 根据合同年限来设置合同过期时间
-            String dateStr = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate(),"yyyy-MM-dd");
-            contract.setExpireDate(dateStr);
             contractMapper.insertContract(contract);
 			Employee employee = employeeMapper.selectEmployeeById(contract.getEmployeeId());
 			//更新员工的合同状态  0 已签订  1 未签订
@@ -124,9 +124,6 @@ public class ContractServiceImpl implements IContractService
 	public AjaxResult updateContract(Contract contract)
 	{
 	    try {
-            // 根据合同年限来设置合同过期时间
-            String dateStr = DateUtils.dateYear(contract.getYearLimit(), contract.getSignDate(), "yyyy-MM-dd");
-            contract.setExpireDate(dateStr);
             contractMapper.updateContract(contract);
             return AjaxResult.success();
         } catch (Exception e) {

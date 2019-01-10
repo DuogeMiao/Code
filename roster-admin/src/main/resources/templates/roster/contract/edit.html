@@ -47,30 +47,27 @@
             <div class="form-group">	
                 <label class="col-sm-3 control-label">意外险：</label>
                 <div class="col-sm-8">
-                    <select name="accidentInsurance" id="accidentInsurance" class="form-control m-b" th:field="*{accidentInsurance}">
-                        <option value=""></option>
-                        <option value="已买">已买</option>
-                        <option value="未买">未买</option>
+                    <select name="accidentInsurance" id="accidentInsurance" class="form-control m-b" th:with="insurance=${@dict.getType('roster_contract_insurance')}">
+                        <option></option>
+                        <option th:each="ct : ${insurance}" th:text="${ct.dictLabel}" th:value="${ct.dictLabel}" th:field="*{accidentInsurance}" ></option>
                     </select>
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">社会保险：</label>
                 <div class="col-sm-8">
-                    <select name="socialInsurance" id="socialInsurance" class="form-control m-b" th:field="*{socialInsurance}">
-                        <option value=""></option>
-                        <option value="已买">已买</option>
-                        <option value="未买">未买</option>
+                    <select name="socialInsurance" id="socialInsurance" class="form-control m-b" th:with="insurance=${@dict.getType('roster_contract_insurance')}">
+                        <option></option>
+                        <option th:each="ct : ${insurance}" th:text="${ct.dictLabel}" th:value="${ct.dictLabel}" th:field="*{socialInsurance}"></option>
                     </select>
                 </div>
             </div>
             <div class="form-group">	
                 <label class="col-sm-3 control-label">工伤保险：</label>
                 <div class="col-sm-8">
-                    <select name="injuryInsurance" id="injuryInsurance" class="form-control m-b" th:field="*{injuryInsurance}">
-                        <option value=""></option>
-                        <option value="已买">已买</option>
-                        <option value="未买">未买</option>
+                    <select name="injuryInsurance" id="injuryInsurance" class="form-control m-b" th:with="insurance=${@dict.getType('roster_contract_insurance')}">
+                        <option></option>
+                        <option th:each="ct : ${insurance}" th:text="${ct.dictLabel}" th:value="${ct.dictLabel}" th:field="*{injuryInsurance}"></option>
                     </select>
                 </div>
             </div>

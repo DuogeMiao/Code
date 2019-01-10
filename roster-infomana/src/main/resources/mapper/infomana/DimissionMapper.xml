@@ -19,6 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="backDate"    column="back_date"    />
         <result property="dimissionType"    column="dimission_type"    />
         <result property="dimissionReason"    column="dimission_reason"    />
+        <result property="contractId"    column="contract_id"    />
         <result property="state"    column="state"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createBy"    column="create_by"    />
@@ -29,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectDimissionVo">
-        select id, employee_id, employee_no, employee_name, identity_card, company_code, dept_name, job_name, post_name, entry_date, dimission_date, back_date, dimission_type, dimission_reason, state, del_flag, create_by, create_time, update_by, update_time, remark from dimission
+        select id, employee_id, employee_no, employee_name, identity_card, company_code, dept_name, job_name, post_name, entry_date, dimission_date, back_date, dimission_type, dimission_reason,contract_id, state, del_flag, create_by, create_time, update_by, update_time, remark from dimission
     </sql>
 
     <select id="selectExport" resultType="com.tsingshan.infomana.domain.Dimission"  statementType="STATEMENT">
@@ -101,6 +102,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="dimissionReason != null  and dimissionReason != '' ">
                  and dimission_reason = #{dimissionReason}
              </if>
+            <if test="contractId != null ">
+                 and contract_id = #{contractId}
+             </if>
              <if test="state != null  and state != '' ">
                  and state = #{state}
              </if>
@@ -130,6 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="backDate != null and backDate != '' ">back_date,</if>
 			<if test="dimissionType != null  and dimissionType != ''  ">dimission_type,</if>
 			<if test="dimissionReason != null  and dimissionReason != ''  ">dimission_reason,</if>
+			<if test="contractId != null  ">contract_id,</if>
 			<if test="state != null  and state != ''  ">state,</if>
 			<if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
 			<if test="createBy != null  and createBy != ''  ">create_by,</if>
@@ -151,6 +156,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="backDate != null and backDate != '' ">#{backDate},</if>
 			<if test="dimissionType != null  and dimissionType != ''  ">#{dimissionType},</if>
 			<if test="dimissionReason != null  and dimissionReason != ''  ">#{dimissionReason},</if>
+			<if test="contractId != null   ">#{contractId},</if>
 			<if test="state != null  and state != ''  ">#{state},</if>
 			<if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
 			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
@@ -175,6 +181,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="backDate != null and backDate != '' ">back_date = #{backDate},</if>
             <if test="dimissionType != null  and dimissionType != ''  ">dimission_type = #{dimissionType},</if>
             <if test="dimissionReason != null  and dimissionReason != ''  ">dimission_reason = #{dimissionReason},</if>
+            <if test="contractId != null  ">contract_id = #{contractId},</if>
             <if test="state != null  and state != ''  ">state = #{state},</if>
             <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
             <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
