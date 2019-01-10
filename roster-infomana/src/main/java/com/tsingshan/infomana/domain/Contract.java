@@ -135,8 +135,10 @@ public class Contract extends BaseEntity
                     note = "合同今天到期";
                 } else if (daySub < 0) {
                     note = "合同已经到期";
+                } else {
+                    note = "";
                 }
-                note = "";
+
             }
         } catch (Exception e) {
             e.printStackTrace();

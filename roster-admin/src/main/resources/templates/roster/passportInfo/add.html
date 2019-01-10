@@ -97,7 +97,6 @@
 	            $.operate.save(prefix + "/add", $('#form-passportInfo-add').serialize());
 	        }
 	    }
-        var strDate = '';
         // laydate 时间控件绑定
         layui.use('laydate', function() {
             var laydate = layui.laydate;
@@ -116,9 +115,14 @@
                     if (day < 10) {
                         day = '0'  + day;
                     }
-                    strDate = (year+10) + '-' + month + '-' + day;
-                    ins1.
-                    // console.log(strDate);
+                    lay('#passportDeadline').html(value);
+                    var strDate = (year+10) + '-' + month + '-' + day;
+                    console.log(strDate);
+                    laydate.render({
+                        elem: '#passportDeadline',
+                        type: 'date',
+                        value: strDate
+                    });
 
                 }
             });
@@ -129,7 +133,6 @@
                 trigger: 'click'
             });
         });
-        console.log(strDate);
         function passportDeadline (strDate){
             $('#passportDeadline').val = strDate;
         }
