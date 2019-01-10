@@ -14,7 +14,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">工号：</label>
                 <div class="col-sm-8">
-                    <select name="employeeaId" onchange="getByEmployeeId()" id="employeeId" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeListByStateAndContractStatus('0','0')}">
+                    <select name="employeeId" onchange="getByEmployeeId()" id="employeeId" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeListByStateAndContractStatus('0','0')}">
                         <option value=""></option>
                         <option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeId}"></option>
                     </select>

@@ -27,11 +27,11 @@
             <div class="form-group">	
                 <label class="col-sm-3 control-label">员工工号：</label>
                 <div class="col-sm-8">
-                    <select name="employeeNo" id="employeeNo" onchange="getByEmployeeNo()" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeListByStateAndContractStatus('0','0')}">
+                    <select name="employeeId" id="employeeId" onchange="getByEmployeeId()" class="form-control select2-hidden-accessible" th:with="employeeVos=${@employeeServiceImpl.selectEmployeeListByStateAndContractStatus('0','0')}">
                         <option value=""></option>
-                        <option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeNo}" th:selected="${employeeVo.employeeNo} == *{employeeNo} ? true:false"></option>
+                        <option th:each="employeeVo : ${employeeVos}" th:text="${employeeVo.employeeNo}" th:value="${employeeVo.employeeId}" th:selected="${employeeVo.employeeId} == *{employeeId} ? true:false"></option>
                     </select>
-                    <input id="employeeId"  th:field="*{employeeId}" name="employeeId" type="hidden">
+                    <input id="employeeNo"  th:field="*{employeeNo}" name="employeeNo" type="hidden">
                 </div>
             </div>
             <div class="form-group">
@@ -98,20 +98,20 @@
             });
         });
 
-        function getByEmployeeNo() {
+        function getByEmployeeId() {
             try{
                 //根据员工工号查询数据
                 $.ajax({
                     type: "post",
-                    url: "/roster/employee/employeeNo",
+                    url: "/roster/employee/employeeId",
                     async: false,
                     data: {
-                        "employeeNo": document.getElementById('employeeNo').value
+                        "employeeId": document.getElementById('employeeId').value
                     },
                     dataType: "json",
                     success: function (e) {
                         document.getElementById('employeeName').value = e.data.employeeName;
-                        document.getElementById('employeeId').value = e.data.employeeId;
+                        document.getElementById('employeeNo').value = e.data.employeeNo;
                         document.getElementById('identityCard').value = e.data.identityCard;
                     }
                 });
