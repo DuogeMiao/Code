@@ -39,7 +39,6 @@ public class VisaInfo extends BaseEntity
     private String employeeNo;
 
 	/** 签证编号 */
-    @Excel(name = "签证编号")
 	private String visaNo;
 
 	/** 签证类型 */

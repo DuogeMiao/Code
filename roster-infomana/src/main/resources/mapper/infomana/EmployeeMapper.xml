@@ -89,9 +89,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectExport" resultType="com.tsingshan.infomana.domain.Employee"  statementType="STATEMENT">
         <include refid="selectEmployee"/>
         where employee_id in
-            <foreach collection="ids" item="ids" open="(" separator="," close=")">
-                ${ids}
-            </foreach>
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            ${ids}
+        </foreach>
     </select>
 
     <select id="selectEmployeeListByStatus" parameterType="java.lang.String" resultMap="EmployeeResult">

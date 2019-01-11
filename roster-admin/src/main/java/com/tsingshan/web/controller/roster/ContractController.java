@@ -49,17 +49,17 @@ public class ContractController extends BaseController
 	@Autowired
 	private IContractService contractService;
 
-	@Autowired
-    private IEmployeeService employeeService;
-
-	@Autowired
-	private ISysPostService postService;
-
-	@Autowired
-	private IJobService jobService;
-
-	@Autowired
-	private ICompanysService companysService;
+//	@Autowired
+//    private IEmployeeService employeeService;
+//
+//	@Autowired
+//	private ISysPostService postService;
+//
+//	@Autowired
+//	private IJobService jobService;
+//
+//	@Autowired
+//	private ICompanysService companysService;
 
 	@RequiresPermissions("roster:contract:view")
 	@GetMapping()
@@ -89,21 +89,21 @@ public class ContractController extends BaseController
 	    return prefix + "/add";
 	}
 
-	/**
-	 * 根据员工id回显员工信息到页面自动填充
-	 * @param employeeId
-	 * @param map
-	 * @return
-	 */
-	@GetMapping("/add/{employeeId}")
-	public String addByEmployeeId(@PathVariable("employeeId") Long employeeId, ModelMap map) {
-		Employee employee = employeeService.selectEmployeeById(employeeId);
-		map.put("employee", employee);
-		map.put("companys", companysService.selectCompanyAll());
-		map.put("jobs", jobService.selectJobAll());
-		map.put("posts", postService.selectPostAll());
-		return prefix + "/add2";
-	}
+//	/**
+//	 * 根据员工id回显员工信息到页面自动填充
+//	 * @param employeeId
+//	 * @param map
+//	 * @return
+//	 */
+//	@GetMapping("/add/{employeeId}")
+//	public String addByEmployeeId(@PathVariable("employeeId") Long employeeId, ModelMap map) {
+//		Employee employee = employeeService.selectEmployeeById(employeeId);
+//		map.put("employee", employee);
+//		map.put("companys", companysService.selectCompanyAll());
+//		map.put("jobs", jobService.selectJobAll());
+//		map.put("posts", postService.selectPostAll());
+//		return prefix + "/add2";
+//	}
 
 	/**
 	 * 新增保存合同
@@ -152,31 +152,31 @@ public class ContractController extends BaseController
         return ajaxResult;
 	}
 
-	/**
-	 * 重签合同
-	 * @param contractId
-	 * @param modelMap
-	 * @return
-	 */
-	@GetMapping("/reSign/{contractId}")
-	public String reSignContract(@PathVariable("contractId") Long contractId, ModelMap modelMap) {
-		Contract contract = contractService.selectContractById(contractId);
-        modelMap.put("contract", contract);
-		return prefix + "/reSignContract";
-	}
-
-	@Log(title = "重签合同", businessType = BusinessType.INSERT)
-	@PostMapping("/reSign")
-	@ResponseBody
-	public AjaxResult reSignContractSave(Contract contract) {
-	    if (StringUtils.isEmpty(contract.getContractNo())) {
-	        return AjaxResult.error("合同号不能为空");
-        }
-		contract.setCreateBy(ShiroUtils.getLoginName());
-        AjaxResult ajaxResult = contractService.reSignContract(contract);
-        return ajaxResult;
-	}
-	
+//	/**
+//	 * 重签合同
+//	 * @param contractId
+//	 * @param modelMap
+//	 * @return
+//	 */
+//	@GetMapping("/reSign/{contractId}")
+//	public String reSignContract(@PathVariable("contractId") Long contractId, ModelMap modelMap) {
+//		Contract contract = contractService.selectContractById(contractId);
+//        modelMap.put("contract", contract);
+//		return prefix + "/reSignContract";
+//	}
+//
+//	@Log(title = "重签合同", businessType = BusinessType.INSERT)
+//	@PostMapping("/reSign")
+//	@ResponseBody
+//	public AjaxResult reSignContractSave(Contract contract) {
+//	    if (StringUtils.isEmpty(contract.getContractNo())) {
+//	        return AjaxResult.error("合同号不能为空");
+//        }
+//		contract.setCreateBy(ShiroUtils.getLoginName());
+//        AjaxResult ajaxResult = contractService.reSignContract(contract);
+//        return ajaxResult;
+//	}
+//
 	/**
 	 * 删除合同
 	 */

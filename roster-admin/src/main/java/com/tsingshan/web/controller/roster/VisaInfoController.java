@@ -120,10 +120,9 @@ public class VisaInfoController extends BaseController
     @ResponseBody
     public AjaxResult export(String  ids)
     {
-        //List<VisaInfo> list = visaInfoService.exportVisaInfo(ids);
-//        ExcelUtil<VisaInfo> util = new ExcelUtil<VisaInfo>(VisaInfo.class);
-//        return util.exportExcel(list, "VisaInfoVo");
-        return AjaxResult.success();
+        List<VisaInfo> list = visaInfoService.exportVisaInfo(ids);
+       ExcelUtil<VisaInfo> util = new ExcelUtil<VisaInfo>(VisaInfo.class);
+        return util.exportExcel(list, "VisaInfoVo");
     }
 
 

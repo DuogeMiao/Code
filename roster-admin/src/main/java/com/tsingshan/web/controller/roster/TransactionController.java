@@ -195,23 +195,23 @@ public class TransactionController extends BaseController
 		return prefix + "/transaction";
 	}
 
-	/**
-	 * 根据员工id回显员工信息到页面自动填充
-	 * @param employeeId
-	 * @param map
-	 * @return
-	 */
-	@GetMapping("/add/{employeeId}")
-	public String addByEmployeeId(@PathVariable("employeeId") Long employeeId, ModelMap map)
-	{
-		Employee employee = employeeService.selectEmployeeById(employeeId);
-        map.put("employee", employee);
-//		map.put("employeeId", employee.getEmployeeId());
-//		map.put("employeeName", employee.getEmployeeName());
-//		map.put("employeeNo", employee.getEmployeeNo());
-//		map.put("identityCard", employee.getIdentityCard());
-		return prefix + "/add2";
-	}
+//	/**
+//	 * 根据员工id回显员工信息到页面自动填充
+//	 * @param employeeId
+//	 * @param map
+//	 * @return
+//	 */
+//	@GetMapping("/add/{employeeId}")
+//	public String addByEmployeeId(@PathVariable("employeeId") Long employeeId, ModelMap map)
+//	{
+//		Employee employee = employeeService.selectEmployeeById(employeeId);
+//        map.put("employee", employee);
+////		map.put("employeeId", employee.getEmployeeId());
+////		map.put("employeeName", employee.getEmployeeName());
+////		map.put("employeeNo", employee.getEmployeeNo());
+////		map.put("identityCard", employee.getIdentityCard());
+//		return prefix + "/add2";
+//	}
 
 	@Override
 	public void initBinder(WebDataBinder binder) {

@@ -1,7 +1,9 @@
 package com.tsingshan.infomana.mapper;
 
 import com.tsingshan.infomana.domain.VisaInfo;
-import java.util.List;	
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 签证 数据层
@@ -58,5 +60,6 @@ public interface VisaInfoMapper
      * @return 结果
      */
 	int deleteVisaInfoByIds(Long[] ids);
-	
+
+    List<VisaInfo> exportVisaInfo(@Param("ids") Long[] ids);
 }

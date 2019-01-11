@@ -61,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           ros_passport_info
         where id IN
         <foreach item="ids" collection="ids" open="(" separator="," close=")">
-            #{id}
+            #{ids}
         </foreach>
     </select>
     <select id="checkPassportNoUnique" parameterType="String" resultMap="PassportInfoResult">

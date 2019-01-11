@@ -54,10 +54,11 @@ public interface IVisaInfoService
      */
 	int deleteVisaInfoByIds(String ids);
 
+
     /**
      * 导出
      * @param ids
      * @return
      */
-//    List<VisaInfoVo> exportVisaInfoVo(String ids);
+    List<VisaInfo> exportVisaInfo(String ids);
 }

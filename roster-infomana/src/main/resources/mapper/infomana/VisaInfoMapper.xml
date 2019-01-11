@@ -57,6 +57,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectVisaInfoVo"/>
         where id = #{id}
     </select>
+    <select id="exportVisaInfo" parameterType="Long" resultMap="VisaInfoResult">
+        SELECT
+            passport_no,
+            employee_name,
+            identity_card,
+            employee_no,
+            visa_type,
+            visa_validity,
+            entry_time,
+            exit_time,
+            in_mine_time,
+            out_mine_time,
+            remark
+        FROM
+            ros_visa_info
+        WHERE id in
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            ${ids}
+        </foreach>
+    </select>
         
     <insert id="insertVisaInfo" parameterType="VisaInfo">
         insert into ros_visa_info

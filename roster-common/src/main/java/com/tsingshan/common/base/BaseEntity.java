@@ -20,20 +20,16 @@ public class BaseEntity implements Serializable
     private String searchValue;
 
     /** 创建者 */
-    @Excel(name = "创建者")
     private String createBy;
 
     /** 创建时间 */
-    @Excel(name = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /** 更新者 */
-    @Excel(name = "更新者")
     private String updateBy;
 
     /** 更新时间 */
-    @Excel(name = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 

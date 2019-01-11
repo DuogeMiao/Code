@@ -107,5 +107,10 @@ public class VisaInfoServiceImpl implements IVisaInfoService
 		return visaInfoMapper.deleteVisaInfoByIds(Convert.toLongArray(ids));
 	}
 
+    @Override
+    public List<VisaInfo> exportVisaInfo(String ids) {
+        return visaInfoMapper.exportVisaInfo(Convert.toLongArray(ids));
+    }
+
 
 }

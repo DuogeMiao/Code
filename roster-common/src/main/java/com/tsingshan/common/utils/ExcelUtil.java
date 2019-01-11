@@ -189,7 +189,6 @@ public class ExcelUtil<T>
      * 
      * @param list 导出数据集合
      * @param sheetName 工作表的名称
-     * @param colsNames 表头的集合
      * @return 结果
      */
     public AjaxResult exportExcel(List<T> list, String sheetName) {
@@ -198,9 +197,9 @@ public class ExcelUtil<T>
         try
         {
             // 得到所有定义字段
-            Field[] allFields = clazz.getDeclaredFields();
+//            Field[] allFields = clazz.getDeclaredFields();
             //得到所有定义字段包含父类
-//            Field[] allFields = FieldUtils.getAllFields(this.clazz);
+            Field[] allFields = FieldUtils.getAllFields(this.clazz);
             List<Field> fields = new ArrayList<Field>();
 //            List<String> stringList = Arrays.asList(colsNames);
 //            T t = list.get(0);
