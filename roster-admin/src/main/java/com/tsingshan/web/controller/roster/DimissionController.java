@@ -118,7 +118,7 @@ public class DimissionController extends BaseController
             dimission.setContractId(contractId);
             dimissionService.insertDimission(dimission);
             long daySub = DateUtils.getDaySub(dimission.getDimissionDate(), DateUtils.getDate(), "yyyy-MM-dd");
-            if (daySub >= 0 ) {
+            if (daySub > 0 ) {
                 //更新员工信息表
                 updateEmployee(dimission.getEmployeeId(),"1");
                 //更新合同信息
@@ -201,7 +201,7 @@ public class DimissionController extends BaseController
         dimission.setUpdateBy(ShiroUtils.getLoginName());
 
         long daySub = DateUtils.getDaySub(dimission.getDimissionDate(), DateUtils.getDate(), "yyyy-MM-dd");
-        String flag = (daySub >= 0 ? "1" : "0");
+        String flag = (daySub > 0 ? "1" : "0");
 
         updateEmployee(dimission.getEmployeeId(),flag);
         //更新合同信息
