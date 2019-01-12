@@ -200,6 +200,21 @@ public class ContractController extends BaseController
 		ExcelUtil<Contract> util = new ExcelUtil<Contract>(Contract.class);
 		return util.exportExcel(list, "contract");
 	}
+	@PostMapping("/expireNotice")
+    @ResponseBody
+    public AjaxResult expireNotice() {
+	    Contract contract = new Contract();
+        List<Contract> contractList = contractService.selectContractList(contract);
+        int num = 0;
+        for (Contract con: contractList) {
+            long daySub = DateUtils.getDaySub(DateUtils.getDate(),con.getExpireDate(), "yyyy-MM-dd");
+            if (daySub <= 15 && daySub >= 0) {
+                num = num + 1;
+            }
+        }
+        return AjaxResult.success(num);
+
+    }
 
 
     /**

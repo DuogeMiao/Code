@@ -90,9 +90,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="entryDate != null and entryDate != '' ">
                  and entry_date = #{entryDate}
              </if>
-             <if test="dimissionDate != null and dimissionDate != '' ">
-                 and dimission_date = #{dimissionDate}
-             </if>
              <if test="backDate != null and backDate != '' ">
                  and back_date = #{backDate}
              </if>
@@ -109,6 +106,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                  and state = #{state}
              </if>
              <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND str_to_date(dimission_date,'%Y-%m-%d') &gt;= str_to_date(#{params.beginTime},'%Y-%m-%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND str_to_date(dimission_date,'%Y-%m-%d') &lt;= str_to_date(#{params.endTime},'%Y-%m-%d')
+            </if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
          </where>
     </select>
     

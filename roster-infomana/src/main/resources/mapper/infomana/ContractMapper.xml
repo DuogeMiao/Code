@@ -168,6 +168,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                  and state = #{state}
              </if>
              <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND str_to_date(expire_date,'%Y-%m-%d') &gt;= str_to_date(#{params.beginTime},'%Y-%m-%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND str_to_date(expire_date,'%Y-%m-%d') &lt;= str_to_date(#{params.endTime},'%Y-%m-%d')
+            </if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
         </where>
     </select>
     <select id="selectContractListByContractNo" parameterType="String" resultMap="ContractResult">

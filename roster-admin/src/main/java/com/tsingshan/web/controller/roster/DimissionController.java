@@ -123,6 +123,9 @@ public class DimissionController extends BaseController
                 updateEmployee(dimission.getEmployeeId(),"1");
                 //更新合同信息
                 updateContract(dimission.getContractId(),dimission.getDimissionDate(),"1");
+            } else {
+                //更新合同信息
+                updateContract(dimission.getContractId(),dimission.getDimissionDate(),"0");
             }
             return AjaxResult.success();
         } catch (Exception e) {

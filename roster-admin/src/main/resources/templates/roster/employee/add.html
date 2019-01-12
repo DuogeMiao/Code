@@ -219,34 +219,35 @@
 			var laydate = layui.laydate;
 			var joinWorkDate = laydate.render({
                 elem: '#joinWorkDate',
-                //max: $('#endTime').val(),
 				type: 'date',
                 theme: 'molv',
-                trigger: 'click',
-               /* done: function(value, date) {
-                    layer.alert('你选择的日期是：' + value + '<br>获得的对象是' + date );
-                }*/
+                trigger: 'click'
             });
             var birthDate = laydate.render({
                 elem: '#birthDate',
                 type: 'date',
                 theme: 'molv',
-                trigger: 'click',
+                max: maxDate(),
+                trigger: 'click'
             });
             var getTime = laydate.render({
                 elem: '#getTime',
                 type: 'date',
                 theme: 'molv',
-                trigger: 'click',
+                trigger: 'click'
             });
             var entryDate = laydate.render({
                 elem: '#entryDate',
                 type: 'date',
                 theme: 'molv',
-                trigger: 'click',
+                trigger: 'click'
             });
 
 		});
+        function maxDate() {
+            var now = new Date();
+            return now.getFullYear()+"-" + (now.getMonth()+1) + "-" + now.getDate();
+        }
 
         /*选择部门树*/
         function selectDeptTree() {

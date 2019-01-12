@@ -34,6 +34,12 @@
                                         <option th:each="job : ${jobs}" th:text="${job.jobName}" th:value="${job.jobName}"></option>
                                     </select>
                             </li>
+                            <li class="select-time">
+                                <label>过期时间： </label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                            </li>
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -47,9 +53,9 @@
 				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="roster:contract:add">
 					<i class="fa fa-plus"></i> 新增
 				</a>
-				<!--<a class="btn btn-primary btn-sigle disabled" onclick="reSignContract()" shiro:hasPermission="roster:contract:edit">
-					<i class="fa fa-edit"></i> 重签
-				</a>-->
+				<!--<a class="btn btn-primary btn-sigle disabled" onclick="reSignContract()" shiro:hasPermission="roster:contract:edit">-->
+					<!--<i class="fa fa-edit"></i> 重签-->
+				<!--</a>-->
 				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="roster:contract:edit">
 					<i class="fa fa-edit"></i> 修改
 				</a>
@@ -59,7 +65,10 @@
 				<a class="btn btn-warning btn-mult disabled" onclick="$.table.exportExcel()" shiro:hasPermission="roster:contract:export">
 					<i class="fa fa-download"></i> 导出
 				</a>
-
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="#" >即将过期
+                    <span class="badge" id="expireNote" title="即将过期的合同数目"></span>
+                </a>
 				<!--<a class="btn btn-info menuItem" onclick="employee()"  shiro:hasPermission="roster:contract:view">
 					<i class="fa fa-link"></i> 员工
 				</a>
@@ -222,7 +231,19 @@
             $.table.init(options);
         });
 
-        function reSignContract() {
+        $(function () {
+            $.ajax({
+                type: "post",
+                url: "/roster/contract/expireNotice",
+                async: false,
+                dataType: "json",
+                success: function (e) {
+                    document.getElementById('expireNote').innerText = e.data;
+                }
+            });
+        });
+
+        /*function reSignContract() {
             var url = "/404.html";
             var id = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
             if ($.common.isNotEmpty(id)) {
@@ -233,7 +254,7 @@
                 url = $.table._option.reSignContractUrl.replace("{id}", id);
             }
             $.modal.open("重签" + $.table._option.modalName, url);
-		}
+		}*/
 
         /*花名册管理-员工 */
         function employee() {
