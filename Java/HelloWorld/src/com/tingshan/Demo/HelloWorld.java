@@ -7,5 +7,8 @@ public class HelloWorld {
         Scanner sc=new Scanner(System.in);
         String s = sc.nextLine();
         System.out.println("Hello World\n"+s);
+        System.out.println("Hello World\n"+s);
+        System.out.println("Hello World\n"+s);
+
     }
 }
